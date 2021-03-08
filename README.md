@@ -3,4 +3,5 @@
 ### Contributor
 
 - andrewli
+- JansonCheung
 - kzChoi
