@@ -11,8 +11,8 @@ const App = () => {
     <>
       <GlobalStyle />
       <Wrapper>
-        <Sidebar md={3} />
-        <Main md={9}>
+        <Sidebar lg={3} />
+        <Main lg={9}>
           <Nav />
           <Today />
         </Main>
