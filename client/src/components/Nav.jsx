@@ -18,7 +18,9 @@ const Nav = () => {
 
 export default Nav;
 
-const CustomContainer = styled(Container)``;
+const CustomContainer = styled(Container)`
+  height: 80px;
+`;
 const NavWrapper = styled.div`
   display: flex;
   color: var(--primaryShaded);
