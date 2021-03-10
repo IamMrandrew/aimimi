@@ -12,4 +12,8 @@ const Sidebar = ({ xs }) => {
 
 export default Sidebar;
 
-const SidebarContainer = styled(Col)``;
+const SidebarContainer = styled(Col)`
+  @media (max-width: 767.99px) {
+    display: none;
+  }
+`;

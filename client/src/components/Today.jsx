@@ -5,10 +5,10 @@ import Container from "react-bootstrap/Container";
 const Today = () => {
   return (
     <TodayContainer>
-      <Container>
+      <CustomContainer>
         <TodayTitle>Today</TodayTitle>
         <TodaySubtitle>Two task left for today</TodaySubtitle>
-      </Container>
+      </CustomContainer>
     </TodayContainer>
   );
 };
@@ -28,4 +28,8 @@ const TodaySubtitle = styled.span`
   font-size: 22px;
   font-weight: 700;
   color: var(--primaryTinted);
+`;
+
+const CustomContainer = styled(Container)`
+  max-width: 888px;
 `;
