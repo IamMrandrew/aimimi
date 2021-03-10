@@ -1,11 +1,31 @@
 import React from "react";
+import styled from "styled-components";
+import Container from "react-bootstrap/Container";
 
 const Today = () => {
   return (
-    <div>
-      <h1>Today</h1>
-    </div>
+    <TodayContainer>
+      <Container>
+        <TodayTitle>Today</TodayTitle>
+        <TodaySubtitle>Two task left for today</TodaySubtitle>
+      </Container>
+    </TodayContainer>
   );
 };
 
 export default Today;
+
+const TodayContainer = styled.div``;
+
+const TodayTitle = styled.h1`
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--primaryShaded);
+  margin-bottom: 36px;
+`;
+
+const TodaySubtitle = styled.span`
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primaryTinted);
+`;
