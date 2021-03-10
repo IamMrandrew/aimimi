@@ -3,14 +3,16 @@ import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
 import styled from "styled-components";
 import { GlobalStyle } from "./components/GlobalStyle";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const App = () => {
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <Sidebar />
-        <Main>
+        <Sidebar xs={3} />
+        <Main xs={9}>
           <Nav />
           <Today />
         </Main>
@@ -21,12 +23,11 @@ const App = () => {
 
 export default App;
 
-const Wrapper = styled.div`
-  display: flex;
+const Wrapper = styled(Row)`
   height: 100vh;
-  background-color: lightcoral;
+  background-color: white;
 `;
 
-const Main = styled.div`
-  background-color: #fff;
+const Main = styled(Col)`
+  background-color: white;
 `;

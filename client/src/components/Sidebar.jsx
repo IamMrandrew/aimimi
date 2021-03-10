@@ -1,11 +1,15 @@
 import React from "react";
+import Col from "react-bootstrap/Col";
+import styled from "styled-components";
 
-const Sidebar = () => {
+const Sidebar = ({ xs }) => {
   return (
-    <div>
+    <SidebarContainer xs={xs}>
       <h2>Sidebar</h2>
-    </div>
+    </SidebarContainer>
   );
 };
 
 export default Sidebar;
+
+const SidebarContainer = styled(Col)``;
