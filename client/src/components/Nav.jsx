@@ -7,35 +7,33 @@ import { FaBars } from "react-icons/fa";
 
 const Nav = () => {
   return (
-    <CustomContainer>
-      <NavWrapper>
-        <CustomFaBars />
-        <Profile src={Profilephoto} />
-        <Today>Today</Today>
-        <CustomFaBell />
-      </NavWrapper>
-    </CustomContainer>
+    <NavContainer>
+      <CustomFaBars />
+      <Profile src={Profilephoto} />
+      <Today>Today</Today>
+      <CustomFaBell />
+    </NavContainer>
   );
 };
 
 export default Nav;
 
-const CustomContainer = styled(Container)`
+const NavContainer = styled(Container)`
   height: 80px;
   max-width: 888px;
-`;
 
-const NavWrapper = styled.div`
+  @media (max-width: 767.99px) {
+    height: 60px;
+  }
   display: flex;
   color: var(--primaryShaded);
   justify-content: flex-end;
-  padding-top: 22px;
+  align-items: center;
 
   @media (max-width: 919.99px) {
     justify-content: space-between;
   }
 `;
-
 const CustomFaBell = styled(FaBell)`
   width: 28px;
   height: 37px;
