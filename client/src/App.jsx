@@ -25,6 +25,7 @@ export default App;
 
 const Wrapper = styled(Row)`
   height: 100vh;
+  width: 100%;
   background-color: white;
 `;
 
