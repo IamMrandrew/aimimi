@@ -12,4 +12,8 @@ export const GlobalStyle = createGlobalStyle`
       -webkit-font-smoothing: antialiased;
   }
   
+  .row {
+    margin: 0
+  }
+
 `;
