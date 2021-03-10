@@ -1,48 +1,73 @@
 import React from "react";
 import Col from "react-bootstrap/Col";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FaCalendarWeek, FaBullseye, FaUsers, FaTrophy } from "react-icons/fa";
 
-const Sidebar = ({ xs }) => {
+const Sidebar = ({ lg, showSidebar }) => {
   return (
-    <SidebarContainer xs={xs}>
-      <SidebarItem>
-        <SidebarItemIcon>
-          <FaCalendarWeek />
-        </SidebarItemIcon>
-        <SidebarItemText>Today</SidebarItemText>
-      </SidebarItem>
-      <SidebarItem>
-        <SidebarItemIcon>
-          <FaBullseye />
-        </SidebarItemIcon>
-        <SidebarItemText>Goals</SidebarItemText>
-      </SidebarItem>
-      <SidebarItem>
-        <SidebarItemIcon>
-          <FaUsers />
-        </SidebarItemIcon>
-        <SidebarItemText>Shared Goal</SidebarItemText>
-      </SidebarItem>
-      <SidebarItem>
-        <SidebarItemIcon>
-          <FaTrophy />
-        </SidebarItemIcon>
-        <SidebarItemText>Leaderboard</SidebarItemText>
-      </SidebarItem>
-    </SidebarContainer>
+    <SidebarCol lg={lg}>
+      <SidebarContainer showSidebar={showSidebar}>
+        <SidebarItem>
+          <SidebarItemIcon>
+            <FaCalendarWeek />
+          </SidebarItemIcon>
+          <SidebarItemText>Today</SidebarItemText>
+        </SidebarItem>
+        <SidebarItem>
+          <SidebarItemIcon>
+            <FaBullseye />
+          </SidebarItemIcon>
+          <SidebarItemText>Goals</SidebarItemText>
+        </SidebarItem>
+        <SidebarItem>
+          <SidebarItemIcon>
+            <FaUsers />
+          </SidebarItemIcon>
+          <SidebarItemText>Shared Goal</SidebarItemText>
+        </SidebarItem>
+        <SidebarItem>
+          <SidebarItemIcon>
+            <FaTrophy />
+          </SidebarItemIcon>
+          <SidebarItemText>Leaderboard</SidebarItemText>
+        </SidebarItem>
+      </SidebarContainer>
+    </SidebarCol>
   );
 };
 
 export default Sidebar;
 
-const SidebarContainer = styled(Col)`
+const SidebarCol = styled(Col)`
   @media (max-width: 991.99px) {
-    display: none;
+    position: absolute;
+    height: 100%;
+    top: 60px;
+    left: 0;
+    z-index: 100;
   }
+`;
+
+const SidebarContainer = styled.div`
   border-right: solid 1px var(--grey);
+  background-color: white;
+  height: 100%;
   padding: 40px;
   padding-top: 100px;
+  transition: all 0.65s;
+
+  @media (max-width: 991.99px) {
+    transform: translateX(-100%);
+    border-right: none;
+  }
+
+  ${(props) =>
+    props.showSidebar &&
+    css`
+      @media (max-width: 991.99px) {
+        transform: translateX(0%);
+      }
+    `}
 `;
 
 const SidebarItem = styled.div`

@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
@@ -7,11 +8,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 const App = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <Sidebar lg={3} />
+        <Sidebar lg={3} showSidebar={showSidebar} />
         <Main lg={9}>
           <Nav />
           <Today />
