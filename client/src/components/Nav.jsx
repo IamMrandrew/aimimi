@@ -31,7 +31,7 @@ const NavWrapper = styled.div`
   justify-content: flex-end;
   padding-top: 22px;
 
-  @media (max-width: 767.99px) {
+  @media (max-width: 919.99px) {
     justify-content: space-between;
   }
 `;
@@ -49,7 +49,7 @@ const CustomFaBell = styled(FaBell)`
 const Profile = styled.img`
   padding-right: 36px;
 
-  @media (max-width: 767.99px) {
+  @media (max-width: 919.99px) {
     display: none;
   }
 `;
@@ -60,7 +60,7 @@ const Today = styled.span`
   color: var(--primaryShaded);
   display: none;
 
-  @media (max-width: 767.99px) {
+  @media (max-width: 919.99px) {
     display: block;
   }
 `;
@@ -71,7 +71,7 @@ const CustomFaBars = styled(FaBars)`
   color: var(--primaryShaded);
   display: none;
 
-  @media (max-width: 767.99px) {
+  @media (max-width: 919.99px) {
     display: block;
     justify-content: flex-start;
   }
