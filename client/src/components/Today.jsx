@@ -21,6 +21,7 @@ const TodayTitle = styled.h1`
   font-size: 40px;
   font-weight: 700;
   color: var(--primaryShaded);
+  margin-top: 20px;
   margin-bottom: 36px;
 `;
 

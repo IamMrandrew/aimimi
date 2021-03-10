@@ -6,6 +6,7 @@ export const GlobalStyle = createGlobalStyle`
     --completed: rgba(112, 190, 209, 0.35);
     --primaryTinted: rgba(28, 75, 86, 0.6);
     --primaryShaded: #1C4B56 ;
+    --grey: rgba(0, 0, 0, 0.08)
   }
   * {
       font-family: 'Roboto', "Open Sans", sans-serif;
