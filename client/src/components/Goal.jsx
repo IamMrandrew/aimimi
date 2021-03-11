@@ -34,6 +34,8 @@ const Title = styled.h2`
   color: #ffffff;
   font-family: "Roboto";
   font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 0px;
 `;
 const TimeWrapper = styled.div``;
 const TitleWrapper = styled.div``;
@@ -42,6 +44,7 @@ const Description = styled.span`
   color: #ffffff;
   font-family: "Roboto";
   font-size: 16px;
+  font-weight: 500;
   margin-right: 10px;
 `;
 
