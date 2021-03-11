@@ -52,13 +52,14 @@ const SidebarContainer = styled.div`
   border-right: solid 1px var(--grey);
   background-color: white;
   height: 100%;
-  padding: 40px;
   padding-top: 100px;
-  transition: all 0.65s;
+  transition: transform 0.65s;
 
   @media (max-width: 991.99px) {
     transform: translateX(-100%);
     border-right: none;
+    padding: 15px;
+    padding-top: 20px;
   }
 
   ${(props) =>
@@ -75,6 +76,10 @@ const SidebarItem = styled.div`
   margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: 991.99px) {
+    margin-left: 0;
+  }
 `;
 
 const SidebarItemText = styled.span`
