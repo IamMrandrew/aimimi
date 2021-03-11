@@ -47,7 +47,7 @@ const Sidebar = ({ lg, showSidebar }) => {
 export default Sidebar;
 
 const Wrapper = styled(Col)`
-  @media (max-width: 991.99px) {
+  @media (max-width: 991.98px) {
     position: absolute;
     height: 100%;
     top: 60px;
@@ -63,7 +63,7 @@ const Content = styled.div`
   padding-top: 100px;
   transition: transform 0.65s;
 
-  @media (max-width: 991.99px) {
+  @media (max-width: 991.98px) {
     transform: translateX(-100%);
     border-right: none;
     padding: 15px;
@@ -73,7 +73,7 @@ const Content = styled.div`
   ${(props) =>
     props.showSidebar &&
     css`
-      @media (max-width: 991.99px) {
+      @media (max-width: 991.98px) {
         transform: translateX(0%);
       }
     `}
@@ -87,7 +87,7 @@ const Item = styled.div`
   margin-left: auto;
   margin-right: auto;
 
-  @media (max-width: 991.99px) {
+  @media (max-width: 991.98px) {
     margin-left: 0;
   }
 `;
