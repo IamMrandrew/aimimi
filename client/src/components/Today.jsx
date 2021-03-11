@@ -22,23 +22,13 @@ const Title = styled.h1`
   font-weight: 700;
   color: var(--primaryShaded);
   margin-top: 20px;
-  margin-bottom: 30px;
-
-  @media (max-width: 991.98px) {
-    display: none;
-  }
+  margin-bottom: 36px;
 `;
 
 const Subtitle = styled.span`
   font-size: 22px;
   font-weight: 700;
   color: var(--primaryTinted);
-  display: block;
-
-  @media (max-width: 991.98px) {
-    margin-top: 20px;
-    font-size: 16px;
-  }
 `;
 
 const CustomContainer = styled(Container)`
