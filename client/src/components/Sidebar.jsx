@@ -1,73 +1,80 @@
 import React from "react";
-import Col from "react-bootstrap/Col";
 import styled, { css } from "styled-components/macro";
 import { FaCalendarWeek, FaBullseye, FaUsers, FaTrophy } from "react-icons/fa";
 import ProfilePhoto from "../assets/ProfilePhoto.png";
 
-const Sidebar = ({ lg, showSidebar }) => {
+const Sidebar = ({ showSidebar }) => {
   return (
-    <Wrapper lg={lg}>
-      <Content showSidebar={showSidebar}>
-        <Item>
-          <ItemIcon>
-            <FaCalendarWeek />
-          </ItemIcon>
-          <ItemText>Today</ItemText>
-        </Item>
-        <Item>
-          <ItemIcon>
-            <FaBullseye />
-          </ItemIcon>
-          <ItemText>Goals</ItemText>
-        </Item>
-        <Item>
-          <ItemIcon>
-            <FaUsers />
-          </ItemIcon>
-          <ItemText>Shared Goal</ItemText>
-        </Item>
-        <Item>
-          <ItemIcon>
-            <FaTrophy />
-          </ItemIcon>
-          <ItemText>Leaderboard</ItemText>
-        </Item>
-        <Hr />
-        <ProfileItem>
-          <Avator>
-            <AvatorImg src={ProfilePhoto} />
-          </Avator>
-          <ItemText>Magnus Nicholls</ItemText>
-        </ProfileItem>
-      </Content>
+    <Wrapper showSidebar={showSidebar}>
+      <Item>
+        <ItemIcon>
+          <FaCalendarWeek />
+        </ItemIcon>
+        <ItemText>Today</ItemText>
+      </Item>
+      <Item>
+        <ItemIcon>
+          <FaBullseye />
+        </ItemIcon>
+        <ItemText>Goals</ItemText>
+      </Item>
+      <Item>
+        <ItemIcon>
+          <FaUsers />
+        </ItemIcon>
+        <ItemText>Shared Goal</ItemText>
+      </Item>
+      <Item>
+        <ItemIcon>
+          <FaTrophy />
+        </ItemIcon>
+        <ItemText>Leaderboard</ItemText>
+      </Item>
+      <Hr />
+      <ProfileItem>
+        <Avator>
+          <AvatorImg src={ProfilePhoto} />
+        </Avator>
+        <ItemText>Magnus Nicholls</ItemText>
+      </ProfileItem>
     </Wrapper>
   );
 };
 
 export default Sidebar;
 
-const Wrapper = styled(Col)`
+const Wrapper = styled.div`
+  border-right: solid 1px var(--grey);
+  background-color: white;
+  height: 100%;
+  padding-top: 100px;
+
+  /* Bootstrap col-lg-3  */
+  position: relative;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  @media (min-width: 992px) {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  /* Bootstrap col-lg-3  */
+
   @media (max-width: 991.98px) {
     position: absolute;
     height: 100%;
     top: 60px;
     left: 0;
     z-index: 100;
-  }
-`;
-
-const Content = styled.div`
-  border-right: solid 1px var(--grey);
-  background-color: white;
-  height: 100%;
-  padding-top: 100px;
-  transition: transform 0.65s;
-
-  @media (max-width: 991.98px) {
     transform: translateX(-100%);
     border-right: none;
-    padding: 15px;
+    padding: 30px;
     padding-top: 20px;
+  }
+
+  @media (max-width: 575.98px) {
+    transition: transform 0.65s;
   }
 
   ${(props) =>
