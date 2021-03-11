@@ -2,6 +2,7 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import styled, { css } from "styled-components/macro";
 import { FaCalendarWeek, FaBullseye, FaUsers, FaTrophy } from "react-icons/fa";
+import ProfilePhoto from "../assets/ProfilePhoto.png";
 
 const Sidebar = ({ lg, showSidebar }) => {
   return (
@@ -31,6 +32,13 @@ const Sidebar = ({ lg, showSidebar }) => {
           </ItemIcon>
           <ItemText>Leaderboard</ItemText>
         </Item>
+        <Hr />
+        <ProfileItem>
+          <Avator>
+            <AvatorImg src={ProfilePhoto} />
+          </Avator>
+          <ItemText>Magnus Nicholls</ItemText>
+        </ProfileItem>
       </Content>
     </Wrapper>
   );
@@ -73,12 +81,23 @@ const Content = styled.div`
 
 const Item = styled.div`
   max-width: 180px;
+  display: flex;
+  align-items: baseline;
   margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
 
   @media (max-width: 991.99px) {
     margin-left: 0;
+  }
+`;
+
+const ProfileItem = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (min-width: 992px) {
+    display: none;
   }
 `;
 
@@ -93,4 +112,26 @@ const ItemText = styled.span`
   font-size: 20px;
   color: var(--primaryShaded);
   font-weight: 700;
+`;
+
+const Hr = styled.hr`
+  border: solid 1px var(--grey);
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+`;
+
+const Avator = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 24px;
+  margin-right: 18px;
+  overflow: hidden;
+`;
+
+const AvatorImg = styled.img`
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
 `;
