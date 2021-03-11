@@ -1,44 +1,44 @@
 import React from "react";
 import Col from "react-bootstrap/Col";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 import { FaCalendarWeek, FaBullseye, FaUsers, FaTrophy } from "react-icons/fa";
 
 const Sidebar = ({ lg, showSidebar }) => {
   return (
-    <SidebarCol lg={lg}>
-      <SidebarContainer showSidebar={showSidebar}>
-        <SidebarItem>
-          <SidebarItemIcon>
+    <Wrapper lg={lg}>
+      <Content showSidebar={showSidebar}>
+        <Item>
+          <ItemIcon>
             <FaCalendarWeek />
-          </SidebarItemIcon>
-          <SidebarItemText>Today</SidebarItemText>
-        </SidebarItem>
-        <SidebarItem>
-          <SidebarItemIcon>
+          </ItemIcon>
+          <ItemText>Today</ItemText>
+        </Item>
+        <Item>
+          <ItemIcon>
             <FaBullseye />
-          </SidebarItemIcon>
-          <SidebarItemText>Goals</SidebarItemText>
-        </SidebarItem>
-        <SidebarItem>
-          <SidebarItemIcon>
+          </ItemIcon>
+          <ItemText>Goals</ItemText>
+        </Item>
+        <Item>
+          <ItemIcon>
             <FaUsers />
-          </SidebarItemIcon>
-          <SidebarItemText>Shared Goal</SidebarItemText>
-        </SidebarItem>
-        <SidebarItem>
-          <SidebarItemIcon>
+          </ItemIcon>
+          <ItemText>Shared Goal</ItemText>
+        </Item>
+        <Item>
+          <ItemIcon>
             <FaTrophy />
-          </SidebarItemIcon>
-          <SidebarItemText>Leaderboard</SidebarItemText>
-        </SidebarItem>
-      </SidebarContainer>
-    </SidebarCol>
+          </ItemIcon>
+          <ItemText>Leaderboard</ItemText>
+        </Item>
+      </Content>
+    </Wrapper>
   );
 };
 
 export default Sidebar;
 
-const SidebarCol = styled(Col)`
+const Wrapper = styled(Col)`
   @media (max-width: 991.99px) {
     position: absolute;
     height: 100%;
@@ -48,7 +48,7 @@ const SidebarCol = styled(Col)`
   }
 `;
 
-const SidebarContainer = styled.div`
+const Content = styled.div`
   border-right: solid 1px var(--grey);
   background-color: white;
   height: 100%;
@@ -71,7 +71,7 @@ const SidebarContainer = styled.div`
     `}
 `;
 
-const SidebarItem = styled.div`
+const Item = styled.div`
   max-width: 180px;
   margin-bottom: 20px;
   margin-left: auto;
@@ -82,15 +82,15 @@ const SidebarItem = styled.div`
   }
 `;
 
-const SidebarItemText = styled.span`
-  font-size: 20px;
-  color: var(--primaryShaded);
-  font-weight: 700;
-`;
-
-const SidebarItemIcon = styled.span`
+const ItemIcon = styled.span`
   font-size: 28px;
   color: var(--primaryShaded);
   font-weight: 700;
   margin-right: 20px;
+`;
+
+const ItemText = styled.span`
+  font-size: 20px;
+  color: var(--primaryShaded);
+  font-weight: 700;
 `;

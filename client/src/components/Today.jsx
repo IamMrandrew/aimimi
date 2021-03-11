@@ -1,23 +1,23 @@
 import React from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 
 const Today = () => {
   return (
-    <TodayContainer>
+    <Wrapper>
       <CustomContainer>
-        <TodayTitle>Today</TodayTitle>
-        <TodaySubtitle>Two task left for today</TodaySubtitle>
+        <Title>Today</Title>
+        <Subtitle>Two task left for today</Subtitle>
       </CustomContainer>
-    </TodayContainer>
+    </Wrapper>
   );
 };
 
 export default Today;
 
-const TodayContainer = styled.div``;
+const Wrapper = styled.div``;
 
-const TodayTitle = styled.h1`
+const Title = styled.h1`
   font-size: 40px;
   font-weight: 700;
   color: var(--primaryShaded);
@@ -25,7 +25,7 @@ const TodayTitle = styled.h1`
   margin-bottom: 36px;
 `;
 
-const TodaySubtitle = styled.span`
+const Subtitle = styled.span`
   font-size: 22px;
   font-weight: 700;
   color: var(--primaryTinted);

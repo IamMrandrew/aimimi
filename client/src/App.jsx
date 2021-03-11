@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { GlobalStyle } from "./components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

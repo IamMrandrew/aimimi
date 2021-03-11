@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { FaBell } from "react-icons/fa";
 import Profilephoto from "../assets/ProfilePhoto.png";
 import { FaBars } from "react-icons/fa";
