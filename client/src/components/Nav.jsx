@@ -5,10 +5,13 @@ import { FaBell } from "react-icons/fa";
 import Profilephoto from "../assets/ProfilePhoto.png";
 import { FaBars } from "react-icons/fa";
 
-const Nav = () => {
+const Nav = ({ showSidebar, setShowSidebar }) => {
+  const SideBarHandler = (showSidebar) => {
+    setShowSidebar(!showSidebar);
+  };
   return (
     <NavContainer>
-      <CustomFaBars />
+      <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
       <Profile src={Profilephoto} />
       <Today>Today</Today>
       <CustomFaBell />

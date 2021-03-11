@@ -16,7 +16,7 @@ const App = () => {
       <Wrapper>
         <Sidebar showSidebar={showSidebar} />
         <Main lg={9}>
-          <Nav />
+          <Nav showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
           <Today />
         </Main>
       </Wrapper>
