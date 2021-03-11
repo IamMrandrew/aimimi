@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
-
+import Goal from "./Goal";
 const Today = () => {
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Today</Title>
         <Subtitle>Two task left for today</Subtitle>
+        <Goal />
       </CustomContainer>
     </Wrapper>
   );
