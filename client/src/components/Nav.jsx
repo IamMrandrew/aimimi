@@ -22,7 +22,8 @@ const NavContainer = styled(Container)`
   height: 80px;
   max-width: 888px;
 
-  @media (max-width: 767.99px) {
+  @media (max-width: 991.98px) {
+    /* 767.99*/
     height: 60px;
   }
   display: flex;
@@ -30,7 +31,7 @@ const NavContainer = styled(Container)`
   justify-content: flex-end;
   align-items: center;
 
-  @media (max-width: 919.99px) {
+  @media (max-width: 991.98px) {
     justify-content: space-between;
   }
 `;
@@ -38,7 +39,8 @@ const CustomFaBell = styled(FaBell)`
   width: 28px;
   height: 37px;
 
-  @media (max-width: 767.99px) {
+  @media (max-width: 991.98px) {
+    /* 767.99*/
     display: block;
     justify-content: flex-end;
   }
@@ -47,7 +49,7 @@ const CustomFaBell = styled(FaBell)`
 const Profile = styled.img`
   padding-right: 36px;
 
-  @media (max-width: 919.99px) {
+  @media (max-width: 991.98px) {
     display: none;
   }
 `;
@@ -58,7 +60,7 @@ const Today = styled.span`
   color: var(--primaryShaded);
   display: none;
 
-  @media (max-width: 919.99px) {
+  @media (max-width: 991.98px) {
     display: block;
   }
 `;
@@ -69,7 +71,7 @@ const CustomFaBars = styled(FaBars)`
   color: var(--primaryShaded);
   display: none;
 
-  @media (max-width: 919.99px) {
+  @media (max-width: 991.98px) {
     display: block;
     justify-content: flex-start;
   }
