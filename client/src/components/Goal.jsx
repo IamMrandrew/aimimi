@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components/macro";
 
-const Goal = () => {
+const Goal = ({ goal }) => {
   return (
     <div>
       <Wrapper>
         <TitleWrapper>
-          <Title>Drink Water</Title>
-          <Description>Everyday</Description>
-          <Description>86 days left</Description>
+          <Title>{goal.title}</Title>
+          <Description>{goal.period}</Description>
+          <Description>{goal.timespan}</Description>
         </TitleWrapper>
         <TimeWrapper>
           <Scores>0/8</Scores>

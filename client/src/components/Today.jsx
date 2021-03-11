@@ -3,12 +3,38 @@ import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Goal from "./Goal";
 const Today = () => {
+  const goal = [
+    {
+      title: "Drink Water!",
+      period: "Everyday",
+      timespan: "86 days left",
+    },
+    {
+      title: "Drink Water!",
+      period: "Everyday",
+      timespan: "86 days left",
+    },
+    {
+      title: "Drink Water!",
+      period: "Everyday",
+      timespan: "86 days left",
+    },
+    {
+      title: "Drink Water!",
+      period: "Everyday",
+      timespan: "86 days left",
+    },
+  ];
+
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Today</Title>
         <Subtitle>Two task left for today</Subtitle>
-        <Goal />
+        <Goal goal={goal[0]} />
+        <Goal goal={goal[1]} />
+        <Goal goal={goal[2]} />
+        <Goal goal={goal[3]} />
       </CustomContainer>
     </Wrapper>
   );
