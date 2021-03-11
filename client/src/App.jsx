@@ -34,4 +34,6 @@ const Wrapper = styled(Row)`
 
 const Main = styled(Col)`
   background-color: white;
+  padding-left: 0;
+  padding-right: 0;
 `;

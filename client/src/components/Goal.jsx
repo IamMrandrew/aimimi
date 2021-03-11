@@ -10,9 +10,9 @@ const Goal = ({ goal }) => {
           <Description>{goal.period}</Description>
           <Description>{goal.timespan}</Description>
         </TitleWrapper>
-        <TimeWrapper>
-          <Scores>0/8</Scores>
-        </TimeWrapper>
+        <TimesWrapper>
+          <Times>0/8</Times>
+        </TimesWrapper>
       </Wrapper>
     </div>
   );
@@ -22,13 +22,16 @@ export default Goal;
 
 const Wrapper = styled.div`
   background-color: var(--primary);
-  height: 94px;
   border-radius: 30px;
-  padding: 0 48.95px;
+  padding: 25px 48.95px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+
+  @media (max-width: 991.98px) {
+    padding: 20px 20px;
+  }
 `;
 const Title = styled.h2`
   color: #ffffff;
@@ -36,8 +39,12 @@ const Title = styled.h2`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 0px;
+
+  @media (max-width: 991.98px) {
+    font-size: 16px;
+  }
 `;
-const TimeWrapper = styled.div``;
+const TimesWrapper = styled.div``;
 const TitleWrapper = styled.div``;
 
 const Description = styled.span`
@@ -46,11 +53,19 @@ const Description = styled.span`
   font-size: 16px;
   font-weight: 500;
   margin-right: 10px;
+
+  @media (max-width: 991.98px) {
+    font-size: 14px;
+  }
 `;
 
-const Scores = styled.span`
+const Times = styled.span`
   color: #ffffff;
   font-family: "Roboto";
   font-size: 18px;
   font-weight: 700;
+
+  @media (max-width: 991.98px) {
+    font-size: 16px;
+  }
 `;
