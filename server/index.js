@@ -19,4 +19,4 @@ app.all('/*', function (req, res) {
 res.send("Hello World!");
 });
 // listen to port 3000
-const server = app.listen(3000);
+const server = app.listen(process.env.PORT);
