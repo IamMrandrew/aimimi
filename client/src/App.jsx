@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
+import Login from "./views/Login";
 import Today from "./views/Today";
 import styled from "styled-components/macro";
 import { GlobalStyle } from "./components/GlobalStyle";
@@ -13,13 +15,25 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
-        <Sidebar showSidebar={showSidebar} />
-        <Main lg={9}>
-          <Nav showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-          <Today />
-        </Main>
-      </Wrapper>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Wrapper>
+              <Sidebar showSidebar={showSidebar} />
+              <Main lg={9}>
+                <Nav
+                  showSidebar={showSidebar}
+                  setShowSidebar={setShowSidebar}
+                />
+                <Today />
+              </Main>
+            </Wrapper>
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+        </Switch>
+      </Router>
     </>
   );
 };
