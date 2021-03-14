@@ -22,69 +22,67 @@ const Signup = () => {
 
           <RightWrapper>
             <CustomContainer>
-              <mainWrapper>
-                <Title>Sign Up</Title>
-                <Subtitle>or </Subtitle>
-                <LoginLink href="/Login"> Log In</LoginLink>
-                <Subtitle> (if you already have an account) </Subtitle>
-                <Signupform method="POST">
-                  <BarWrapper>
-                    <IconAndTagWrapper>
-                      <CustomFaEnvelope />
-                      <TagWrapper>
-                        <Tag>Email</Tag>
-                        <SigninInput
-                          id="email"
-                          type="email"
-                          name="email"
-                          placeholder="name@domain.com"
-                          required
-                        ></SigninInput>
-                      </TagWrapper>
-                    </IconAndTagWrapper>
+              <Title>Sign Up</Title>
+              <Subtitle>or </Subtitle>
+              <LoginLink href="/Login"> Log In</LoginLink>
+              <Subtitle> (if you already have an account) </Subtitle>
+              <Signupform method="POST">
+                <BarWrapper>
+                  <IconAndTagWrapper>
+                    <CustomFaEnvelope />
+                    <TagWrapper>
+                      <Tag>Email</Tag>
+                      <SigninInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="name@domain.com"
+                        required
+                      ></SigninInput>
+                    </TagWrapper>
+                  </IconAndTagWrapper>
 
-                    <CustomFaTimes />
-                  </BarWrapper>
+                  <CustomFaTimes />
+                </BarWrapper>
 
-                  <PasswordBarWrapper>
-                    <IconAndTagWrapper>
-                      <CustomFiLock />
-                      <TagWrapper>
-                        <Tag>Password</Tag>
-                        <PasswordInput
-                          id="password"
-                          type="password"
-                          placeholder="Must have at least 6 characters"
-                          required
-                        />
-                      </TagWrapper>
-                    </IconAndTagWrapper>
+                <PasswordBarWrapper>
+                  <IconAndTagWrapper>
+                    <CustomFiLock />
+                    <TagWrapper>
+                      <Tag>Password</Tag>
+                      <PasswordInput
+                        id="password"
+                        type="password"
+                        placeholder="Must have at least 6 characters"
+                        required
+                      />
+                    </TagWrapper>
+                  </IconAndTagWrapper>
 
-                    <CustomFaTimes />
-                  </PasswordBarWrapper>
+                  <CustomFaTimes />
+                </PasswordBarWrapper>
 
-                  <PasswordBarWrapper>
-                    <IconAndTagWrapper>
-                      <CustomAiOutlineEye />
-                      <TagWrapper>
-                        <Tag>Confirm Password</Tag>
-                        <PasswordInput
-                          id="confirm_password"
-                          type="password"
-                          placeholder="Enter the same password"
-                          required
-                        />
-                      </TagWrapper>
-                    </IconAndTagWrapper>
+                <PasswordBarWrapper>
+                  <IconAndTagWrapper>
+                    <CustomAiOutlineEye />
+                    <TagWrapper>
+                      <Tag>Confirm Password</Tag>
+                      <PasswordInput
+                        id="confirm_password"
+                        type="password"
+                        placeholder="Enter the same password"
+                        required
+                      />
+                    </TagWrapper>
+                  </IconAndTagWrapper>
 
-                    <CustomFaTimes />
-                  </PasswordBarWrapper>
+                  <CustomFaTimes />
+                </PasswordBarWrapper>
 
-                  <SignupBar>
-                    <SignupTitle>Sign Up</SignupTitle>
-                  </SignupBar>
-                </Signupform>
-              </mainWrapper>
+                <SignupBar>
+                  <SignupTitle>Sign Up</SignupTitle>
+                </SignupBar>
+              </Signupform>
             </CustomContainer>
           </RightWrapper>
         </Main>
@@ -152,7 +150,7 @@ const Title = styled.h1`
 const CustomContainer = styled(Container)`
   max-width: 481px;
 `;
-const mainWrapper = styled.div``;
+
 const Subtitle = styled.span`
   font-family: "Roboto";
   font-size: 19px;
