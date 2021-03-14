@@ -1,5 +1,5 @@
-import styled from "styled-components/macro";
-
+import React from "react";
+import { GlobalStyle } from "../components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import LoginImage from "../assets/LogInBack.png";
@@ -7,61 +7,89 @@ import Container from "react-bootstrap/Container";
 import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
+import { AiOutlineEye } from "react-icons/ai";
+import styled from "styled-components/macro";
 
-const Login = () => {
+const Signup = () => {
   return (
-    <Wrapper>
-      <Main>
-        <ImageBackWrapper>
-          <LoginImg src={LoginImage} />
-        </ImageBackWrapper>
+    <>
+      <GlobalStyle />
+      <Wrapper>
+        <Main>
+          <ImageBackWrapper>
+            <LoginImg src={LoginImage} />
+          </ImageBackWrapper>
 
-        <RightWrapper>
-          <CustomContainer>
-            <Title>Log In</Title>
-            <Subtitle>or </Subtitle>
+          <RightWrapper>
+            <CustomContainer>
+              <mainWrapper>
+                <Title>Sign Up</Title>
+                <Subtitle>or </Subtitle>
+                <LoginLink href="/Login"> Log In</LoginLink>
+                <Subtitle> (if you already have an account) </Subtitle>
+                <Signupform method="POST">
+                  <BarWrapper>
+                    <IconAndTagWrapper>
+                      <CustomFaEnvelope />
+                      <TagWrapper>
+                        <Tag>Email</Tag>
+                        <SigninInput
+                          id="email"
+                          type="email"
+                          name="email"
+                          placeholder="name@domain.com"
+                          required
+                        ></SigninInput>
+                      </TagWrapper>
+                    </IconAndTagWrapper>
 
-            <SignupLink href="/Signup">Sign up </SignupLink>
+                    <CustomFaTimes />
+                  </BarWrapper>
 
-            <Subtitle> (if you do not have an account) </Subtitle>
-            <LoginForm method="POST">
-              <BarWrapper>
-                <IconAndTagWrapper>
-                  <CustomFaEnvelope />
-                  <TagWrapper>
-                    <Tag>Email</Tag>
-                    <EmailInput
-                      id="email"
-                      type="email"
-                      name="name"
-                      placeholder="name@domain.com"
-                      required
-                    ></EmailInput>
-                  </TagWrapper>
-                </IconAndTagWrapper>
-                <CustomFaTimes />
-              </BarWrapper>
-              <PasswordBarWrapper>
-                <CustomFiLock />
-                <TagWrapper>
-                  <Tag>Password</Tag>
-                  <PasswordInput
-                    id="password"
-                    type="password"
-                    placeholder="Must have at least 8 characters"
-                    required
-                  />
-                </TagWrapper>
-                <CustomFaTimes />
-              </PasswordBarWrapper>
-              <LoginBar>
-                <LoginTitle>Login</LoginTitle>
-              </LoginBar>
-            </LoginForm>
-          </CustomContainer>
-        </RightWrapper>
-      </Main>
-    </Wrapper>
+                  <PasswordBarWrapper>
+                    <IconAndTagWrapper>
+                      <CustomFiLock />
+                      <TagWrapper>
+                        <Tag>Password</Tag>
+                        <PasswordInput
+                          id="password"
+                          type="password"
+                          placeholder="Must have at least 6 characters"
+                          required
+                        />
+                      </TagWrapper>
+                    </IconAndTagWrapper>
+
+                    <CustomFaTimes />
+                  </PasswordBarWrapper>
+
+                  <PasswordBarWrapper>
+                    <IconAndTagWrapper>
+                      <CustomAiOutlineEye />
+                      <TagWrapper>
+                        <Tag>Confirm Password</Tag>
+                        <PasswordInput
+                          id="confirm_password"
+                          type="password"
+                          placeholder="Enter the same password"
+                          required
+                        />
+                      </TagWrapper>
+                    </IconAndTagWrapper>
+
+                    <CustomFaTimes />
+                  </PasswordBarWrapper>
+
+                  <SignupBar>
+                    <SignupTitle>Sign Up</SignupTitle>
+                  </SignupBar>
+                </Signupform>
+              </mainWrapper>
+            </CustomContainer>
+          </RightWrapper>
+        </Main>
+      </Wrapper>
+    </>
   );
 };
 
@@ -92,7 +120,6 @@ const ImageBackWrapper = styled.div`
   @media (max-width: 991.98px) {
     height: 40%;
     width: 100%;
-    align-items: center;
   }
 `;
 
@@ -116,18 +143,16 @@ const Title = styled.h1`
   font-size: 38px;
   font-weight: 700;
   color: #000000;
-
   margin-bottom: 10px;
-
   @media (max-width: 991.98px) {
-    padding-top: 40px;
+    padding-top: 10px;
   }
 `;
 
 const CustomContainer = styled(Container)`
   max-width: 481px;
 `;
-
+const mainWrapper = styled.div``;
 const Subtitle = styled.span`
   font-family: "Roboto";
   font-size: 19px;
@@ -156,7 +181,6 @@ const BarWrapper = styled.div`
   align-items: center;
   background-color: #fcfcfc;
   max-width: 481px;
-  justify-content: space-between;
   @media (max-width: 767.98px) {
     margin-top: 8px;
   }
@@ -178,7 +202,7 @@ const CustomFaTimes = styled(FaTimes)`
   width: 20px;
   height: 20px;
   color: #a0a3bd;
-
+  margin-left: auto;
   margin-right: 26px;
 `;
 
@@ -221,6 +245,17 @@ const CustomFiLock = styled(FiLock)`
   }
 `;
 
+const CustomAiOutlineEye = styled(AiOutlineEye)`
+  width: 29px;
+  height: 29px;
+  margin: 27px 29px;
+
+  @media (max-width: 767.98px) {
+    width: 24px;
+    height: 24px;
+    margin: 22px 18px;
+  }
+`;
 const PasswordBarWrapper = styled.div`
   margin-top: 16px;
   border-radius: 20px;
@@ -241,7 +276,7 @@ const Password = styled.span`
   }
 `;
 
-const LoginBar = styled.button`
+const SignupBar = styled.button`
   margin-top: 46px;
   width: 100%;
   border-radius: 20px;
@@ -258,7 +293,7 @@ const LoginBar = styled.button`
   }
 `;
 
-const LoginTitle = styled.h1`
+const SignupTitle = styled.h1`
   font-family: "Roboto";
   font-size: 24px;
   font-weight: 700;
@@ -269,9 +304,29 @@ const LoginTitle = styled.h1`
   }
 `;
 
-const LoginForm = styled.form``;
+const LoginLink = styled.a`
+  font-family: "Roboto";
+  font-size: 19px;
+  color: #1c4b56;
+  font-weight: 700;
 
-const EmailInput = styled.input`
+  padding-bottom: 0.5px;
+  outline: none;
+
+  :hover {
+    color: #1c4b56;
+  }
+`;
+
+const IconAndTagWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
+const Signupform = styled.form``;
+
+const SigninInput = styled.input`
   font-family: "Roboto";
   font-size: 16px;
   font-weight: 400;
@@ -299,22 +354,4 @@ const PasswordInput = styled.input`
   }
 `;
 
-const IconAndTagWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-`;
-
-const SignupLink = styled.a`
-  font-family: "Roboto";
-  font-size: 19px;
-  color: #1c4b56;
-  font-weight: 700;
-  padding-bottom: 0.5px;
-  outline: none;
-
-  :hover {
-    color: #1c4b56;
-  }
-`;
-export default Login;
+export default Signup;

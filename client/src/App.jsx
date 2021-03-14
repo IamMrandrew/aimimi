@@ -8,7 +8,7 @@ import styled from "styled-components/macro";
 import { GlobalStyle } from "./components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
+import Signup from "./views/Signup";
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -31,6 +31,9 @@ const App = () => {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/signup">
+            <Signup />
           </Route>
         </Switch>
       </Router>
