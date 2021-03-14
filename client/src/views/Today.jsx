@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
-import Goal from "./Goal";
+import Goal from "../components/Goal";
 const Today = () => {
   const goal = [
     {
