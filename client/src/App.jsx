@@ -50,7 +50,7 @@ const Wrapper = styled(Row)`
 `;
 
 const Main = styled(Col)`
-  background-color: white;
+  background-color: var(--greyBackground);
   padding-left: 0;
   padding-right: 0;
 `;

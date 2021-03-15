@@ -42,13 +42,14 @@ const Today = () => {
 
 export default Today;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  padding-top: 32px;
+`;
 
 const Title = styled.h1`
   font-size: 40px;
   font-weight: 700;
   color: var(--primaryShaded);
-  margin-top: 20px;
   margin-bottom: 30px;
 
   @media (max-width: 991.98px) {
