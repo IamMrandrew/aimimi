@@ -8,21 +8,29 @@ const Today = () => {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 0,
     },
     {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 2,
     },
     {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 4,
     },
     {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 8,
     },
   ];
 
