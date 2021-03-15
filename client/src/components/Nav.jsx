@@ -10,16 +10,22 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     setShowSidebar(!showSidebar);
   };
   return (
-    <NavContainer>
-      <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
-      <Profile src={Profilephoto} />
-      <Today>Today</Today>
-      <CustomFaBell />
-    </NavContainer>
+    <Wrapper>
+      <NavContainer>
+        <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
+        <Profile src={Profilephoto} />
+        <Today>Today</Today>
+        <CustomFaBell />
+      </NavContainer>
+    </Wrapper>
   );
 };
 
 export default Nav;
+
+const Wrapper = styled.div`
+  background-color: white;
+`;
 
 const NavContainer = styled(Container)`
   height: 80px;

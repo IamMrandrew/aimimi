@@ -8,21 +8,29 @@ const Today = () => {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 0,
     },
     {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 2,
     },
     {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 4,
     },
     {
       title: "Drink Water!",
       period: "Everyday",
       timespan: "86 days left",
+      times: 8,
+      progress: 8,
     },
   ];
 
@@ -42,13 +50,14 @@ const Today = () => {
 
 export default Today;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  padding-top: 32px;
+`;
 
 const Title = styled.h1`
   font-size: 40px;
   font-weight: 700;
   color: var(--primaryShaded);
-  margin-top: 20px;
   margin-bottom: 30px;
 
   @media (max-width: 991.98px) {
