@@ -2,8 +2,6 @@
 
 # aimimi
 
-## Overview
-
 The project’s objective is to develop a platform for people who are hoping to crush their goals. The core feature of the platform is goal tracking, also with some other features like goal sharing, leaderboard, social networking service, etc.
 
 ## File Structure
