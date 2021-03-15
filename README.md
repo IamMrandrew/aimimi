@@ -69,15 +69,15 @@ Make sure you have [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stabl
 
 ```
 git clone https://github.com/IamMrandrew/aimimi.git
-yarn install
 ```
 
 ### client
 
-Navigate to client folder
+Navigate to client folder, install dependencies
 
 ```
 cd client
+yarn install
 ```
 
 Start the client side
@@ -88,10 +88,11 @@ yarn start
 
 ### server
 
-Navigate to client folder
+Navigate to client folder, install dependencies
 
 ```
 cd server
+yarn install
 ```
 
 Create an `.env` file under the server folder and set the environment variable:
