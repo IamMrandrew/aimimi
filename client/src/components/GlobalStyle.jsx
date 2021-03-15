@@ -8,8 +8,8 @@ export const GlobalStyle = createGlobalStyle`
     --primaryShaded: #1C4B56 ;
     --primaryGoal: #73CED9;
     --grey: rgba(0, 0, 0, 0.08);
-    --background:#348CA2;
-    --greyBackground: #FAFAFA;
+    --primaryMild:#348CA2;
+    --background: #FAFAFA;
   }
   * {
       font-family: 'Roboto', "Open Sans", sans-serif;
