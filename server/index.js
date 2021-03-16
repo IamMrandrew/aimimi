@@ -25,6 +25,6 @@ app.all("/", function (req, res) {
 });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use("/user", userRoutes);
-app.use("/goal", goalRoutes);
+app.use("/", userRoutes);
+app.use("/", goalRoutes);
 const server = app.listen(process.env.PORT);
