@@ -1,34 +1,30 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 require("dotenv").config();
-const userRoutes = require('./api/routes/user');
+const userRoutes = require("./api/routes/user");
 const goalRoutes = require("./api/routes/goal");
-mongoose.connect(process.env.MONGO_URL,  {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function () {
   console.log("successful connection");
 });
 
-                      
- 
-const express = require('express');
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 // handle ALL requests
-app.all('/', function (req, res) {
-// send this to client
-res.send("Hello World!");
+app.all("/", function (req, res) {
+  // send this to client
+  res.send("Hello World!");
 });
-<<<<<<< HEAD
-// listen to port 3000
-const server = app.listen(3000);
-=======
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/user", userRoutes);
 app.use("/goal", goalRoutes);
 const server = app.listen(process.env.PORT);
->>>>>>> 2eb676a (feat: user and goal)
