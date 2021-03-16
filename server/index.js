@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
+
 require("dotenv").config();
+const userRoutes = require('./api/routes/user');
+const goalRoutes = require("./api/routes/goal");
 mongoose.connect(process.env.MONGO_URL,  {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 
@@ -8,15 +11,24 @@ db.once('open', function() {
   console.log("successful connection");
 });
 
-const dbName = "cluster0";
                       
  
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+
 // handle ALL requests
-app.all('/*', function (req, res) {
+app.all('/', function (req, res) {
 // send this to client
 res.send("Hello World!");
 });
+<<<<<<< HEAD
 // listen to port 3000
 const server = app.listen(3000);
+=======
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use("/user", userRoutes);
+app.use("/goal", goalRoutes);
+const server = app.listen(process.env.PORT);
+>>>>>>> 2eb676a (feat: user and goal)
