@@ -18,11 +18,11 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
-// handle ALL requests
-app.all("/", function (req, res) {
-  // send this to client
-  res.send("Hello World!");
-});
+// // handle ALL requests
+// app.all("/", function (req, res) {
+//   // send this to client
+//   res.send("Hello World!");
+// });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
