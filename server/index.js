@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const path = require("path");
 
 require("dotenv").config();
 const userRoutes = require("./api/routes/user");
@@ -14,9 +18,7 @@ db.once("open", function () {
   console.log("successful connection");
 });
 
-const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
 
 // // handle ALL requests
 // app.all("/", function (req, res) {
