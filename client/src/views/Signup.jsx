@@ -162,15 +162,6 @@ const Subtitle = styled.span`
   }
 `;
 
-const SignupText = styled.span`
-  font-family: "Roboto";
-  font-size: 19px;
-  color: #1c4b56;
-  font-weight: 700;
-  border-bottom: 1px solid #1c4b56;
-  padding-bottom: 0.5px;
-`;
-
 const BarWrapper = styled.div`
   margin-top: 45px;
   border-radius: 20px;
@@ -220,16 +211,6 @@ const Tag = styled.h2`
     margin-bottom: 2px;
   }
 `;
-const Email = styled.span`
-  font-family: "Roboto";
-  font-size: 20px;
-  font-weight: 400;
-  color: black;
-
-  @media (max-width: 767.98px) {
-    font-size: 14px;
-  }
-`;
 
 const CustomFiLock = styled(FiLock)`
   width: 29px;
@@ -262,16 +243,6 @@ const PasswordBarWrapper = styled.div`
   align-items: center;
   background-color: #fcfcfc;
   max-width: 481px;
-`;
-const Password = styled.span`
-  font-family: "Roboto";
-  font-size: 20px;
-  font-weight: 400;
-  color: black;
-
-  @media (max-width: 767.98px) {
-    font-size: 14px;
-  }
 `;
 
 const SignupBar = styled.button`

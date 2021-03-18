@@ -38,7 +38,7 @@ const Today = () => {
     <Wrapper>
       <CustomContainer>
         <Title>Today</Title>
-        <Subtitle>Two task left for today</Subtitle>
+        <Subtitle>Three task left for today</Subtitle>
         <Goal goal={goal[0]} />
         <Goal goal={goal[1]} />
         <Goal goal={goal[2]} />
@@ -55,7 +55,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 40px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--primaryShaded);
   margin-bottom: 30px;
@@ -66,7 +66,7 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.span`
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--primaryTinted);
   display: block;
