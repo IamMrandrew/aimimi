@@ -21,10 +21,11 @@ The project’s objective is to develop a platform for people who are hoping to 
 │   ├── yarn.lock
 │   ├── README.md
 ├── server
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
+│   ├── api
+│   │   ├── controllers
+│   │   ├── middleware
+│   │   ├── models
+│   │   ├── routes
 │   ├── index.js
 |   ├── package.json
 │   ├── yarn.lock
@@ -99,7 +100,7 @@ Create an `.env` file under the server folder and set the environment variable:
 
 ```
 PORT=3001
-MONGO_URI=your_own_mongodb_uri
+MONGO_URL=your_own_mongodb_uri
 NODE_ENV=development
 ```
 
