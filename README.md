@@ -100,7 +100,7 @@ Create an `.env` file under the server folder and set the environment variable:
 
 ```
 PORT=3001
-MONGO_URI=your_own_mongodb_uri
+MONGO_URL=your_own_mongodb_uri
 NODE_ENV=development
 ```
 
