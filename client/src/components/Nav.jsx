@@ -8,7 +8,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Login from "../views/Login";
+
 const Nav = ({ showSidebar, setShowSidebar }) => {
   const [showDropDown, setShowDropDown] = useState(false);
 
