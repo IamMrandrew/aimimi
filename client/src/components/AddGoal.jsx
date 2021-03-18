@@ -6,9 +6,11 @@ const AddGoal = () => {
   const [goalName, setGoalName] = useState("");
   const [goalCategory, setGoalCategory] = useState("");
   const [goalPeriod, setGoalPeriod] = useState("");
-  const [goalTarget, setGoalTarget] = useState("");
+  const [goalFrequency, setGoalFrequency] = useState("");
   const [goalTimespan, setGoalTimespan] = useState("");
   const [goalPublicity, setGoalPublicity] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
 
   const goalNameHandler = (e) => {
     setGoalName(e.target.value);
@@ -19,23 +21,32 @@ const AddGoal = () => {
   const goalPeriodHandler = (e) => {
     setGoalPeriod(e.target.value);
   };
-  const goalTargetHandler = (e) => {
-    setGoalTarget(e.target.value);
+  const goalFrequencyHandler = (e) => {
+    setGoalFrequency(e.target.value);
   };
   const goalTimespanHandler = (e) => {
     setGoalTimespan(e.target.value);
   };
 
   const goalPublicityHandler = (e) => {
-    setGoalPublicity(e.target.value);
+    setGoalPublicity(!goalPublicity);
+  };
+
+  const showModalHandler = () => {
+    setShowModal(!showModal);
   };
 
   return (
     <>
-      <Wrapper>
+      <Wrapper showModal={showModal}>
         <Title>Add Goal</Title>
         <Label>Name</Label>
-        <Input type="text" placeholder="Goal name" />
+        <Input
+          type="text"
+          onChange={goalNameHandler}
+          value={goalName}
+          placeholder="Goal name"
+        />
         <Label>In what category?</Label>
         <Select>
           <Option>Sports</Option>
@@ -45,16 +56,30 @@ const AddGoal = () => {
         <Button>Everyday</Button>
         <Button>Weekly</Button>
         <Label>How many times?</Label>
-        <Input type="text" placeholder="1" />
+        <Input
+          type="number"
+          onChange={goalFrequencyHandler}
+          value={goalFrequency}
+          placeholder="1"
+        />
         <Label>Last for how long?</Label>
-        <Input type="text" placeholder="3" />
+        <Input
+          type="number"
+          onChange={goalTimespanHandler}
+          value={goalTimespan}
+          placeholder="3"
+        />
         <Field>
-          <CheckBox type="checkbox" />
+          <CheckBox
+            type="checkbox"
+            onChange={goalPublicityHandler}
+            checked={goalPublicity}
+          />
           <Label>Shared Goal</Label>
         </Field>
         <SubmitButton>Done</SubmitButton>
       </Wrapper>
-      <FloatButton>
+      <FloatButton onClick={showModalHandler}>
         <FaPlus />
       </FloatButton>
     </>
@@ -74,6 +99,8 @@ const Wrapper = styled.div`
   padding: 40px 20px;
   border-radius: 12px;
   border: 1px solid #e6e6e6;
+
+  display: ${(props) => (props.showModal ? "block" : "none")};
 `;
 
 const Title = styled.span`
