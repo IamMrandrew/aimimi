@@ -27,8 +27,8 @@ const Wrapper = styled.div`
   position: relative;
   background-color: white;
   overflow: hidden;
-  border-radius: 30px;
-  padding: 25px 48.95px;
+  border-radius: 20px;
+  padding: 20px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,13 +44,10 @@ const Title = styled.h2`
   z-index: 10;
   color: var(--primaryShaded);
   font-family: "Roboto";
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 0px;
-
-  @media (max-width: 991.98px) {
-    font-size: 16px;
-  }
+  line-height: 0.7;
 `;
 const TimesWrapper = styled.div``;
 const TitleWrapper = styled.div``;
@@ -60,13 +57,9 @@ const Description = styled.span`
   z-index: 10;
   color: var(--primaryShaded);
   font-family: "Roboto";
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin-right: 10px;
-
-  @media (max-width: 991.98px) {
-    font-size: 14px;
-  }
 `;
 
 const Times = styled.span`
@@ -74,12 +67,8 @@ const Times = styled.span`
   z-index: 10;
   color: var(--primaryShaded);
   font-family: "Roboto";
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-
-  @media (max-width: 991.98px) {
-    font-size: 16px;
-  }
 `;
 
 const Progress = styled.div`
