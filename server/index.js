@@ -23,8 +23,10 @@ app.all("/", function (req, res) {
   // send this to client
   res.send("Hello World!");
 });
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/", userRoutes);
 app.use("/", goalRoutes);
 const server = app.listen(process.env.PORT);
+
