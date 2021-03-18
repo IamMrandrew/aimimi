@@ -28,5 +28,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/", userRoutes);
 app.use("/", goalRoutes);
-const server = app.listen(process.env.PORT);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Server is running!!");
+  });
+}
+
+const server = app.listen(process.env.PORT);
