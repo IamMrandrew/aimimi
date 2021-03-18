@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { FaPlus } from "react-icons/fa";
 
 const AddGoal = () => {
+  const [goalName, setGoalName] = useState("");
+  const [goalCategory, setGoalCategory] = useState("");
+  const [goalPeriod, setGoalPeriod] = useState("");
+  const [goalTarget, setGoalTarget] = useState("");
+  const [goalTimespan, setGoalTimespan] = useState("");
+  const [goalPublicity, setGoalPublicity] = useState(false);
+
+  const goalNameHandler = (e) => {
+    setGoalName(e.target.value);
+  };
+  const goalCategoryHandler = (e) => {
+    setGoalCategory(e.target.value);
+  };
+  const goalPeriodHandler = (e) => {
+    setGoalPeriod(e.target.value);
+  };
+  const goalTargetHandler = (e) => {
+    setGoalTarget(e.target.value);
+  };
+  const goalTimespanHandler = (e) => {
+    setGoalTimespan(e.target.value);
+  };
+
+  const goalPublicityHandler = (e) => {
+    setGoalPublicity(e.target.value);
+  };
+
   return (
     <>
       <Wrapper>
@@ -56,7 +83,7 @@ const Title = styled.span`
 `;
 
 const Label = styled.label`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 4px;
   display: block;
