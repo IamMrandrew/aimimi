@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "IamMrandrew <andrewliyanlap000824@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "node server/index.js",
+    "heroku-postbuild": "YARN_PRODUCTION=false yarn --cwd client install && yarn --cwd server install && yarn --cwd client build"
+  }
 }
