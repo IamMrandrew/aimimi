@@ -84,8 +84,8 @@ const BellWapper = styled.div`
   padding-left: 23px;
 `;
 const CustomFaBell = styled(FaBell)`
-  width: 28px;
-  height: 37px;
+  width: 24px;
+  height: 33px;
 
   @media (max-width: 991.98px) {
     /* 767.99*/
@@ -95,7 +95,7 @@ const CustomFaBell = styled(FaBell)`
 `;
 
 const Profile = styled.img`
-  padding-right: 36px;
+  margin-right: 10px;
 
   @media (max-width: 991.98px) {
     display: none;

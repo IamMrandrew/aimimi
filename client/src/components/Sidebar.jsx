@@ -114,22 +114,20 @@ const Item = styled.div`
   @media (max-width: 991.98px) {
     margin-left: 0;
   }
-
-  :hover {
-  }
 `;
 
 const ProfileItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 24px;
+
   @media (min-width: 992px) {
     display: none;
   }
 `;
 
 const ItemIcon = styled.span`
-  font-size: 28px;
+  font-size: 24px;
   color: var(--primaryShaded);
   font-weight: 700;
   margin-right: 20px;
@@ -150,8 +148,8 @@ const Hr = styled.hr`
 `;
 
 const Avator = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 24px;
   margin-right: 18px;
   overflow: hidden;
