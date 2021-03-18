@@ -28,8 +28,8 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use("/", userRoutes);
-app.use("/", goalRoutes);
+app.use("/user", userRoutes);
+app.use("/goal", goalRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
