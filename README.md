@@ -21,10 +21,11 @@ The project’s objective is to develop a platform for people who are hoping to 
 │   ├── yarn.lock
 │   ├── README.md
 ├── server
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
+│   ├── api
+│   │   ├── controllers
+│   │   ├── middleware
+│   │   ├── models
+│   │   ├── routes
 │   ├── index.js
 |   ├── package.json
 │   ├── yarn.lock
