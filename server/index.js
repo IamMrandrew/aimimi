@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 const userRoutes = require("./api/routes/user");
@@ -28,7 +29,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cookieParser());
 
 app.use("/user", userRoutes);
 app.use("/goal", goalRoutes);

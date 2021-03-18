@@ -7,8 +7,20 @@ import Container from "react-bootstrap/Container";
 import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const Login = () => {
+  axios
+    .post(
+      "http://localhost:3001/user/login",
+      { email: "def@mail.com", password: "12345" },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      console.log(res.data);
+    });
+
   return (
     <Wrapper>
       <Main>

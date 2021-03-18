@@ -9,6 +9,7 @@ import { GlobalStyle } from "./components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
+
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
