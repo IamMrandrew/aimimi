@@ -102,6 +102,7 @@ Create an `.env` file under the server folder and set the environment variable:
 PORT=3001
 MONGO_URL=your_own_mongodb_uri
 NODE_ENV=development
+JTW_TOKEN=your_token
 ```
 
 Start the server side
