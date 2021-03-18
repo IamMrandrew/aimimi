@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Goal from "../components/Goal";
+import AddGoal from "../components/AddGoal";
 const Today = () => {
   const goal = [
     {
@@ -43,6 +44,7 @@ const Today = () => {
         <Goal goal={goal[1]} />
         <Goal goal={goal[2]} />
         <Goal goal={goal[3]} />
+        <AddGoal />
       </CustomContainer>
     </Wrapper>
   );
@@ -52,6 +54,8 @@ export default Today;
 
 const Wrapper = styled.div`
   padding-top: 32px;
+  flex: 1;
+  display: flex;
 `;
 
 const Title = styled.h1`
@@ -79,4 +83,5 @@ const Subtitle = styled.span`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
+  position: relative;
 `;

@@ -1,5 +1,4 @@
 import styled from "styled-components/macro";
-
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import LoginImage from "../assets/LogInBack.png";
@@ -7,19 +6,33 @@ import Container from "react-bootstrap/Container";
 import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
+import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const Login = () => {
-  axios
-    .post(
-      "http://localhost:3001/user/login",
-      { email: "def@mail.com", password: "12345" },
-      { withCredentials: true }
-    )
-    .then((res) => {
-      console.log(res.data);
-    });
+  const [details, setDetails] = useState({ email: "", password: "" });
+  const history = useHistory();
+  const Login = (details) => {
+    axios
+      .post("http://localhost:3001/user/login", details, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+
+        history.push("/");
+      })
+      .catch((error) => {
+        alert("Login Failed. Try Again.");
+      });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    Login(details);
+  };
 
   return (
     <Wrapper>
@@ -32,11 +45,10 @@ const Login = () => {
           <CustomContainer>
             <Title>Log In</Title>
             <Subtitle>or </Subtitle>
-
             <SignupLink href="/Signup">Sign up </SignupLink>
 
             <Subtitle> (if you do not have an account) </Subtitle>
-            <LoginForm method="POST">
+            <LoginForm method="POST" onSubmit={submitHandler}>
               <BarWrapper>
                 <IconAndTagWrapper>
                   <CustomFaEnvelope />
@@ -47,6 +59,10 @@ const Login = () => {
                       type="email"
                       name="name"
                       placeholder="name@domain.com"
+                      onChange={(e) =>
+                        setDetails({ ...details, email: e.target.value })
+                      }
+                      value={details.email}
                       required
                     ></EmailInput>
                   </TagWrapper>
@@ -61,6 +77,10 @@ const Login = () => {
                     id="password"
                     type="password"
                     placeholder="Must have at least 8 characters"
+                    onChange={(e) =>
+                      setDetails({ ...details, password: e.target.value })
+                    }
+                    value={details.password}
                     required
                   />
                 </TagWrapper>

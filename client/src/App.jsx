@@ -54,4 +54,6 @@ const Main = styled(Col)`
   background-color: var(--background);
   padding-left: 0;
   padding-right: 0;
+  display: flex;
+  flex-direction: column;
 `;
