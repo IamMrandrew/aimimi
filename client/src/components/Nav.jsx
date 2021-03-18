@@ -42,7 +42,9 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
                 </ProfileWrapper>
                 <LogoutWrapper>
                   <CustomFaSignOutAlt />
-                  <DropDownText to="/login">Logout</DropDownText>
+                  <Link to="/login">
+                    <DropDownText>Logout</DropDownText>
+                  </Link>
                 </LogoutWrapper>
               </BlockWrapper>
             </DownWrapper>
@@ -118,7 +120,7 @@ const CustomFaBars = styled(FaBars)`
   height: 28px;
   color: var(--primaryShaded);
   display: none;
-
+  cursor: pointer;
   @media (max-width: 991.98px) {
     display: block;
     justify-content: flex-start;
@@ -152,6 +154,7 @@ const CustomFaChevronDown = styled(FaChevronDown)`
   width: 20px;
   height: 20px;
   margin-right: 14px;
+  cursor: pointer;
 `;
 
 const DownWrapper = styled.div`
@@ -179,7 +182,7 @@ const ProfileWrapper = styled.div`
   margin-bottom: 5px;
 `;
 
-const DropDownText = styled(Link)`
+const DropDownText = styled.span`
   font-family: "Roboto";
   color: var(--primaryShaded);
   font-size: 16px;
@@ -208,9 +211,11 @@ const CustomFaSignOutAlt = styled(FaSignOutAlt)`
   color: var(--primaryShaded);
 `;
 const BlockWrapper = styled.div``;
+
 const WrapDropDownWrapper = styled.div`
   position: relative;
 `;
+
 const OutDropDown = styled.div`
   @media (max-width: 991.98px) {
     display: none;
