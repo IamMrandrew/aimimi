@@ -44,7 +44,7 @@ const Title = styled.h2`
   z-index: 10;
   color: var(--primaryShaded);
   font-family: "Roboto";
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 0px;
 
@@ -60,7 +60,7 @@ const Description = styled.span`
   z-index: 10;
   color: var(--primaryShaded);
   font-family: "Roboto";
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin-right: 10px;
 
@@ -74,7 +74,7 @@ const Times = styled.span`
   z-index: 10;
   color: var(--primaryShaded);
   font-family: "Roboto";
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
 
   @media (max-width: 991.98px) {

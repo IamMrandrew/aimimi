@@ -1,11 +1,21 @@
 import React from "react";
 import styled, { css } from "styled-components/macro";
-import { FaCalendarWeek, FaBullseye, FaUsers, FaTrophy } from "react-icons/fa";
+import {
+  FaCalendarWeek,
+  FaBullseye,
+  FaUsers,
+  FaTrophy,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import ProfilePhoto from "../assets/ProfilePhoto.png";
+import Logo from "../assets/Logo.svg";
 
 const Sidebar = ({ showSidebar }) => {
   return (
     <Wrapper showSidebar={showSidebar}>
+      <LogoWrapper>
+        <LogoImg src={Logo} />
+      </LogoWrapper>
       <Item>
         <ItemIcon>
           <FaCalendarWeek />
@@ -37,6 +47,13 @@ const Sidebar = ({ showSidebar }) => {
         </Avator>
         <ItemText>Magnus Nicholls</ItemText>
       </ProfileItem>
+
+      <ProfileItem>
+        <ItemIcon>
+          <FaSignOutAlt />
+        </ItemIcon>
+        <ItemText>Log out</ItemText>
+      </ProfileItem>
     </Wrapper>
   );
 };
@@ -47,7 +64,7 @@ const Wrapper = styled.div`
   border-right: solid 1px var(--grey);
   background-color: white;
   height: 100%;
-  padding-top: 100px;
+  padding-top: 33px;
 
   /* Bootstrap col-lg-3  */
   position: relative;
@@ -97,12 +114,15 @@ const Item = styled.div`
   @media (max-width: 991.98px) {
     margin-left: 0;
   }
+
+  :hover {
+  }
 `;
 
 const ProfileItem = styled.div`
   display: flex;
   align-items: center;
-
+  margin-bottom: 24px;
   @media (min-width: 992px) {
     display: none;
   }
@@ -116,7 +136,7 @@ const ItemIcon = styled.span`
 `;
 
 const ItemText = styled.span`
-  font-size: 20px;
+  font-size: 18px;
   color: var(--primaryShaded);
   font-weight: 700;
 `;
@@ -142,3 +162,18 @@ const AvatorImg = styled.img`
   object-fit: cover;
   object-position: center center;
 `;
+
+const LogoWrapper = styled.div`
+  max-width: 180px;
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 48px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: 991.98px) {
+    display: none;
+  }
+`;
+
+const LogoImg = styled.img``;
