@@ -9,18 +9,24 @@ import { FiLock } from "react-icons/fi";
 import { useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
-axios.defaults.withCredentials = true;
+import Cookies from "universal-cookie";
 
-const Login = () => {
+const Login = ({ setAuth }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const history = useHistory();
   const Login = (details) => {
+    const cookies = new Cookies();
+
     axios
-      .post("http://localhost:3001/user/login", details, {
-        withCredentials: true,
-      })
+      .post("http://localhost:3001/user/login", details)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.message);
+        cookies.set("token", response.data.token, {
+          sameSite: "strict",
+          path: "/",
+          expires: new Date(new Date().getTime() + 1000 * 1000),
+        });
+        setAuth(cookies.get("token"));
 
         history.push("/");
       })

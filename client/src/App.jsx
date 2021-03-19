@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
@@ -9,9 +9,23 @@ import { GlobalStyle } from "./components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
+import Cookies from "universal-cookie";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [auth, setAuth] = useState(null);
+
+  useEffect(() => {
+    const cookies = new Cookies();
+    const token = cookies.get("token");
+
+    if (token) {
+      setAuth(cookies.get("token"));
+      console.log(auth);
+
+      // Not working here
+    }
+  }, []);
 
   return (
     <>
@@ -26,12 +40,12 @@ const App = () => {
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
                 />
-                <Today />
+                <Today auth={auth} />
               </Main>
             </Wrapper>
           </Route>
           <Route path="/login">
-            <Login />
+            <Login setAuth={setAuth} />
           </Route>
           <Route path="/signup">
             <Signup />
