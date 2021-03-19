@@ -131,7 +131,7 @@ const Wrapper = styled.div`
   bottom: 140px;
   right: 0;
   z-index: 1000;
-  min-width: 350px;
+  min-width: 320px;
 
   background-color: white;
   padding: 40px 20px;
@@ -139,6 +139,10 @@ const Wrapper = styled.div`
   border: 1px solid #e6e6e6;
 
   display: ${(props) => (props.showModal ? "block" : "none")};
+
+  @media (max-width: 575.98px) {
+    width: 100%;
+  }
 `;
 
 const Title = styled.span`
