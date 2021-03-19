@@ -72,15 +72,10 @@ exports.user_login = (req, res, next) => {
             //expiresIn: "1h"
             //}
           );
-          return res
-            .status(200)
-            .cookie("token", token, {
-              sameSite: "strict",
-              path: "/",
-              expires: new Date(new Date().getTime() + 100 * 1000),
-              httpOnly: true,
-            })
-            .send("Logged in");
+          return res.status(200).json({
+            message: "Logged in",
+            token: token,
+          });
         }
         res.status(401).json({
           message: "Incorrect password",
