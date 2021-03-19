@@ -95,6 +95,20 @@ exports.user_login = (req, res, next) => {
     });
 };
 
+exports.user_logout = (req, res, next) => {
+  res
+    .status(202)
+    .clearCookie("token")
+    .json({
+      message: "Logged out",
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
 exports.user_delete = (req, res, next) => {
   const ObjectId = require("mongoose").Types.ObjectId;
   User.remove({ _id: new ObjectId(req.body.userID) })
