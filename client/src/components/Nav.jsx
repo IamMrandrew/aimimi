@@ -8,15 +8,34 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Nav = ({ showSidebar, setShowSidebar }) => {
   const [showDropDown, setShowDropDown] = useState(false);
-
+  const history = useHistory();
   const SideBarHandler = (showSidebar) => {
     setShowSidebar(!showSidebar);
   };
   const DropDownHandler = (showDropDown) => {
     setShowDropDown(!showDropDown);
+  };
+  const Logout = () => {
+    axios
+      .delete("/user/logout", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        history.push("/login");
+      })
+      .catch((error) => {
+        alert("Logout Failed. Try Again.");
+      });
+  };
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    Logout();
   };
 
   return (
@@ -37,14 +56,13 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
             <DownWrapper showDropDown={showDropDown}>
               <BlockWrapper>
                 <ProfileWrapper>
-                  <CustomFaUserAlt />
-                  <DropDownText>Profile</DropDownText>
+                  <CustomFaSignOutAlt />
+
+                  <DropDownText onClick={onClickHandler}>Logout</DropDownText>
                 </ProfileWrapper>
                 <LogoutWrapper>
-                  <CustomFaSignOutAlt />
-                  <Link to="/login">
-                    <DropDownText>Logout</DropDownText>
-                  </Link>
+                  <CustomFaUserAlt />
+                  <ProfileDropDownText>Profile</ProfileDropDownText>
                 </LogoutWrapper>
               </BlockWrapper>
             </DownWrapper>
@@ -187,6 +205,7 @@ const DropDownText = styled.span`
   color: var(--primaryShaded);
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 
   :hover {
     text-decoration: none;
@@ -219,5 +238,17 @@ const WrapDropDownWrapper = styled.div`
 const OutDropDown = styled.div`
   @media (max-width: 991.98px) {
     display: none;
+  }
+`;
+
+const ProfileDropDownText = styled.span`
+  font-family: "Roboto";
+  color: var(--primaryShaded);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  :hover {
+    text-decoration: none;
   }
 `;
