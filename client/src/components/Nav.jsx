@@ -20,6 +20,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
   const DropDownHandler = (showDropDown) => {
     setShowDropDown(!showDropDown);
   };
+
   const Logout = () => {
     axios
       .delete("/user/logout", {

@@ -13,13 +13,14 @@ import axios from "axios";
 const Login = ({ setAuth }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const history = useHistory();
+
   const Login = (details) => {
     axios
       .post("/user/login", details, {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         setAuth(response.data);
         history.push("/");
       })

@@ -11,11 +11,11 @@ import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
 import axios from "axios";
-
+import { useHistory } from "react-router-dom";
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [auth, setAuth] = useState(null);
-
+  const history = useHistory();
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
@@ -30,36 +30,36 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Router>
-        <Switch>
-          {auth && (
-            <Route exact path="/">
-              <Wrapper>
-                <Sidebar showSidebar={showSidebar} />
-                <Main lg={9}>
-                  <Nav
-                    showSidebar={showSidebar}
-                    setShowSidebar={setShowSidebar}
-                  />
-                  <Today />
-                </Main>
-              </Wrapper>
-            </Route>
-          )}
+
+      <Switch>
+        {auth && (
           <Route exact path="/">
-            <Login setAuth={setAuth} />
+            <Wrapper>
+              <Sidebar showSidebar={showSidebar} />
+              <Main lg={9}>
+                <Nav
+                  showSidebar={showSidebar}
+                  setShowSidebar={setShowSidebar}
+                />
+                <Today />
+              </Main>
+            </Wrapper>
           </Route>
-          <Route path="/login">
-            <Login setAuth={setAuth} />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Route path="/onboarding">
-            <Onboarding />
-          </Route>
-        </Switch>
-      </Router>
+        )}
+        <Route exact path="/">
+          {/* <Login setAuth={setAuth} /> */}
+          <Onboarding />
+        </Route>
+        <Route path="/login">
+          <Login setAuth={setAuth} />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+        <Route path="/onboarding">
+          <Onboarding />
+        </Route>
+      </Switch>
     </>
   );
 };
