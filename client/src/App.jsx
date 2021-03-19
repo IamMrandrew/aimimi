@@ -9,16 +9,10 @@ import { GlobalStyle } from "./components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
-import Cookies from "universal-cookie";
 import Onboarding from "./views/Onboarding";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-
-  useEffect(() => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-  }, []);
 
   return (
     <>

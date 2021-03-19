@@ -4,23 +4,18 @@ import Container from "react-bootstrap/Container";
 import Goal from "../components/Goal";
 import AddGoal from "../components/AddGoal";
 import axios from "axios";
-import Cookies from "universal-cookie";
 
 const Today = () => {
   const [goals, setGoals] = useState([]);
 
   useEffect(() => {
-    const cookies = new Cookies();
-    const auth = cookies.get("token");
     axios
-      .get(
-        "http://localhost:3001/goal",
-
-        { headers: { Authorization: "Bearer " + auth } }
-      )
+      .get("/goal", { withCredentials: true })
       .then((response) => {
-        console.log(response.data);
         setGoals(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
 
@@ -32,7 +27,7 @@ const Today = () => {
         {goals.map((goal) => (
           <Goal key={goal._id} goal={goal} />
         ))}
-        <AddGoal />
+        <AddGoal setGoals={setGoals} />
       </CustomContainer>
     </Wrapper>
   );
