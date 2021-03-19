@@ -6,18 +6,26 @@ import Container from "react-bootstrap/Container";
 import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
-import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
 const Login = () => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const history = useHistory();
   const Login = (details) => {
+    const cookies = new Cookies();
+
     axios
-      .put("http://localhost:3001/user", details)
+      .post("http://localhost:3001/user/login", details)
       .then((response) => {
-        console.log(response.data.token);
+        console.log(response.data.message);
+        cookies.set("token", response.data.token, {
+          sameSite: "strict",
+          path: "/",
+          expires: new Date(new Date().getTime() + 30 * 60 * 1000),
+        });
 
         history.push("/");
       })

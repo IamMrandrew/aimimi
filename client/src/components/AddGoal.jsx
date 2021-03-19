@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { FaPlus } from "react-icons/fa";
+import axios from "axios";
+import Cookies from "universal-cookie";
 
 const AddGoal = () => {
   const [goalName, setGoalName] = useState("");
-  const [goalCategory, setGoalCategory] = useState("");
-  const [goalPeriod, setGoalPeriod] = useState("");
+  const [goalCategory, setGoalCategory] = useState("Lifestyle");
+  const [goalPeriod, setGoalPeriod] = useState("Everyday");
   const [goalFrequency, setGoalFrequency] = useState("");
   const [goalTimespan, setGoalTimespan] = useState("");
   const [goalPublicity, setGoalPublicity] = useState(false);
@@ -34,6 +36,31 @@ const AddGoal = () => {
 
   const showModalHandler = () => {
     setShowModal(!showModal);
+  };
+
+  const addGoalHandler = () => {
+    const cookies = new Cookies();
+    const auth = cookies.get("token");
+    axios
+      .post(
+        "http://localhost:3001/goal",
+        {
+          title: goalName,
+          startTime: Date.now(),
+          category: goalCategory,
+          frequency: goalFrequency,
+          period: goalPeriod,
+          publicity: goalPublicity,
+          timespan: goalTimespan,
+        },
+        { headers: { Authorization: "Bearer " + auth } }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -77,7 +104,7 @@ const AddGoal = () => {
           />
           <Label>Shared Goal</Label>
         </Field>
-        <SubmitButton>Done</SubmitButton>
+        <SubmitButton onClick={addGoalHandler}>Done</SubmitButton>
       </Wrapper>
       <FloatButton onClick={showModalHandler}>
         <FaPlus />

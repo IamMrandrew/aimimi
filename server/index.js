@@ -20,12 +20,6 @@ db.once("open", function () {
 
 const app = express();
 
-// // handle ALL requests
-// app.all("/", function (req, res) {
-//   // send this to client
-//   res.send("Hello World!");
-// });
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
