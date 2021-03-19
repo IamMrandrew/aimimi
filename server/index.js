@@ -23,7 +23,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors({ credentials: true, origin: "https://aimimi.herokuapp.com/" }));
+app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 app.use(cookieParser());
 
 app.use("/user", userRoutes);
