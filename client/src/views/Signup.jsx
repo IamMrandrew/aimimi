@@ -9,8 +9,36 @@ import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
 import { AiOutlineEye } from "react-icons/ai";
 import styled from "styled-components/macro";
+import { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Signup = () => {
+  const [details, setDetails] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
+  const history = useHistory();
+  const Signup = (details) => {
+    axios
+      .post("/user/signup", details, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        history.push("/login");
+        alert("Signup successfully. Welcome!");
+      })
+      .catch((error) => {
+        alert("Signup Failed. Try Again.");
+      });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    Signup(details);
+  };
   return (
     <>
       <GlobalStyle />
@@ -26,7 +54,7 @@ const Signup = () => {
               <Subtitle>or </Subtitle>
               <LoginLink href="/Login"> Log In</LoginLink>
               <Subtitle> (if you already have an account) </Subtitle>
-              <Signupform method="POST">
+              <Signupform method="POST" onSubmit={submitHandler}>
                 <BarWrapper>
                   <IconAndTagWrapper>
                     <CustomFaEnvelope />
@@ -37,6 +65,10 @@ const Signup = () => {
                         type="email"
                         name="email"
                         placeholder="name@domain.com"
+                        onChange={(e) =>
+                          setDetails({ ...details, email: e.target.value })
+                        }
+                        value={details.email}
                         required
                       ></SigninInput>
                     </TagWrapper>
@@ -54,6 +86,10 @@ const Signup = () => {
                         id="password"
                         type="password"
                         placeholder="Must have at least 6 characters"
+                        onChange={(e) =>
+                          setDetails({ ...details, password: e.target.value })
+                        }
+                        value={details.password}
                         required
                       />
                     </TagWrapper>
@@ -66,11 +102,15 @@ const Signup = () => {
                   <IconAndTagWrapper>
                     <CustomAiOutlineEye />
                     <TagWrapper>
-                      <Tag>Confirm Password</Tag>
+                      <Tag>Username</Tag>
                       <PasswordInput
                         id="confirm_password"
-                        type="password"
-                        placeholder="Enter the same password"
+                        type="username"
+                        placeholder="Enter your username"
+                        onChange={(e) =>
+                          setDetails({ ...details, username: e.target.value })
+                        }
+                        value={details.username}
                         required
                       />
                     </TagWrapper>
