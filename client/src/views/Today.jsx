@@ -4,42 +4,14 @@ import Container from "react-bootstrap/Container";
 import Goal from "../components/Goal";
 import AddGoal from "../components/AddGoal";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
-const Today = ({ auth }) => {
+const Today = () => {
   const [goals, setGoals] = useState([]);
 
-  // const goal = [
-  //   {
-  //     title: "Drink Water!",
-  //     period: "Everyday",
-  //     timespan: "86 days left",
-  //     times: 8,
-  //     progress: 0,
-  //   },
-  //   {
-  //     title: "Drink Water!",
-  //     period: "Everyday",
-  //     timespan: "86 days left",
-  //     times: 8,
-  //     progress: 2,
-  //   },
-  //   {
-  //     title: "Drink Water!",
-  //     period: "Everyday",
-  //     timespan: "86 days left",
-  //     times: 8,
-  //     progress: 4,
-  //   },
-  //   {
-  //     title: "Drink Water!",
-  //     period: "Everyday",
-  //     timespan: "86 days left",
-  //     times: 8,
-  //     progress: 8,
-  //   },
-  // ];
-
   useEffect(() => {
+    const cookies = new Cookies();
+    const auth = cookies.get("token");
     axios
       .get(
         "http://localhost:3001/goal",
@@ -58,9 +30,9 @@ const Today = ({ auth }) => {
         <Title>Today</Title>
         <Subtitle>Three task left for today</Subtitle>
         {goals.map((goal) => (
-          <Goal key={goal.id} goal={goal} />
+          <Goal key={goal._id} goal={goal} />
         ))}
-        <AddGoal auth={auth} />
+        <AddGoal />
       </CustomContainer>
     </Wrapper>
   );

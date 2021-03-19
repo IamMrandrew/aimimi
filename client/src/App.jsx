@@ -13,18 +13,10 @@ import Cookies from "universal-cookie";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [auth, setAuth] = useState(null);
 
   useEffect(() => {
     const cookies = new Cookies();
     const token = cookies.get("token");
-
-    if (token) {
-      setAuth(cookies.get("token"));
-      console.log(auth);
-
-      // Not working here
-    }
   }, []);
 
   return (
@@ -40,12 +32,12 @@ const App = () => {
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
                 />
-                <Today auth={auth} />
+                <Today />
               </Main>
             </Wrapper>
           </Route>
           <Route path="/login">
-            <Login setAuth={setAuth} />
+            <Login />
           </Route>
           <Route path="/signup">
             <Signup />

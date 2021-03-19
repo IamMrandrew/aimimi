@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const Login = ({ setAuth }) => {
+const Login = () => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const history = useHistory();
   const Login = (details) => {
@@ -24,9 +24,8 @@ const Login = ({ setAuth }) => {
         cookies.set("token", response.data.token, {
           sameSite: "strict",
           path: "/",
-          expires: new Date(new Date().getTime() + 1000 * 1000),
+          expires: new Date(new Date().getTime() + 30 * 60 * 1000),
         });
-        setAuth(cookies.get("token"));
 
         history.push("/");
       })

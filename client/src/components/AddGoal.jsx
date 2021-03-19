@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { FaPlus } from "react-icons/fa";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
-const AddGoal = ({ auth }) => {
+const AddGoal = () => {
   const [goalName, setGoalName] = useState("");
   const [goalCategory, setGoalCategory] = useState("Lifestyle");
   const [goalPeriod, setGoalPeriod] = useState("Everyday");
@@ -38,6 +39,8 @@ const AddGoal = ({ auth }) => {
   };
 
   const addGoalHandler = () => {
+    const cookies = new Cookies();
+    const auth = cookies.get("token");
     axios
       .post(
         "http://localhost:3001/goal",

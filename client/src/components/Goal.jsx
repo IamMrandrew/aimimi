@@ -5,7 +5,7 @@ const Goal = ({ goal }) => {
   return (
     <div>
       <Wrapper>
-        <Progress percentage={goal.progress / goal.times}></Progress>
+        <Progress percentage={goal.progress / goal.frequency}></Progress>
         <TitleWrapper>
           <Title>{goal.title}</Title>
           <Description>{goal.period}</Description>
@@ -13,7 +13,7 @@ const Goal = ({ goal }) => {
         </TitleWrapper>
         <TimesWrapper>
           <Times>
-            {goal.progress}/{goal.times}
+            {goal.progress}/{goal.frequency}
           </Times>
         </TimesWrapper>
       </Wrapper>
