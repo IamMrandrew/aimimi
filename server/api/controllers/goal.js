@@ -101,7 +101,7 @@ exports.remove_goal = (req, res, next) => {
 
 exports.read_all_goal = (req, res, next) => {
   User.findOne({ _id: req.userData.userId })
-    .populate("Goal")
+    .populate("onGoingGoals")
     .exec((err, user) => {
       if (err)
         return res.status(500).json({
