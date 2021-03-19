@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components/macro";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTimes } from "react-icons/fa";
 import axios from "axios";
 
 const AddGoal = ({ setGoals }) => {
@@ -116,8 +116,9 @@ const AddGoal = ({ setGoals }) => {
         </Field>
         <SubmitButton onClick={addGoalHandler}>Done</SubmitButton>
       </Wrapper>
-      <FloatButton onClick={showModalHandler}>
+      <FloatButton showModal={showModal} onClick={showModalHandler}>
         <FaPlus />
+        <FaTimes />
       </FloatButton>
     </>
   );
@@ -239,7 +240,11 @@ const FloatButton = styled.button`
   bottom: 60px;
   right: 0;
   z-index: 100;
-  padding: 11px 17px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--primaryGoal);
   border: none;
   outline: none;
@@ -248,4 +253,12 @@ const FloatButton = styled.button`
   margin-right: 14px;
   font-size: 25px;
   color: white;
+
+  svg:nth-child(1) {
+    display: ${(props) => (props.showModal ? "none" : "block")};
+  }
+
+  svg:nth-child(2) {
+    display: ${(props) => (props.showModal ? "block" : "none")};
+  }
 `;
