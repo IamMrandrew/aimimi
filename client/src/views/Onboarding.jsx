@@ -83,10 +83,20 @@ const CustomContainer = styled(Container)`
 
 const CustomNavbar = styled(Navbar)`
   background-color: var(--primary);
+  padding-top: 20px;
 
   .navbar-brand {
     display: flex;
     align-items: center;
+  }
+
+  .navbar-toggler {
+    color: white;
+    border: none;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='square' stroke-miterlimit='10' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
 `;
 
@@ -235,6 +245,7 @@ const FloatImgWrapper = styled.div`
 `;
 const Onboarding1Mobile = styled.img`
   width: 320px;
+  height: 320px;
 `;
 
 const OnboardingImg2 = styled.img``;
