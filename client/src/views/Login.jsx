@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
 
-const Login = () => {
+const Login = ({ setAuth }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const history = useHistory();
   const Login = (details) => {
@@ -20,7 +20,7 @@ const Login = () => {
       })
       .then((response) => {
         console.log(response);
-
+        setAuth(response.data);
         history.push("/");
       })
       .catch((error) => {
