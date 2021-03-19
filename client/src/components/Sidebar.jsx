@@ -195,4 +195,7 @@ const LogoWrapper = styled.div`
   }
 `;
 
-const LogoImg = styled.img``;
+const LogoImg = styled.img`
+  width: 30px;
+  height: 30px;
+`;

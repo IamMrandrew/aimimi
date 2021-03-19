@@ -9,6 +9,7 @@ import { GlobalStyle } from "./components/GlobalStyle";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
+import Onboarding from "./views/Onboarding";
 import axios from "axios";
 
 const App = () => {
@@ -57,6 +58,9 @@ const App = () => {
           </Route>
           <Route path="/signup">
             <Signup />
+          </Route>
+          <Route path="/onboarding">
+            <Onboarding />
           </Route>
         </Switch>
       </Router>
