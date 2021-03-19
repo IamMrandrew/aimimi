@@ -40,7 +40,7 @@ const AddGoal = ({ setGoals }) => {
   const addGoalHandler = () => {
     axios
       .post(
-        "http://localhost:3001/goal",
+        "/goal",
         {
           title: goalName,
           startTime: Date.now(),
@@ -53,11 +53,9 @@ const AddGoal = ({ setGoals }) => {
         { withCredentials: true }
       )
       .then((response) => {
-        axios
-          .get("http://localhost:3001/goal", { withCredentials: true })
-          .then((response) => {
-            setGoals(response.data);
-          });
+        axios.get("/goal", { withCredentials: true }).then((response) => {
+          setGoals(response.data);
+        });
       })
       .catch((error) => {
         console.log(error);

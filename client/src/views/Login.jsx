@@ -15,7 +15,7 @@ const Login = () => {
   const history = useHistory();
   const Login = (details) => {
     axios
-      .post("http://localhost:3001/user/login", details, {
+      .post("/user/login", details, {
         withCredentials: true,
       })
       .then((response) => {

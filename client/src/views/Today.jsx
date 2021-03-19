@@ -10,11 +10,7 @@ const Today = () => {
 
   useEffect(() => {
     axios
-      .get(
-        "http://localhost:3001/goal",
-
-        { withCredentials: true }
-      )
+      .get("/goal", { withCredentials: true })
       .then((response) => {
         setGoals(response.data);
       })
