@@ -4,7 +4,9 @@
 
 The project’s objective is to develop a platform for people who are hoping to crush their goals. The core feature of the platform is goal tracking, also with some other features like goal sharing, leaderboard, social networking service, etc.
 
-## File Structure
+> aimimi.herokuapp.com/
+
+## 📁 File Structure
 
 ```
 .
@@ -36,13 +38,13 @@ The project’s objective is to develop a platform for people who are hoping to 
 ├── README.md
 ```
 
-## Frontend Development
+## 💅🏻 Frontend Development
 
 Aimimi is a web application, also a progressive web application (PWA) for mobile users. We are going to use [react](https://github.com/facebook/react) for our front-end development.
 
 Also, we are planning to use the [react-bootstrap](https://react-bootstrap.github.io/getting-started/introduction) and [styled-component](https://styled-components.com/docs/basics) in developing user interfaces. We hope to provide users with an user-friendly, responsive, and high performance experience for reaching their goals.
 
-## Backend Development
+## 🛡️ Backend Development
 
 Our backend development mainly focuses on the database management and the request and response between our data and server. Beside, we decided to use the following tools for backend development:
 
@@ -54,7 +56,14 @@ It is an aggregation framework that provides a secure and NoSQL database that ca
 
 We designed Express as the Node.js web framework, which provides mechanisms to integrate with rendering engines that can generate responses by inserting data from MongoDB. Also, at different URL paths, Express allows writing handlers for requests with HTTP verbs, providing RESTful API for frontend.
 
-## Contributors
+## 🎯 Progress
+
+- Responsive user interface
+- User system (Signup, Login, Logout)
+- View user's goals, adding a goal
+- Deployed on Heroku
+
+## 🥁 Contributors
 
 - andrewli
 - thomas
@@ -62,7 +71,7 @@ We designed Express as the Node.js web framework, which provides mechanisms to i
 - JansonCheung
 - kzChoi
 
-## Run it locally
+## 🚀 Run it locally
 
 Run the following commands:
 
