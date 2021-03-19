@@ -27,10 +27,6 @@ const App = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
-
   return (
     <>
       <GlobalStyle />

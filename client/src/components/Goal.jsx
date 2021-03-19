@@ -9,7 +9,7 @@ const Goal = ({ goal }) => {
         <TitleWrapper>
           <Title>{goal.title}</Title>
           <Description>{goal.period}</Description>
-          <Description>{goal.timespan}</Description>
+          <Description>{goal.timespan} days left</Description>
         </TitleWrapper>
         <TimesWrapper>
           <Times>
