@@ -5,8 +5,8 @@ import axios from "axios";
 
 const AddGoal = ({ setGoals }) => {
   const [goalName, setGoalName] = useState("");
-  const [goalCategory, setGoalCategory] = useState("Lifestyle");
-  const [goalPeriod, setGoalPeriod] = useState("Everyday");
+  const [goalCategory, setGoalCategory] = useState("Sports");
+  const [goalPeriod, setGoalPeriod] = useState("Daily");
   const [goalFrequency, setGoalFrequency] = useState("");
   const [goalTimespan, setGoalTimespan] = useState("");
   const [goalPublicity, setGoalPublicity] = useState(false);
@@ -20,7 +20,7 @@ const AddGoal = ({ setGoals }) => {
     setGoalCategory(e.target.value);
   };
   const goalPeriodHandler = (e) => {
-    setGoalPeriod(e.target.value);
+    setGoalPeriod(e.target.innerHTML);
   };
   const goalFrequencyHandler = (e) => {
     setGoalFrequency(e.target.value);
@@ -55,6 +55,7 @@ const AddGoal = ({ setGoals }) => {
       .then((response) => {
         axios.get("/goal", { withCredentials: true }).then((response) => {
           setGoals(response.data);
+          setShowModal(!showModal);
         });
       })
       .catch((error) => {
@@ -74,13 +75,23 @@ const AddGoal = ({ setGoals }) => {
           placeholder="Goal name"
         />
         <Label>In what category?</Label>
-        <Select>
-          <Option>Sports</Option>
-          <Option>Lifestyle</Option>
+        <Select value={goalCategory} onChange={goalCategoryHandler}>
+          <Option value="Sports">Sports</Option>
+          <Option value="Lifestyle">Lifestyle</Option>
         </Select>
         <Label>Repeating period?</Label>
-        <Button>Everyday</Button>
-        <Button>Weekly</Button>
+        <Button
+          selected={goalPeriod === "Daily" ? true : false}
+          onClick={goalPeriodHandler}
+        >
+          Daily
+        </Button>
+        <Button
+          selected={goalPeriod === "Weekly" ? true : false}
+          onClick={goalPeriodHandler}
+        >
+          Weekly
+        </Button>
         <Label>How many times?</Label>
         <Input
           type="number"
@@ -88,12 +99,12 @@ const AddGoal = ({ setGoals }) => {
           value={goalFrequency}
           placeholder="1"
         />
-        <Label>Last for how long?</Label>
+        <Label>Last for how long? (days)</Label>
         <Input
           type="number"
           onChange={goalTimespanHandler}
           value={goalTimespan}
-          placeholder="3"
+          placeholder="21"
         />
         <Field>
           <CheckBox
@@ -160,19 +171,37 @@ const Input = styled.input`
   }
 `;
 
-const Select = styled.select``;
+const Select = styled.select`
+  padding: 5px 12px;
+  padding-right: 15px;
+  color: var(--monoPrimary);
+  font-weight: 500;
+  border: 0px;
+  cursor: pointer;
+  background-color: var(--background);
+  /* appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none; */
+  font-size: 16px;
+  font-family: inherit;
+  &:focus,
+  &:hover {
+    outline: none;
+  }
+`;
 
 const Option = styled.option``;
 
 const Button = styled.button`
   padding: 11px 17px;
-  background-color: var(--background);
+  background-color: ${(props) =>
+    props.selected ? "var(--primaryGoal)" : "var(--background)"};
   border: none;
   outline: none;
   border-radius: 12px;
   font-weight: 500;
   margin-right: 14px;
-  color: var(--monoPrimary);
+  color: ${(props) => (props.selected ? "white" : "var(--monoPrimary)")};
 `;
 
 const Field = styled.div`
