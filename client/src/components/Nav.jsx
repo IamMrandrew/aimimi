@@ -56,13 +56,14 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
             <DownWrapper showDropDown={showDropDown}>
               <BlockWrapper>
                 <ProfileWrapper>
-                  <CustomFaSignOutAlt />
-
-                  <DropDownText onClick={onClickHandler}>Logout</DropDownText>
+                  <CustomFaUserAlt />
+                  <DropDownText>Profile</DropDownText>
                 </ProfileWrapper>
                 <LogoutWrapper>
-                  <CustomFaUserAlt />
-                  <ProfileDropDownText>Profile</ProfileDropDownText>
+                  <CustomFaSignOutAlt onClick={onClickHandler} />
+                  <LoginDropDownText onClick={onClickHandler}>
+                    Logout
+                  </LoginDropDownText>
                 </LogoutWrapper>
               </BlockWrapper>
             </DownWrapper>
@@ -198,6 +199,7 @@ const ProfileWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
+  align-items: center;
 `;
 
 const DropDownText = styled.span`
@@ -217,17 +219,22 @@ const CustomFaUserAlt = styled(FaUserAlt)`
   height: 18px;
   margin-right: 16px;
   color: #1c4b56;
+  cursor: pointer;
 `;
 
 const LogoutWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const CustomFaSignOutAlt = styled(FaSignOutAlt)`
   width: 16px;
   height: 18px;
   color: var(--primaryShaded);
+  cursor: pointer;
+  position: relative;
+  z-index: 100;
 `;
 const BlockWrapper = styled.div``;
 
@@ -241,13 +248,14 @@ const OutDropDown = styled.div`
   }
 `;
 
-const ProfileDropDownText = styled.span`
+const LoginDropDownText = styled.span`
   font-family: "Roboto";
   color: var(--primaryShaded);
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-
+  position: relative;
+  z-index: 100;
   :hover {
     text-decoration: none;
   }
