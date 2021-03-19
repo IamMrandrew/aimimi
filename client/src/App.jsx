@@ -10,29 +10,51 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
+import axios from "axios";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [auth, setAuth] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("/user", { withCredentials: true })
+      .then((response) => {
+        setAuth(response.data);
+      })
+      .catch((error) => {
+        console.log("Not logged in!");
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(auth);
+  }, [auth]);
 
   return (
     <>
       <GlobalStyle />
       <Router>
         <Switch>
+          {auth && (
+            <Route exact path="/">
+              <Wrapper>
+                <Sidebar showSidebar={showSidebar} />
+                <Main lg={9}>
+                  <Nav
+                    showSidebar={showSidebar}
+                    setShowSidebar={setShowSidebar}
+                  />
+                  <Today />
+                </Main>
+              </Wrapper>
+            </Route>
+          )}
           <Route exact path="/">
-            <Wrapper>
-              <Sidebar showSidebar={showSidebar} />
-              <Main lg={9}>
-                <Nav
-                  showSidebar={showSidebar}
-                  setShowSidebar={setShowSidebar}
-                />
-                <Today />
-              </Main>
-            </Wrapper>
+            <Login setAuth={setAuth} />
           </Route>
           <Route path="/login">
-            <Login />
+            <Login setAuth={setAuth} />
           </Route>
           <Route path="/signup">
             <Signup />

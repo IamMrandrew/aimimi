@@ -9,6 +9,8 @@ router.post("/signup", UserController.user_signup);
 
 router.post("/login", UserController.user_login);
 
+router.get("/", checkAuth, UserController.user_info);
+
 router.delete("/logout", checkAuth, UserController.user_logout);
 
 router.delete("/", checkAuth, UserController.user_delete);

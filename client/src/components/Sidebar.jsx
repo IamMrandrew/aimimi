@@ -9,8 +9,29 @@ import {
 } from "react-icons/fa";
 import ProfilePhoto from "../assets/ProfilePhoto.png";
 import Logo from "../assets/Logo.svg";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Sidebar = ({ showSidebar }) => {
+  const history = useHistory();
+  const Logout = () => {
+    axios
+      .delete("/user/logout", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        history.push("/login");
+      })
+      .catch((error) => {
+        alert("Logout Failed. Try Again.");
+      });
+  };
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    Logout();
+  };
+
   return (
     <Wrapper showSidebar={showSidebar}>
       <LogoWrapper>
@@ -52,7 +73,7 @@ const Sidebar = ({ showSidebar }) => {
         <ItemIcon>
           <FaSignOutAlt />
         </ItemIcon>
-        <ItemText>Log out</ItemText>
+        <ItemText onClick={onClickHandler}>Log out</ItemText>
       </ProfileItem>
     </Wrapper>
   );

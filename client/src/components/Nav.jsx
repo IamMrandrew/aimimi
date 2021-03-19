@@ -8,15 +8,34 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Nav = ({ showSidebar, setShowSidebar }) => {
   const [showDropDown, setShowDropDown] = useState(false);
-
+  const history = useHistory();
   const SideBarHandler = (showSidebar) => {
     setShowSidebar(!showSidebar);
   };
   const DropDownHandler = (showDropDown) => {
     setShowDropDown(!showDropDown);
+  };
+  const Logout = () => {
+    axios
+      .delete("/user/logout", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        history.push("/login");
+      })
+      .catch((error) => {
+        alert("Logout Failed. Try Again.");
+      });
+  };
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    Logout();
   };
 
   return (
@@ -41,10 +60,10 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
                   <DropDownText>Profile</DropDownText>
                 </ProfileWrapper>
                 <LogoutWrapper>
-                  <CustomFaSignOutAlt />
-                  <Link to="/login">
-                    <DropDownText>Logout</DropDownText>
-                  </Link>
+                  <CustomFaSignOutAlt onClick={onClickHandler} />
+                  <LoginDropDownText onClick={onClickHandler}>
+                    Logout
+                  </LoginDropDownText>
                 </LogoutWrapper>
               </BlockWrapper>
             </DownWrapper>
@@ -180,6 +199,7 @@ const ProfileWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
+  align-items: center;
 `;
 
 const DropDownText = styled.span`
@@ -187,6 +207,7 @@ const DropDownText = styled.span`
   color: var(--primaryShaded);
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 
   :hover {
     text-decoration: none;
@@ -198,17 +219,22 @@ const CustomFaUserAlt = styled(FaUserAlt)`
   height: 18px;
   margin-right: 16px;
   color: #1c4b56;
+  cursor: pointer;
 `;
 
 const LogoutWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const CustomFaSignOutAlt = styled(FaSignOutAlt)`
   width: 16px;
   height: 18px;
   color: var(--primaryShaded);
+  cursor: pointer;
+  position: relative;
+  z-index: 100;
 `;
 const BlockWrapper = styled.div``;
 
@@ -219,5 +245,18 @@ const WrapDropDownWrapper = styled.div`
 const OutDropDown = styled.div`
   @media (max-width: 991.98px) {
     display: none;
+  }
+`;
+
+const LoginDropDownText = styled.span`
+  font-family: "Roboto";
+  color: var(--primaryShaded);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  z-index: 100;
+  :hover {
+    text-decoration: none;
   }
 `;

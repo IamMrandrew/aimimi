@@ -95,6 +95,18 @@ exports.user_login = (req, res, next) => {
     });
 };
 
+exports.user_info = (req, res, next) => {
+  User.findOne({ _id: req.userData.userId })
+    .then((user) => {
+      return res.status(202).end(JSON.stringify(user));
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
+};
+
 exports.user_logout = (req, res, next) => {
   res
     .status(202)
