@@ -10,6 +10,8 @@ export const GlobalStyle = createGlobalStyle`
     --grey: rgba(0, 0, 0, 0.08);
     --primaryMild:#348CA2;
     --background: #FAFAFA;
+    --placeholder: #888888;
+    --monoPrimary: #202020;
   }
   * {
       font-family: 'Roboto', "Open Sans", sans-serif;
