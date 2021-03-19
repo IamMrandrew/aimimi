@@ -10,6 +10,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Signup from "./views/Signup";
 import Cookies from "universal-cookie";
+import Onboarding from "./views/Onboarding";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -41,6 +42,9 @@ const App = () => {
           </Route>
           <Route path="/signup">
             <Signup />
+          </Route>
+          <Route path="/onboarding">
+            <Onboarding />
           </Route>
         </Switch>
       </Router>
