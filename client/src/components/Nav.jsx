@@ -7,7 +7,6 @@ import { FaBars } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
