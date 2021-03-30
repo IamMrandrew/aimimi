@@ -23,7 +23,7 @@ const App = () => {
         setAuth(response.data);
       })
       .catch((error) => {
-        console.log("Not logged in!");
+        console.log(error.response.data.message);
       });
   }, []);
 
