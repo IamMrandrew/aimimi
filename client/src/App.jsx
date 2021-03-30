@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
+import styled from "styled-components/macro";
+import { GlobalStyle } from "./components/GlobalStyle";
+import { AuthContext } from "./contexts/AuthContext";
+import axios from "axios";
+
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
 import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
-import styled from "styled-components/macro";
-import { GlobalStyle } from "./components/GlobalStyle";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
+
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [auth, setAuth] = useState(null);
-  const history = useHistory();
+  const { auth, setAuth } = useContext(AuthContext);
+
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
@@ -25,12 +29,11 @@ const App = () => {
       .catch((error) => {
         console.log(error.response.data.message);
       });
-  }, []);
+  }, [setAuth]);
 
   return (
     <>
       <GlobalStyle />
-
       <Switch>
         {auth && (
           <Route exact path="/">
@@ -47,11 +50,10 @@ const App = () => {
           </Route>
         )}
         <Route exact path="/">
-          {/* <Login setAuth={setAuth} /> */}
           <Onboarding />
         </Route>
         <Route path="/login">
-          <Login setAuth={setAuth} />
+          <Login />
         </Route>
         <Route path="/signup">
           <Signup />
