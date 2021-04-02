@@ -110,3 +110,14 @@ exports.read_all_goal = (req, res, next) => {
       return res.status(200).end(JSON.stringify(user.onGoingGoals));
     });
 };
+
+exports.check_in = (req, res, next) => {
+  var S = req.session;
+  const id = req.body.goal_id;
+  if (S[id]) {
+    S[id] += 1;
+  } else {
+    S[id] = 1;
+  }
+  return res.status(200).json({ data: S });
+};
