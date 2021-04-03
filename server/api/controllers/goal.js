@@ -121,3 +121,17 @@ exports.check_in = (req, res, next) => {
   }
   return res.status(200).json({ data: S });
 };
+
+exports.get_all_public_goal = (req, res, next) => {
+  Goal.find({ publicity: true })
+    .then((result) => {
+      res.status(200).json({
+        data: JSON.stringify(result),
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
+};
