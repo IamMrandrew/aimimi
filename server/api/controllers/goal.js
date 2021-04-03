@@ -101,7 +101,7 @@ exports.remove_goal = (req, res, next) => {
 
 exports.read_all_goal = (req, res, next) => {
   User.findOne({ _id: req.userData.userId })
-    .populate("Goal")
+    .populate("onGoingGoalsGoal")
     .exec((err, user) => {
       if (err)
         return res.status(500).json({
@@ -159,4 +159,32 @@ exports.join_goal = (req, res, next) => {
       });
     }
   });
+};
+
+exports.get_today_view = (req, res, next) => {
+  User.findById(req.userData.userId)
+    .populate("onGoingGoals")
+    .exec((err, user) => {
+      if (err)
+        return res.status(500).json({
+          Error: err,
+        });
+      else {
+        var data = [];
+        user.onGoingGoals.forEach((element) => {
+          if (element.period == "Daily") {
+            data.push(element);
+          } else if (element.period == "Weekly") {
+            var diffDays = parseInt(
+              (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
+            );
+            console.log(diffDays);
+            if (diffDays % 7 == 0) {
+              data.push(element);
+            }
+          }
+        });
+        res.status(200).end(JSON.stringify(data));
+      }
+    });
 };

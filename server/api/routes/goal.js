@@ -20,4 +20,6 @@ router.get("/public_goal", checkAuth, GoalController.get_all_public_goal);
 
 router.put("/join", checkAuth, GoalController.join_goal);
 
+router.get("/today_view", checkAuth, GoalController.get_today_view);
+
 module.exports = router;
