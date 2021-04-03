@@ -110,3 +110,85 @@ exports.read_all_goal = (req, res, next) => {
       return res.status(200).end(JSON.stringify(user.onGoingGoals));
     });
 };
+
+exports.check_in = (req, res, next) => {
+  var S = req.session;
+  const id = req.body.goal_id;
+  if (S[id]) {
+    S[id] += 1;
+  } else {
+    S[id] = 1;
+  }
+  return res.status(200).json({ data: S });
+};
+
+exports.get_all_public_goal = (req, res, next) => {
+  Goal.find({ publicity: true })
+    .then((result) => {
+      res.status(200).json({
+        data: JSON.stringify(result),
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
+};
+
+exports.join_goal = (req, res, next) => {
+  Goal.findById(req.body.goal_id).then((result) => {
+    if (result.publicity == true) {
+      User.updateOne(
+        { _id: req.userData.userId },
+        { $push: { onGoingGoals: req.body.goal_id } }
+      )
+        .then(() => {
+          res.status(200).json({
+            Message: "join successful",
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            Error: err,
+          });
+        });
+    } else {
+      res.status(400).json({
+        Message: "goal is not public",
+      });
+    }
+  });
+};
+
+exports.get_today_view = (req, res, next) => {
+  User.findById(req.userData.userId)
+    .populate("onGoingGoals")
+    .exec((err, user) => {
+      if (err)
+        return res.status(500).json({
+          Error: err,
+        });
+      else {
+        var data = [];
+        user.onGoingGoals.forEach((element) => {
+          if (element.period == "Daily") {
+            data.push(element);
+          } else if (element.period == "Weekly") {
+            var diffDays = parseInt(
+              (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
+            );
+            console.log(diffDays);
+            if (diffDays % 7 == 0) {
+              data.push(element);
+            }
+          }
+        });
+        res.status(200).end(JSON.stringify(data));
+      }
+    });
+};
+
+exports.leaderboard = (req, res, next) => {
+  User.find({ onGoingGoals: req.body.goal_id }).then((result) => {});
+};
