@@ -7,15 +7,27 @@ import OngoingGoal from "../components/OngoingGoal";
 
 const Goals = () => {
   const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/goal", { withCredentials: true })
+      .then((response) => {
+        setGoals(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Goals</Title>
 
-        {/* {goals.map((goal) => (
-        <Goal key={goal._id} goal={goal} />
-      ))} */}
-        <OngoingGoal />
+        {goals.map((goal) => (
+          <OngoingGoal key={goal._id} goal={goal} />
+        ))}
+
         <AddGoal setGoals={setGoals} />
       </CustomContainer>
     </Wrapper>

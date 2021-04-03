@@ -32,6 +32,15 @@ const Sidebar = ({ showSidebar }) => {
     Logout();
   };
 
+  const ClickGoal = (e) => {
+    e.preventDefault();
+    history.push("/goal");
+  };
+  const ClickToday = (e) => {
+    e.preventDefault();
+    history.push("/");
+  };
+
   return (
     <Wrapper showSidebar={showSidebar}>
       <LogoWrapper>
@@ -41,13 +50,13 @@ const Sidebar = ({ showSidebar }) => {
         <ItemIcon>
           <FaCalendarWeek />
         </ItemIcon>
-        <ItemText>Today</ItemText>
+        <ItemText onClick={ClickToday}>Today</ItemText>
       </Item>
       <Item>
         <ItemIcon>
           <FaBullseye />
         </ItemIcon>
-        <ItemText>Goals</ItemText>
+        <ItemText onClick={ClickGoal}>Goals</ItemText>
       </Item>
       <Item>
         <ItemIcon>
@@ -158,6 +167,7 @@ const ItemText = styled.span`
   font-size: 18px;
   color: var(--primaryShaded);
   font-weight: 700;
+  cursor: pointer;
 `;
 
 const Hr = styled.hr`

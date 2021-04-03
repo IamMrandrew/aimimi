@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components/macro";
 import { FaAngleRight } from "react-icons/fa";
 
-const OngoingGoal = () => {
+const OngoingGoal = ({ goal }) => {
   return (
     <div>
       <Wrapper>
         <TitleWrapper>
-          <Title>Drink Water</Title>
-          <Description>Everyday</Description>
-          <Description> days left</Description>
+          <Title>{goal.title}</Title>
+          <Description>{goal.period}</Description>
+          <Description> {goal.timespan}</Description>
         </TitleWrapper>
         <TimesWrapper>
           <CustomFaAngleRight />
