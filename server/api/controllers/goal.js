@@ -101,7 +101,7 @@ exports.remove_goal = (req, res, next) => {
 
 exports.read_all_goal = (req, res, next) => {
   User.findOne({ _id: req.userData.userId })
-    .populate("onGoingGoalsGoal")
+    .populate("onGoingGoals")
     .exec((err, user) => {
       if (err)
         return res.status(500).json({
@@ -187,4 +187,8 @@ exports.get_today_view = (req, res, next) => {
         res.status(200).end(JSON.stringify(data));
       }
     });
+};
+
+exports.leaderboard = (req, res, next) => {
+  User.find({ onGoingGoals: req.body.goal_id }).then((result) => {});
 };
