@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { FaCheck } from "react-icons/fa";
 
-const Goal = ({ goal }) => {
+const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
   const [showCheckInButton, setShowCheckInButton] = useState(false);
   const showCheckInButtonHandler = () => {
     setShowCheckInButton((prev) => !prev);
   };
 
+  const showModalHandler = () => {
+    setShowModal((prev) => !prev);
+    setSelectedGoal(goal._id);
+  };
   return (
     <div>
       <HoverWrapper
@@ -27,7 +31,10 @@ const Goal = ({ goal }) => {
             </Times>
           </TimesWrapper>
         </Wrapper>
-        <CheckInButton showCheckInButton={showCheckInButton}>
+        <CheckInButton
+          showCheckInButton={showCheckInButton}
+          onClick={showModalHandler}
+        >
           <FaCheck />
         </CheckInButton>
       </HoverWrapper>
