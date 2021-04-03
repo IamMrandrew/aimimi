@@ -18,4 +18,6 @@ router.put("/check_in", checkAuth, GoalController.check_in);
 
 router.get("/public_goal", checkAuth, GoalController.get_all_public_goal);
 
+router.put("/join", checkAuth, GoalController.join_goal);
+
 module.exports = router;

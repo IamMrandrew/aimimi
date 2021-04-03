@@ -135,3 +135,28 @@ exports.get_all_public_goal = (req, res, next) => {
       });
     });
 };
+
+exports.join_goal = (req, res, next) => {
+  Goal.findById(req.body.goal_id).then((result) => {
+    if (result.publicity == true) {
+      User.updateOne(
+        { _id: req.userData.userId },
+        { $push: { onGoingGoals: req.body.goal_id } }
+      )
+        .then(() => {
+          res.status(200).json({
+            Message: "join successful",
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            Error: err,
+          });
+        });
+    } else {
+      res.status(400).json({
+        Message: "goal is not public",
+      });
+    }
+  });
+};
