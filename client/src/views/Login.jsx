@@ -7,11 +7,13 @@ import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
 import { useHistory } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 
-const Login = ({ setAuth }) => {
+const Login = () => {
   const [details, setDetails] = useState({ email: "", password: "" });
+  const { setAuth } = useContext(AuthContext);
   const history = useHistory();
 
   const Login = (details) => {
@@ -20,7 +22,6 @@ const Login = ({ setAuth }) => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data);
         setAuth(response.data);
         history.push("/");
       })
