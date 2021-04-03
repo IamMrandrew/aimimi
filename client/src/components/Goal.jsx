@@ -1,27 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
+import { FaCheck } from "react-icons/fa";
 
 const Goal = ({ goal }) => {
+  const [showCheckInButton, setShowCheckInButton] = useState(false);
+  const showCheckInButtonHandler = () => {
+    setShowCheckInButton((prev) => !prev);
+  };
+
   return (
     <div>
-      <Wrapper>
-        <Progress percentage={goal.progress / goal.frequency}></Progress>
-        <TitleWrapper>
-          <Title>{goal.title}</Title>
-          <Description>{goal.period}</Description>
-          <Description>{goal.timespan} days left</Description>
-        </TitleWrapper>
-        <TimesWrapper>
-          <Times>
-            {goal.progress}/{goal.frequency}
-          </Times>
-        </TimesWrapper>
-      </Wrapper>
+      <HoverWrapper
+        onMouseOver={showCheckInButtonHandler}
+        onMouseOut={showCheckInButtonHandler}
+      >
+        <Wrapper showCheckInButton={showCheckInButton}>
+          <Progress percentage={goal.progress / goal.frequency}></Progress>
+          <TitleWrapper>
+            <Title>{goal.title}</Title>
+            <Description>{goal.period}</Description>
+            <Description>{goal.timespan} days left</Description>
+          </TitleWrapper>
+          <TimesWrapper>
+            <Times>
+              {goal.progress}/{goal.frequency}
+            </Times>
+          </TimesWrapper>
+        </Wrapper>
+        <CheckInButton showCheckInButton={showCheckInButton}>
+          <FaCheck />
+        </CheckInButton>
+      </HoverWrapper>
     </div>
   );
 };
 
 export default Goal;
+
+const HoverWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+const CheckInButton = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin-left: 8px;
+  width: 65px;
+  height: 65px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--primaryGoal);
+  transform: ${(props) => (props.showCheckInButton ? "scale(1)" : "scale(0.6)")}
+    translateY(-50%);
+  opacity: ${(props) => (props.showCheckInButton ? "100%" : "0%")};
+  pointer-events: ${(props) => (props.showCheckInButton ? "all" : "none")};
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+
+  svg {
+    color: white;
+  }
+`;
 
 const Wrapper = styled.div`
   position: relative;
@@ -32,13 +76,15 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  width: ${(props) => (props.showCheckInButton ? "calc(100% - 75px)" : "100%")};
+  transition: width 0.2s ease-in;
 
   @media (max-width: 991.98px) {
     padding: 20px 20px;
     border-radius: 24px;
   }
 `;
+
 const Title = styled.h2`
   position: relative;
   z-index: 10;
