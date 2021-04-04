@@ -100,21 +100,21 @@ exports.remove_goal = (req, res, next) => {
 };
 
 exports.read_all_goal = (req, res, next) => {
-  async function getGoal(user) {
-    var data = [];
-    user.onGoingGoals.forEach((element) => {
-      Goal.findById(element.goal_id).then((goal) => {
-        data.push(goal);
-      });
+  function getGoal(user) {
+    let data = [];
+
+    return Promise.all(
+      user.onGoingGoals.map(async (element) => {
+        data.push(await Goal.findById(element.goal_id));
+        return;
+      })
+    ).then(() => {
+      return data;
     });
-    return data;
   }
-  User.findOne({ _id: req.userData.userId }).then((user) => {
-    getGoal(user).then((data) => {
-      setTimeout(() => {
-        res.status(200).end(JSON.stringify(data));
-      }, 300);
-    });
+
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    res.status(200).json(await getGoal(user));
   });
 };
 
