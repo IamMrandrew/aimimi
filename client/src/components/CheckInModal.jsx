@@ -1,12 +1,28 @@
 import React from "react";
 import styled from "styled-components/macro";
+import axios from "axios";
 
 const CheckInModal = ({ showModal, selectedGoal }) => {
+  const checkInHandler = () => {
+    axios
+      .put(
+        "/goal/check_in",
+        { goal_id: selectedGoal },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Wrapper showModal={showModal}>
       <Title>Add Progress</Title>
       <Slider type="range" />
-      <Button>Check in</Button>
+      <Button onClick={checkInHandler}>Check in</Button>
     </Wrapper>
   );
 };
