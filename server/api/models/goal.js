@@ -10,6 +10,5 @@ const goalSchema = Schema({
   period: { type: String, required: true },
   timespan: { type: String, required: true },
   publicity: { type: Boolean, requied: true },
-  progress: { type: Number, max: 100 },
 });
 module.exports = mongoose.model("Goal", goalSchema);
