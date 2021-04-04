@@ -2,24 +2,28 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
 
-const CheckInModal = ({ showModal, setShowModal, selectedGoal }) => {
+const CheckInModal = ({
+  showModal,
+  setShowModal,
+  selectedGoal,
+  selectedGoalCheckIn,
+}) => {
   const [progress, setProgress] = useState(0);
 
   const checkInHandler = () => {
     axios
       .put(
         "/goal/check_in",
-        { goal_id: selectedGoal._id, progress: progress },
+        { goal_id: selectedGoal._id, check_in_time: progress },
         { withCredentials: true }
       )
       .then((res) => {
         console.log(res);
+        setShowModal(!showModal);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    setShowModal(!showModal);
   };
 
   const progressHandler = (e) => {
@@ -27,8 +31,8 @@ const CheckInModal = ({ showModal, setShowModal, selectedGoal }) => {
   };
 
   useEffect(() => {
-    console.log(progress);
-  }, []);
+    setProgress(selectedGoalCheckIn);
+  }, [selectedGoalCheckIn]);
 
   return (
     <Wrapper showModal={showModal}>

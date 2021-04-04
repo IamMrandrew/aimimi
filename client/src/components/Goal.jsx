@@ -3,8 +3,16 @@ import styled from "styled-components/macro";
 import { FaCheck } from "react-icons/fa";
 import axios from "axios";
 
-const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
+const Goal = ({
+  goal,
+  showModal,
+  setShowModal,
+  setSelectedGoal,
+  setSelectedGoalCheckIn,
+}) => {
   const [showCheckInButton, setShowCheckInButton] = useState(false);
+  const [progressData, setProgressData] = useState(null);
+
   const showCheckInButtonHandler = () => {
     setShowCheckInButton((prev) => !prev);
   };
@@ -12,15 +20,24 @@ const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
   const showModalHandler = () => {
     setShowModal((prev) => !prev);
     setSelectedGoal(goal);
+    axios
+      .get(`/goal/progress/${goal._id}`, { withCredentials: true })
+      .then((response) => {
+        console.log("checkin", response.data.Data.check_in);
+        setProgressData(response.data.Data);
+        setSelectedGoalCheckIn(response.data.Data.check_in);
+      });
   };
 
   useEffect(() => {
     axios
       .get(`/goal/progress/${goal._id}`, { withCredentials: true })
       .then((response) => {
-        console.log(response.data);
+        console.log("checkin", response.data.Data.check_in);
+        setProgressData(response.data.Data);
+        // setSelectedGoalCheckIn(response.data.Data.check_in);
       });
-  }, []);
+  }, [showModal]);
 
   return (
     <div>
@@ -37,7 +54,7 @@ const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
           </TitleWrapper>
           <TimesWrapper>
             <Times>
-              {goal.progress}/{goal.frequency}
+              {progressData ? progressData.check_in : "-"}/{goal.frequency}
             </Times>
           </TimesWrapper>
         </Wrapper>

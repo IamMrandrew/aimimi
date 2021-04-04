@@ -9,6 +9,7 @@ import axios from "axios";
 const Today = ({ showModal, setShowModal }) => {
   const [goals, setGoals] = useState([]);
   const [selectedGoal, setSelectedGoal] = useState(0);
+  const [selectedGoalCheckIn, setSelectedGoalCheckIn] = useState(0);
 
   useEffect(() => {
     axios
@@ -30,8 +31,10 @@ const Today = ({ showModal, setShowModal }) => {
           <Goal
             key={goal._id}
             goal={goal}
+            showModal={showModal}
             setShowModal={setShowModal}
             setSelectedGoal={setSelectedGoal}
+            setSelectedGoalCheckIn={setSelectedGoalCheckIn}
           />
         ))}
         <AddGoal setGoals={setGoals} />
@@ -39,6 +42,7 @@ const Today = ({ showModal, setShowModal }) => {
           showModal={showModal}
           setShowModal={setShowModal}
           selectedGoal={selectedGoal}
+          selectedGoalCheckIn={selectedGoalCheckIn}
         />
       </CustomContainer>
     </Wrapper>

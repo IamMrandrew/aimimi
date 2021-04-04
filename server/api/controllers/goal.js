@@ -135,10 +135,11 @@ exports.check_in = (req, res, next) => {
     .then((user) => {
       user.onGoingGoals.forEach((element) => {
         if (element.goal_id == req.body.goal_id) {
-          element.check_in += req.body.check_in_time;
+          element.check_in = Number(req.body.check_in_time);
+          console.log(user, element.check_in);
           Goal.findById(element.goal_id).then((goal) => {
             if (element.check_in == goal.frequency) {
-              element.check_in = 0;
+              // element.check_in = 0;
               if (goal.period == "Daily") {
                 element.progress = element.progress + (1 / goal.timespan) * 100;
                 parseFloat(element.progress) +
@@ -161,6 +162,11 @@ exports.check_in = (req, res, next) => {
                   Message: "Checked-in",
                 });
               }
+            } else {
+              user.save();
+              res.status(200).json({
+                Message: "Checked-in",
+              });
             }
           });
         }
