@@ -118,6 +118,18 @@ exports.read_all_goal = (req, res, next) => {
   });
 };
 
+exports.get_a_goal = (req, res, next) => {
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    try {
+      res.status(200).json(await Goal.findById(req.params.id));
+    } catch (err) {
+      res.status(500).json({
+        Error: err,
+      });
+    }
+  });
+};
+
 exports.check_in = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
@@ -267,7 +279,7 @@ exports.goal_progress = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
       var data = user.onGoingGoals.find(
-        (element) => element.goal_id == req.body.goal_id
+        (element) => element.goal_id == req.params.id
       );
       res.status(200).json({
         Data: data,
