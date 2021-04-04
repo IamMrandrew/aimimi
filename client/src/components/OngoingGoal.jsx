@@ -7,7 +7,7 @@ const OngoingGoal = ({ goal }) => {
   const history = useHistory();
   const onClickHandler = (e) => {
     e.preventDefault();
-    history.push("/details");
+    history.push(`/goals/${goal._id}`);
   };
   return (
     <div>

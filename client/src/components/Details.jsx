@@ -1,10 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import { FaAngleLeft, FaClipboardCheck, FaFire } from "react-icons/fa";
 import ProgressBar from "react-bootstrap/progressbar";
-
+import axios from "axios";
+import { useParams } from "react-router-dom";
 const Details = () => {
+  const [goals, setGoals] = useState([]);
+  const [goalsDetails, setGoalDetails] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get("/goal/today_view", { withCredentials: true })
+      .then((response) => {
+        setGoals(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    var x;
+    for (x = 0; x < goals.length; x++) {
+      if (goals[x]._id === id) {
+        setGoalDetails(goals[x]);
+        console.log(goals[x]);
+      }
+    }
+  }, [goals]);
+
   return (
     <div>
       <CustomContainer>
@@ -13,10 +38,10 @@ const Details = () => {
         </LeftButtonWrapper>
         <HeadingWrapper>
           <TitleWrapper>
-            <Title>Drink Water </Title>
-            <Description>Lifestyle</Description>
-            <Description>Everyday</Description>
-            <Description>86 days left</Description>
+            <Title> {goalsDetails.title} </Title>
+            <Description>{goalsDetails.category}</Description>
+            <Description>{goalsDetails.period}</Description>
+            <Description>{goalsDetails.timespan} days left</Description>
           </TitleWrapper>
         </HeadingWrapper>
 
@@ -49,12 +74,25 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How long did you lasted for?</DeatilTitle>
               <PercentageDiv>
-                <PastDay>9 days passed</PastDay>
+                <PastDay>
+                  {Math.floor(
+                    (Date.now() - Date.parse(goalsDetails.startTime)) /
+                      (1000 * 3600 * 24)
+                  )}{" "}
+                  day passed
+                </PastDay>
               </PercentageDiv>
-              <CustomProgressbar now={9} max="21" variant="info" />
+              <CustomProgressbar
+                now={Math.floor(
+                  (Date.now() - Date.parse(goalsDetails.startTime)) /
+                    (1000 * 3600 * 24)
+                )}
+                max={`${goalsDetails.timespan}`}
+                variant="info"
+              />
               <LabelDiv>
                 <Label>0</Label>
-                <Label>21</Label>
+                <Label>{goalsDetails.timespan}</Label>
               </LabelDiv>
             </EmptyDiv>
           </LastWrapper>

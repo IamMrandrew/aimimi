@@ -34,7 +34,7 @@ const Sidebar = ({ showSidebar }) => {
 
   const ClickGoal = (e) => {
     e.preventDefault();
-    history.push("/goal");
+    history.push("/goals");
   };
   const ClickToday = (e) => {
     e.preventDefault();
