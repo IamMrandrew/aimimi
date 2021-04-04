@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { FaCheck } from "react-icons/fa";
+import axios from "axios";
 
 const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
   const [showCheckInButton, setShowCheckInButton] = useState(false);
@@ -12,6 +13,15 @@ const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
     setShowModal((prev) => !prev);
     setSelectedGoal(goal);
   };
+
+  useEffect(() => {
+    axios
+      .get(`/goal/progress/${goal._id}`, { withCredentials: true })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }, []);
+
   return (
     <div>
       <HoverWrapper
