@@ -33,9 +33,7 @@ const Goal = ({
     axios
       .get(`/goal/progress/${goal._id}`, { withCredentials: true })
       .then((response) => {
-        console.log("checkin", response.data.Data.check_in);
         setProgressData(response.data.Data);
-        // setSelectedGoalCheckIn(response.data.Data.check_in);
       });
   }, [showModal]);
 

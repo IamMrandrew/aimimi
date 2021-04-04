@@ -136,7 +136,6 @@ exports.check_in = (req, res, next) => {
       user.onGoingGoals.forEach((element) => {
         if (element.goal_id == req.body.goal_id) {
           element.check_in = Number(req.body.check_in_time);
-          console.log(user, element.check_in);
           Goal.findById(element.goal_id).then((goal) => {
             if (element.check_in == goal.frequency) {
               // element.check_in = 0;
