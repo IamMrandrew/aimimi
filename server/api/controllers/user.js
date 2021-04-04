@@ -26,6 +26,7 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
+              onGoingGoals: {},
             });
             user
               .save()

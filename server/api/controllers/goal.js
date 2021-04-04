@@ -101,13 +101,13 @@ exports.remove_goal = (req, res, next) => {
 
 exports.read_all_goal = (req, res, next) => {
   User.findOne({ _id: req.userData.userId })
-    .populate("onGoingGoals")
-    .exec((err, user) => {
-      if (err)
-        return res.status(500).json({
-          Error: err,
-        });
-      return res.status(200).end(JSON.stringify(user.onGoingGoals));
+    .then((user) => {
+      res.status(200).end(JSON.stringify(user.onGoingGoals));
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
     });
 };
 
@@ -139,10 +139,12 @@ exports.get_all_public_goal = (req, res, next) => {
 exports.join_goal = (req, res, next) => {
   Goal.findById(req.body.goal_id).then((result) => {
     if (result.publicity == true) {
-      User.updateOne(
-        { _id: req.userData.userId },
-        { $push: { onGoingGoals: req.body.goal_id } }
-      )
+      User.findById(req.userData.userId)
+        .then((user) => {
+          user.onGoingGoals.set(req.body.goal_id, 0);
+          console.log(user.onGoingGoals);
+          user.save();
+        })
         .then(() => {
           res.status(200).json({
             Message: "join successful",
@@ -163,29 +165,44 @@ exports.join_goal = (req, res, next) => {
 
 exports.get_today_view = (req, res, next) => {
   User.findById(req.userData.userId)
-    .populate("onGoingGoals")
-    .exec((err, user) => {
-      if (err)
-        return res.status(500).json({
-          Error: err,
-        });
-      else {
-        var data = [];
-        user.onGoingGoals.forEach((element) => {
-          if (element.period == "Daily") {
-            data.push(element);
-          } else if (element.period == "Weekly") {
-            var diffDays = parseInt(
-              (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
-            );
-            console.log(diffDays);
-            if (diffDays % 7 == 0) {
-              data.push(element);
+    .then((user) => {
+      let data = [];
+      let x = 0;
+      user.onGoingGoals.forEach((value, key, map) => {
+        let y = map.size;
+        Goal.findById(key)
+          .then((goal) => {
+            if (goal.period == "Daily") {
+              data.push(goal);
+            } else if (goal.period == "Weekly") {
+              let date_now = new Date(Date.now());
+              console.log(date_now);
+              date_now.setHours(0, 0, 0, 0);
+              let date_start = new Date(goal.startTime);
+              date_start.setHours(0, 0, 0, 0);
+              console.log(date_now);
+              console.log(date_start);
+              var diffDays = parseInt(
+                (date_now - date_start) / (1000 * 60 * 60 * 24) + 1
+              );
+              console.log(diffDays);
+              if (diffDays % 7 == 0) {
+                data.push(goal);
+              }
             }
-          }
-        });
-        res.status(200).end(JSON.stringify(data));
-      }
+          })
+          .then(() => {
+            x += 1;
+            if (x == y) {
+              res.status(200).end(JSON.stringify(data));
+            }
+          });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
     });
 };
 
