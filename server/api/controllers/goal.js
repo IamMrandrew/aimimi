@@ -112,14 +112,46 @@ exports.read_all_goal = (req, res, next) => {
 };
 
 exports.check_in = (req, res, next) => {
-  var S = req.session;
-  const id = req.body.goal_id;
-  if (S[id]) {
-    S[id] += 1;
-  } else {
-    S[id] = 1;
-  }
-  return res.status(200).json({ data: S });
+  User.findById(req.userData.userId)
+    .then((user) => {
+      user.onGoingGoals.forEach((element) => {
+        if (element.goal_id == req.body.goal_id) {
+          element.check_in += req.body.check_in_time;
+          Goal.findById(element.goal_id).then((goal) => {
+            if (element.check_in == goal.frequency) {
+              element.check_in = 0;
+              if (goal.period == "Daily") {
+                element.progress = element.progress + (1 / goal.timespan) * 100;
+                parseFloat(element.progress) +
+                  ((1 / parseFloat(goal.timespan)) * 100).toFixed(3);
+              } else if (goal.period == "Weekly") {
+                element.progress =
+                  parseFloat(element.progress) +
+                  ((7 / parseFloat(goal.timespan)) * 100).toFixed(3);
+              }
+              if (element.progress >= 99.99) {
+                user.onGoingGoals.pull({ _id: element._id });
+                user.completedGoals.push(req.body.goal_id);
+                user.save();
+                res.status(200).json({
+                  Message: "Goal is accomplished",
+                });
+              } else {
+                user.save();
+                res.status(200).json({
+                  Message: "Checked-in",
+                });
+              }
+            }
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
 };
 
 exports.get_all_public_goal = (req, res, next) => {
@@ -141,7 +173,15 @@ exports.join_goal = (req, res, next) => {
     if (result.publicity == true) {
       User.updateOne(
         { _id: req.userData.userId },
-        { $push: { onGoingGoals: req.body.goal_id } }
+        {
+          $push: {
+            onGoingGoals: {
+              goal_id: req.body.goal_id,
+              progress: 0,
+              check_in: 0,
+            },
+          },
+        }
       )
         .then(() => {
           res.status(200).json({
