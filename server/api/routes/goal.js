@@ -8,6 +8,8 @@ const { route } = require("./user");
 
 router.get("/", checkAuth, GoalController.read_all_goal);
 
+router.get("/:id", checkAuth, GoalController.get_a_goal);
+
 router.post("/", checkAuth, GoalController.add_goal);
 
 router.put("/", checkAuth, GoalController.update_goal);

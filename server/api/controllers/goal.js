@@ -118,6 +118,18 @@ exports.read_all_goal = (req, res, next) => {
   });
 };
 
+exports.get_a_goal = (req, res, next) => {
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    try {
+      res.status(200).json(await Goal.findById(req.params.id));
+    } catch (err) {
+      res.status(500).json({
+        Error: err,
+      });
+    }
+  });
+};
+
 exports.check_in = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
