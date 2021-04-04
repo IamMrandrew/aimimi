@@ -25,7 +25,7 @@ exports.add_goal = (req, res, next) => {
   });
   User.updateOne(
     { _id: req.userData.userId },
-    { $push: { onGoingGoals: goal._id } }
+    { $push: { onGoingGoals: { goal_id: goal._id, progress: 0, check_in: 0 } } }
   )
     .exec()
     .then((result) => {
@@ -100,26 +100,63 @@ exports.remove_goal = (req, res, next) => {
 };
 
 exports.read_all_goal = (req, res, next) => {
-  User.findOne({ _id: req.userData.userId })
-    .populate("onGoingGoals")
-    .exec((err, user) => {
-      if (err)
-        return res.status(500).json({
-          Error: err,
-        });
-      return res.status(200).end(JSON.stringify(user.onGoingGoals));
-    });
+  function getGoal(user) {
+    let data = [];
+
+    return Promise.all(
+      user.onGoingGoals.map(async (element) => {
+        data.push(await Goal.findById(element.goal_id));
+        return;
+      })
+    ).then(() => {
+      return data;
+
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    res.status(200).json(await getGoal(user));
+  });
 };
 
 exports.check_in = (req, res, next) => {
-  var S = req.session;
-  const id = req.body.goal_id;
-  if (S[id]) {
-    S[id] += 1;
-  } else {
-    S[id] = 1;
-  }
-  return res.status(200).json({ data: S });
+  User.findById(req.userData.userId)
+    .then((user) => {
+      user.onGoingGoals.forEach((element) => {
+        if (element.goal_id == req.body.goal_id) {
+          element.check_in += req.body.check_in_time;
+          Goal.findById(element.goal_id).then((goal) => {
+            if (element.check_in == goal.frequency) {
+              element.check_in = 0;
+              if (goal.period == "Daily") {
+                element.progress = element.progress + (1 / goal.timespan) * 100;
+                parseFloat(element.progress) +
+                  ((1 / parseFloat(goal.timespan)) * 100).toFixed(3);
+              } else if (goal.period == "Weekly") {
+                element.progress =
+                  parseFloat(element.progress) +
+                  ((7 / parseFloat(goal.timespan)) * 100).toFixed(3);
+              }
+              if (element.progress >= 99.99) {
+                user.onGoingGoals.pull({ _id: element._id });
+                user.completedGoals.push(req.body.goal_id);
+                user.save();
+                res.status(200).json({
+                  Message: "Goal is accomplished",
+                });
+              } else {
+                user.save();
+                res.status(200).json({
+                  Message: "Checked-in",
+                });
+              }
+            }
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
 };
 
 exports.get_all_public_goal = (req, res, next) => {
@@ -141,7 +178,15 @@ exports.join_goal = (req, res, next) => {
     if (result.publicity == true) {
       User.updateOne(
         { _id: req.userData.userId },
-        { $push: { onGoingGoals: req.body.goal_id } }
+        {
+          $push: {
+            onGoingGoals: {
+              goal_id: req.body.goal_id,
+              progress: 0,
+              check_in: 0,
+            },
+          },
+        }
       )
         .then(() => {
           res.status(200).json({
@@ -162,33 +207,73 @@ exports.join_goal = (req, res, next) => {
 };
 
 exports.get_today_view = (req, res, next) => {
-  User.findById(req.userData.userId)
-    .populate("onGoingGoals")
-    .exec((err, user) => {
-      if (err)
-        return res.status(500).json({
-          Error: err,
-        });
-      else {
-        var data = [];
-        user.onGoingGoals.forEach((element) => {
+  function getGoal(user) {
+    let data = [];
+    return Promise.all(
+      user.onGoingGoals.map(async (element) => {
+        await Goal.findById(element.goal_id).then((element) => {
           if (element.period == "Daily") {
             data.push(element);
+            return;
           } else if (element.period == "Weekly") {
             var diffDays = parseInt(
               (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
             );
-            console.log(diffDays);
             if (diffDays % 7 == 0) {
               data.push(element);
+              return;
+            } else {
+              return;
             }
           }
         });
-        res.status(200).end(JSON.stringify(data));
-      }
+      })
+    ).then(() => {
+      return data;
     });
+  }
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    res.status(200).json(await getGoal(user));
+  });
 };
 
 exports.leaderboard = (req, res, next) => {
-  User.find({ onGoingGoals: req.body.goal_id }).then((result) => {});
+  User.find({ "onGoingGoals.goal_id": req.body.goal_id })
+    .then((result) => {
+      var data = [];
+      result.forEach((element) => {
+        var goal = element.onGoingGoals.find(
+          (element) => element.goal_id == req.body.goal_id
+        );
+        data.push({ user_id: element._id, progress: goal.progress });
+      });
+      data.sort((a, b) => {
+        return b.progress - a.progress;
+      });
+      res.status(200).json({
+        Data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
+};
+
+exports.goal_progress = (req, res, next) => {
+  User.findById(req.userData.userId)
+    .then((user) => {
+      var data = user.onGoingGoals.find(
+        (element) => element.goal_id == req.body.goal_id
+      );
+      res.status(200).json({
+        Data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
 };
