@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const GoalsSchema = require("./goal");
 
+const onGoingGoalsSchema = Schema({
+  goal_id: { type: String },
+  progress: { type: Number },
+  check_in: { type: Number },
+});
 const userSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
   username: { type: String, required: true },
@@ -9,10 +13,7 @@ const userSchema = Schema({
   password: { type: String, required: true },
   joinDate: { type: Date, default: Date.now },
   completedGoals: [{ type: Schema.Types.ObjectId, ref: "Goal" }],
-  onGoingGoals: {
-    type: Map,
-    of: Number,
-  },
+  onGoingGoals: [onGoingGoalsSchema],
 });
 
 module.exports = mongoose.model("User", userSchema);
