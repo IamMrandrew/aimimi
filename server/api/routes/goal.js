@@ -24,6 +24,6 @@ router.get("/today_view", checkAuth, GoalController.get_today_view);
 
 router.get("/leaderboard", checkAuth, GoalController.leaderboard);
 
-router.get("/progress", checkAuth, GoalController.goal_progress);
+router.get("/progress/:id", checkAuth, GoalController.goal_progress);
 
 module.exports = router;

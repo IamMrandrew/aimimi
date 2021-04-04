@@ -267,7 +267,7 @@ exports.goal_progress = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
       var data = user.onGoingGoals.find(
-        (element) => element.goal_id == req.body.goal_id
+        (element) => element.goal_id == req.params.id
       );
       res.status(200).json({
         Data: data,
