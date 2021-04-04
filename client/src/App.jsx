@@ -13,6 +13,7 @@ import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
 import GoalPage from "./views/GoalPage";
+import GoalDetails from "./views/GoalDetails";
 
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
@@ -64,6 +65,9 @@ const App = () => {
         </Route>
         <Route path="/goal">
           <GoalPage />
+        </Route>
+        <Route path="/details">
+          <GoalDetails />
         </Route>
       </Switch>
     </>

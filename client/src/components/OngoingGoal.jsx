@@ -1,18 +1,25 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { FaAngleRight } from "react-icons/fa";
+import { useHistory } from "react-router-dom";
 
 const OngoingGoal = ({ goal }) => {
+  const history = useHistory();
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    history.push("/details");
+  };
   return (
     <div>
       <Wrapper>
         <TitleWrapper>
           <Title>{goal.title}</Title>
+          <Description>{goal.category}</Description>
           <Description>{goal.period}</Description>
-          <Description> {goal.timespan}</Description>
+          <Description> {goal.timespan} days left</Description>
         </TitleWrapper>
         <TimesWrapper>
-          <CustomFaAngleRight />
+          <CustomFaAngleRight onClick={onClickHandler} />
         </TimesWrapper>
       </Wrapper>
     </div>

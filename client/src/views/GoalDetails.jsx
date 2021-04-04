@@ -4,20 +4,22 @@ import Sidebar from "../components/Sidebar";
 import Nav from "../components/Nav";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Goals from "./Goals";
+import Details from "../components/Details";
 
-const GoalPage = () => {
+const GoalDetails = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   return (
     <Wrapper>
       <Sidebar showSidebar={showSidebar} />
       <Main lg={9}>
         <Nav showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-        <Goals />
+        <Details />
       </Main>
     </Wrapper>
   );
 };
+
+export default GoalDetails;
 
 const Wrapper = styled(Row)`
   height: 100vh;
@@ -32,5 +34,3 @@ const Main = styled(Col)`
   display: flex;
   flex-direction: column;
 `;
-
-export default GoalPage;
