@@ -209,31 +209,31 @@ exports.join_goal = (req, res, next) => {
 };
 
 exports.get_today_view = (req, res, next) => {
-  async function getGoal(user) {
-    var data = [];
-    user.onGoingGoals.forEach((element) => {
-      Goal.findById(element.goal_id).then((element) => {
+  function getGoal(user) {
+    let data = [];
+    return Promise.all(
+      user.onGoingGoals.map(async (element) => {
         if (element.period == "Daily") {
-          data.push(element);
-        } else if (element.period == "Weekly") {
-          var diffDays = parseInt(
-            (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
-          );
-          console.log(diffDays);
-          if (diffDays % 7 == 0) {
-            data.push(element);
-          }
-        }
-      });
+          data.push(await Goal.findById(element.goal_id));
+          return;
+        } // else if (element.period == "Weekly") {
+        //var diffDays = parseInt(
+        //  (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
+        // );
+        // if (diffDays % 7 == 0) {
+        //   data.push(await Goal.findById(element.goal_id));
+        //   return;
+        //  } else {
+        //    return;
+        //  }
+        // }
+      })
+    ).then(() => {
+      return data;
     });
-    return data;
   }
-  User.findOne({ _id: req.userData.userId }).then((user) => {
-    getGoal(user).then((data) => {
-      setTimeout(() => {
-        res.status(200).end(JSON.stringify(data));
-      }, 300);
-    });
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    res.status(200).json(await getGoal(user));
   });
 };
 
@@ -250,6 +250,23 @@ exports.leaderboard = (req, res, next) => {
       data.sort((a, b) => {
         return b.progress - a.progress;
       });
+      res.status(200).json({
+        Data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
+};
+
+exports.goal_progress = (req, res, next) => {
+  User.findById(req.userData.userId)
+    .then((user) => {
+      var data = user.onGoingGoals.find(
+        (element) => element.goal_id == req.body.goal_id
+      );
       res.status(200).json({
         Data: data,
       });
