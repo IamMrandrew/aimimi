@@ -25,7 +25,7 @@ exports.add_goal = (req, res, next) => {
   });
   User.updateOne(
     { _id: req.userData.userId },
-    { $push: { onGoingGoals: goal._id } }
+    { $push: { onGoingGoals: { goal_id: goal._id, progress: 0, check_in: 0 } } }
   )
     .exec()
     .then((result) => {
@@ -238,5 +238,25 @@ exports.get_today_view = (req, res, next) => {
 };
 
 exports.leaderboard = (req, res, next) => {
-  User.find({ onGoingGoals: req.body.goal_id }).then((result) => {});
+  User.find({ "onGoingGoals.goal_id": req.body.goal_id })
+    .then((result) => {
+      var data = [];
+      result.forEach((element) => {
+        var goal = element.onGoingGoals.find(
+          (element) => element.goal_id == req.body.goal_id
+        );
+        data.push({ user_id: element._id, progress: goal.progress });
+      });
+      data.sort((a, b) => {
+        return b.progress - a.progress;
+      });
+      res.status(200).json({
+        Data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        Error: err,
+      });
+    });
 };

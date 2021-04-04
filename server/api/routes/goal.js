@@ -22,4 +22,6 @@ router.put("/join", checkAuth, GoalController.join_goal);
 
 router.get("/today_view", checkAuth, GoalController.get_today_view);
 
+router.get("/leaderboard", checkAuth, GoalController.leaderboard);
+
 module.exports = router;
