@@ -213,20 +213,22 @@ exports.get_today_view = (req, res, next) => {
     let data = [];
     return Promise.all(
       user.onGoingGoals.map(async (element) => {
-        if (element.period == "Daily") {
-          data.push(await Goal.findById(element.goal_id));
-          return;
-        } // else if (element.period == "Weekly") {
-        //var diffDays = parseInt(
-        //  (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
-        // );
-        // if (diffDays % 7 == 0) {
-        //   data.push(await Goal.findById(element.goal_id));
-        //   return;
-        //  } else {
-        //    return;
-        //  }
-        // }
+        await Goal.findById(element.goal_id).then((element) => {
+          if (element.period == "Daily") {
+            data.push(element);
+            return;
+          } else if (element.period == "Weekly") {
+            var diffDays = parseInt(
+              (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
+            );
+            if (diffDays % 7 == 0) {
+              data.push(element);
+              return;
+            } else {
+              return;
+            }
+          }
+        });
       })
     ).then(() => {
       return data;
