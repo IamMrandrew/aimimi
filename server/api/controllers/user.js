@@ -73,15 +73,47 @@ exports.user_login = (req, res, next) => {
             //expiresIn: "1h"
             //}
           );
-          return res.status(200).json({
-            message: "Logged in",
-            token: token,
-          });
+          return res
+            .status(200)
+            .cookie("token", token, {
+              sameSite: "strict",
+              path: "/",
+              expires: new Date(new Date().getTime() + 30 * 60 * 1000),
+              httpOnly: true,
+              // secure: true,
+            })
+            .send("Logged in");
         }
         res.status(401).json({
           message: "Incorrect password",
         });
       });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.user_info = (req, res, next) => {
+  User.findOne({ _id: req.userData.userId })
+    .then((user) => {
+      return res.status(202).end(JSON.stringify(user));
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.user_logout = (req, res, next) => {
+  res
+    .status(202)
+    .clearCookie("token")
+    .json({
+      message: "Logged out",
     })
     .catch((err) => {
       res.status(500).json({
