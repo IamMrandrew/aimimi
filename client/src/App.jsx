@@ -15,10 +15,12 @@ import Today from "./views/Today";
 
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
+import Overlay from "./components/Overlay";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios
@@ -37,6 +39,7 @@ const App = () => {
       <Switch>
         {auth && (
           <Route exact path="/">
+            <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
               <Sidebar showSidebar={showSidebar} />
               <Main lg={9}>
@@ -44,7 +47,7 @@ const App = () => {
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
                 />
-                <Today />
+                <Today showModal={showModal} setShowModal={setShowModal} />
               </Main>
             </Wrapper>
           </Route>

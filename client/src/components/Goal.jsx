@@ -10,7 +10,7 @@ const Goal = ({ goal, setShowModal, setSelectedGoal }) => {
 
   const showModalHandler = () => {
     setShowModal((prev) => !prev);
-    setSelectedGoal(goal._id);
+    setSelectedGoal(goal);
   };
   return (
     <div>

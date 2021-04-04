@@ -6,9 +6,8 @@ import AddGoal from "../components/AddGoal";
 import CheckInModal from "../components/CheckInModal";
 import axios from "axios";
 
-const Today = () => {
+const Today = ({ showModal, setShowModal }) => {
   const [goals, setGoals] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState(0);
 
   useEffect(() => {
@@ -36,7 +35,11 @@ const Today = () => {
           />
         ))}
         <AddGoal setGoals={setGoals} />
-        <CheckInModal showModal={showModal} selectedGoal={selectedGoal} />
+        <CheckInModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          selectedGoal={selectedGoal}
+        />
       </CustomContainer>
     </Wrapper>
   );
@@ -48,6 +51,7 @@ const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
+  overflow: hidden;
 `;
 
 const Title = styled.h1`
