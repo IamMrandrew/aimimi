@@ -215,7 +215,7 @@ exports.get_all_public_goal = (req, res, next) => {
         return a - b;
       });
       res.status(200).json({
-        data: JSON.stringify(result),
+        data: result,
       });
     })
     .catch((err) => {
@@ -268,7 +268,7 @@ exports.get_today_view = (req, res, next) => {
       user.onGoingGoals.map(async (element) => {
         await Goal.findById(element.goal_id).then((goal) => {
           if (goal.period == "Daily") {
-            data.push(element);
+            data.push(goal);
             return;
           } else if (goal.period == "Weekly") {
             let date_now = new Date(Date.now());
@@ -279,7 +279,7 @@ exports.get_today_view = (req, res, next) => {
               (date_now - date_start) / (1000 * 60 * 60 * 24)
             );
             if (diffDays % 7 == 0) {
-              data.push(element);
+              data.push(goal);
               return;
             } else {
               return;
@@ -326,9 +326,18 @@ exports.leaderboard = (req, res, next) => {
 exports.goal_progress = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
-      var data = user.onGoingGoals.find(
-        (element) => element.goal_id == req.parmas.goal_id
-      );
+      // var data = user.onGoingGoals.find(
+      //   (element) => element.goal_id == req.parmas.goal_id
+      // );
+
+      // Idk why this code dont work, but i dont work lol
+
+      let data;
+      for (const element of user.onGoingGoals) {
+        if (element.goal_id == req.params.goal_id) {
+          data = element;
+        }
+      }
       res.status(200).json({
         Data: data,
       });
