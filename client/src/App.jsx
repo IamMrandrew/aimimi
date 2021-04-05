@@ -16,10 +16,13 @@ import Today from "./views/Today";
 import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
+import Overlay from "./components/Overlay";
 import Details from "./components/Details";
+
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios
@@ -37,6 +40,7 @@ const App = () => {
       <GlobalStyle />
       <Switch>
         {auth && (
+          <Overlay showModal={showModal} setShowModal={setShowModal} />
           <Wrapper>
             <Sidebar showSidebar={showSidebar} />
             <Main lg={9}>
