@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import { FaAngleLeft, FaClipboardCheck, FaFire } from "react-icons/fa";
-import ProgressBar from "react-bootstrap/progressbar";
+import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 
