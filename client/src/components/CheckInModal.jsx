@@ -154,6 +154,8 @@ const SliderValue = styled.span`
   left: ${(props) =>
     (props.progress / props.selectedGoal.frequency) * 100 > 50
       ? (props.progress / props.selectedGoal.frequency) * 100 - 3
+      : (props.progress / props.selectedGoal.frequency) * 100 === 50
+      ? (props.progress / props.selectedGoal.frequency) * 100
       : (props.progress / props.selectedGoal.frequency) * 100 + 3}%;
   transform: translateX(-50%)
     ${(props) => (props.showValue ? "scale(1)" : "scale(0.5)")};
