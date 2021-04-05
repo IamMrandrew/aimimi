@@ -33,6 +33,15 @@ const Sidebar = ({ showSidebar }) => {
     Logout();
   };
 
+  const ClickGoal = (e) => {
+    e.preventDefault();
+    history.push("/goals");
+  };
+  const ClickToday = (e) => {
+    e.preventDefault();
+    history.push("/");
+  };
+
   return (
     <Wrapper showSidebar={showSidebar}>
       <LogoWrapper>
@@ -42,14 +51,14 @@ const Sidebar = ({ showSidebar }) => {
         <ItemIcon>
           <FaCalendarWeek />
         </ItemIcon>
-        <ItemText>Today</ItemText>
+        <ItemText onClick={ClickToday}>Today</ItemText>
         <ItemHover />
       </Item>
       <Item>
         <ItemIcon>
           <FaBullseye />
         </ItemIcon>
-        <ItemText>Goals</ItemText>
+        <ItemText onClick={ClickGoal}>Goals</ItemText>
         <ItemHover />
       </Item>
       <Item>

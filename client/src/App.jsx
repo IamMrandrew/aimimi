@@ -13,12 +13,16 @@ import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
 
+import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
+import Overlay from "./components/Overlay";
+import Details from "./components/Details";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios
@@ -36,7 +40,8 @@ const App = () => {
       <GlobalStyle />
       <Switch>
         {auth && (
-          <Route exact path="/">
+          <>
+            <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
               <Sidebar showSidebar={showSidebar} />
               <Main lg={9}>
@@ -44,10 +49,18 @@ const App = () => {
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
                 />
-                <Today />
+                <Route exact path="/">
+                  <Today />
+                </Route>
+                <Route exact path="/goals">
+                  <Goals />
+                </Route>
+                <Route path="/goals/:id">
+                  <Details />
+                </Route>
               </Main>
             </Wrapper>
-          </Route>
+          </>
         )}
         <Route exact path="/">
           <Onboarding />
