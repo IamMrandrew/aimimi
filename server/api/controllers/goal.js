@@ -338,23 +338,36 @@ const delete_check_in = schedule.scheduleJob("00 00 * * *", function () {
   });
 });
 
-/*const calculate_accuracy = schedule.schedule.scheduleJob(
-  "* * * * *",
-  function () {
-    let date_now = new Date(Date.now());
-    date_now.setHours(0, 0, 0, 0);
-    let date_start = new Date();
-    User.find({}).then((user) => {
-      user.forEach((element) => {
-        element.onGoingGoals.foreach((personal_goal) => {
-          Goal.findById(personal_goal.goal_id).then((goal) => {
-            if (goal.period == "Daily") {
-              date_start = goal.startTime();
-              personal_goal.accuracy = personal_goal.progress / 1;
-            }
-          });
+const calculate_accuracy = schedule.scheduleJob("05 * * * *", function () {
+  let date_now = new Date(Date.now());
+  date_now.setHours(0, 0, 0, 0);
+  let date_start = new Date();
+  User.find({}).then((user) => {
+    user.forEach((element) => {
+      element.onGoingGoals.forEach((personal_goal) => {
+        date_start = personal_goal.join_time;
+        date_start.setHours(0, 0, 0, 0);
+        Goal.findById(personal_goal.goal_id).then((goal) => {
+          if (goal.period == "Daily") {
+            personal_goal.accuracy =
+              personal_goal.progress /
+              (((date_now - date_start) /
+                (1000 * 60 * 60 * 24) /
+                goal.timespan) *
+                100);
+            user.save();
+          } else if (goal.period == "Weekly") {
+            if (((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7 == 0)
+              personal_goal.accuracy =
+                personal_goal.progress /
+                (((date_now - date_start) /
+                  (1000 * 60 * 60 * 24) /
+                  (goal.timespan / 7)) *
+                  100);
+            user.save();
+          }
         });
       });
     });
-  }
-);*/
+  });
+});
