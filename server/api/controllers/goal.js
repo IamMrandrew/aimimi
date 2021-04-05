@@ -111,6 +111,8 @@ exports.read_all_goal = (req, res, next) => {
       })
     ).then(() => {
       return data;
+    });
+  }
 
   User.findOne({ _id: req.userData.userId }).then(async (user) => {
     res.status(200).json(await getGoal(user));
