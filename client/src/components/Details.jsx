@@ -27,7 +27,6 @@ const Details = () => {
     for (x = 0; x < goals.length; x++) {
       if (goals[x]._id === id) {
         setGoalDetails(goals[x]);
-        console.log(goals);
       }
     }
   }, [goals]);

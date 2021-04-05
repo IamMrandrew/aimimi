@@ -18,7 +18,7 @@ import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
 import Overlay from "./components/Overlay";
 import Details from "./components/Details";
-
+import Shares from "./views/Shares";
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
@@ -57,6 +57,9 @@ const App = () => {
                 </Route>
                 <Route path="/goals/:id">
                   <Details />
+                </Route>
+                <Route path="/shares">
+                  <Shares />
                 </Route>
               </Main>
             </Wrapper>
