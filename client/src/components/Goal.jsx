@@ -14,7 +14,13 @@ const Goal = ({
   const [progressData, setProgressData] = useState(0);
 
   const showCheckInButtonHandler = () => {
-    setShowCheckInButton((prev) => !prev);
+    if (progressData.check_in < goal.frequency) {
+      setShowCheckInButton(true);
+    }
+  };
+
+  const closeCheckInButtonHandler = () => {
+    setShowCheckInButton(false);
   };
 
   const showModalHandler = () => {
@@ -35,7 +41,7 @@ const Goal = ({
     <div>
       <HoverWrapper
         onMouseOver={showCheckInButtonHandler}
-        onMouseOut={showCheckInButtonHandler}
+        onMouseOut={closeCheckInButtonHandler}
       >
         <Wrapper showCheckInButton={showCheckInButton}>
           <Progress
