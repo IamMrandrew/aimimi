@@ -13,7 +13,7 @@ const Today = ({ showModal, setShowModal }) => {
 
   useEffect(() => {
     axios
-      .get("/goal", { withCredentials: true })
+      .get("/goal/today_view", { withCredentials: true })
       .then((response) => {
         setGoals(response.data);
       })
