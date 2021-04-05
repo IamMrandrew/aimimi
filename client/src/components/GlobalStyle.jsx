@@ -7,6 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     --primaryTinted: rgba(28, 75, 86, 0.6);
     --primaryShaded: #1C4B56 ;
     --primaryGoal: #80D3DC;
+    --primaryTrans: #F4FBFB;
     --grey: rgba(0, 0, 0, 0.08);
     --primaryMild:#348CA2;
     --background: #FAFAFA;
