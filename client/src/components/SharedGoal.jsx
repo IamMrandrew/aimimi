@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Profilephoto from "../assets/ProfilePhoto.png";
 import { FaUsers, FaCalendarAlt } from "react-icons/fa";
-const SharedGoal = () => {
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+
+const SharedGoal = ({ goal }) => {
+  const History = useHistory();
+  const joinGoal = (e) => {
+    e.preventDefault();
+    axios
+      .put("/goal/join", { goal_id: goal._id }, { withCredentials: true })
+      .then((res) => {
+        History.push("/goals");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Wrapper>
       <Container>
         <FlexDiv>
-          <Title>Jogging Everyday</Title>
+          <Title>{goal ? goal.title : ""}</Title>
           <FlexDiv>
             <Profile src={Profilephoto} />
             <UserName>Jane Doe</UserName>
@@ -16,8 +32,8 @@ const SharedGoal = () => {
         </FlexDiv>
 
         <SubtitleDiv>
-          <Subtitle>Lifestyle</Subtitle>
-          <Subtitle>Everyday</Subtitle>
+          <Subtitle>{goal ? goal.category : ""}</Subtitle>
+          <Subtitle>{goal ? goal.period : ""}</Subtitle>
         </SubtitleDiv>
 
         <FlexDiv>
@@ -29,9 +45,9 @@ const SharedGoal = () => {
             <ItemIcon>
               <FaCalendarAlt />
             </ItemIcon>
-            <Stat>86 days left</Stat>
+            <Stat>{goal ? goal.timespan : ""} days left</Stat>
           </SubtitleDiv>
-          <JoinButton>Join</JoinButton>
+          <JoinButton onClick={joinGoal}>Join</JoinButton>
         </FlexDiv>
       </Container>
     </Wrapper>
@@ -85,7 +101,6 @@ const UserName = styled.span`
   font-family: "Roboto";
   font-weight: 800;
   color: var(--primaryShaded);
-  margin-left: 18px;
 `;
 const SubtitleDiv = styled.div`
   display: flex;
