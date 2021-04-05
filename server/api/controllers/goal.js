@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const schedule = require("node-schedule");
 
 const Goal = require("../models/goal");
 const User = require("../models/user");
@@ -279,3 +280,13 @@ exports.goal_progress = (req, res, next) => {
       });
     });
 };
+
+const job = schedule.scheduleJob("00 00 * * *", function () {
+  User.updateMany(
+    {},
+    { $set: { "onGoingGoals.$[elem].check_in": 0 } },
+    { multi: true, arrayFilters: [{ "elem.check_in": { $gt: 0 } }] }
+  ).then((result) => {
+    console.log(result);
+  });
+});

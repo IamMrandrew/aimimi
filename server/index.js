@@ -13,7 +13,6 @@ require("dotenv").config();
 const userRoutes = require("./api/routes/user");
 const goalRoutes = require("./api/routes/goal");
 
-
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -27,12 +26,6 @@ db.once("open", function () {
 
 const app = express();
 
-// handle ALL requests
-app.all("/", function (req, res) {
-  // send this to client
-  res.send("Hello World!");
-});
-
 app.use(
   require("express-session")({
     secret: process.env.SESSION_SECRET,
@@ -43,9 +36,6 @@ app.use(
     cookie: { maxAge: 6000 * 1000 },
   })
 );
-
-app.use("/", userRoutes);
-app.use("/", goalRoutes);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
