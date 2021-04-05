@@ -4,14 +4,16 @@ import Container from "react-bootstrap/Container";
 import { FaAngleLeft, FaClipboardCheck, FaFire } from "react-icons/fa";
 import ProgressBar from "react-bootstrap/progressbar";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+
 const Details = () => {
   const [goals, setGoals] = useState([]);
   const [goalsDetails, setGoalDetails] = useState([]);
   const { id } = useParams();
+  const history = useHistory();
   useEffect(() => {
     axios
-      .get("/goal/today_view", { withCredentials: true })
+      .get("/goal", { withCredentials: true })
       .then((response) => {
         setGoals(response.data);
       })
@@ -25,15 +27,34 @@ const Details = () => {
     for (x = 0; x < goals.length; x++) {
       if (goals[x]._id === id) {
         setGoalDetails(goals[x]);
-        console.log(goals[x]);
+        console.log(goals);
       }
     }
   }, [goals]);
 
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    history.push(`/goals`);
+  };
+
+  const onClickDeleteHandler = (e) => {
+    axios
+      .delete(`/goal/${goalsDetails._id}`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        alert("Deleted successfully!");
+        history.push("/goals");
+      })
+      .catch((error) => {
+        alert("Delete Failed. Try Again.");
+      });
+  };
+
   return (
     <div>
       <CustomContainer>
-        <LeftButtonWrapper>
+        <LeftButtonWrapper onClick={onClickHandler}>
           <CustomFaAngleLeft />
         </LeftButtonWrapper>
         <HeadingWrapper>
@@ -97,7 +118,7 @@ const Details = () => {
             </EmptyDiv>
           </LastWrapper>
         </ContentWrapper>
-        <QuitButton>Quit goal</QuitButton>
+        <QuitButton onClick={onClickDeleteHandler}>Quit goal</QuitButton>
       </CustomContainer>
     </div>
   );
@@ -117,6 +138,7 @@ const LeftButtonWrapper = styled.div`
   justify-content: center;
   border-radius: 12px;
   margin-bottom: 21px;
+  cursor: pointer;
 `;
 
 const CustomFaAngleLeft = styled(FaAngleLeft)`
