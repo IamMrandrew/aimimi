@@ -11,6 +11,7 @@ import ProfilePhoto from "../assets/ProfilePhoto.png";
 import Logo from "../assets/Logo.svg";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import NavItem from "./NavItem";
 
 const Sidebar = ({ showSidebar }) => {
   const history = useHistory();
@@ -33,48 +34,23 @@ const Sidebar = ({ showSidebar }) => {
     Logout();
   };
 
-  const ClickGoal = (e) => {
-    e.preventDefault();
-    history.push("/goals");
-  };
-  const ClickToday = (e) => {
-    e.preventDefault();
-    history.push("/");
-  };
-
   return (
     <Wrapper showSidebar={showSidebar}>
       <LogoWrapper>
         <LogoImg src={Logo} />
       </LogoWrapper>
-      <Item>
-        <ItemIcon>
-          <FaCalendarWeek />
-        </ItemIcon>
-        <ItemText onClick={ClickToday}>Today</ItemText>
-        <ItemHover />
-      </Item>
-      <Item>
-        <ItemIcon>
-          <FaBullseye />
-        </ItemIcon>
-        <ItemText onClick={ClickGoal}>Goals</ItemText>
-        <ItemHover />
-      </Item>
-      <Item>
-        <ItemIcon>
-          <FaUsers />
-        </ItemIcon>
-        <ItemText>Shared Goal</ItemText>
-        <ItemHover />
-      </Item>
-      <Item>
-        <ItemIcon>
-          <FaTrophy />
-        </ItemIcon>
-        <ItemText>Leaderboard</ItemText>
-        <ItemHover />
-      </Item>
+      <NavItem path="/" exact={true} text="Today">
+        <FaCalendarWeek />
+      </NavItem>
+      <NavItem path="/goals" exaxt={false} text="Goals">
+        <FaBullseye />
+      </NavItem>
+      <NavItem path="/shares" exaxt={false} text="Shares">
+        <FaUsers />
+      </NavItem>
+      <NavItem path="/leaderboard" exaxt={false} text="Leaderboard">
+        <FaTrophy />
+      </NavItem>
       <Hr />
       <ProfileItem>
         <Avator>
@@ -138,37 +114,6 @@ const Wrapper = styled.div`
     `}
 `;
 
-const Item = styled.div`
-  max-width: 200px;
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  cursor: pointer;
-  position: relative;
-  padding: 4px 15px;
-
-  @media (max-width: 991.98px) {
-    margin-left: 0;
-  }
-
-  :hover div {
-    opacity: 100%;
-    transform: scale(1);
-  }
-`;
-
-const ProfileItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-
-  @media (min-width: 992px) {
-    display: none;
-  }
-`;
-
 const ItemIcon = styled.span`
   font-size: 24px;
   color: var(--primaryShaded);
@@ -186,20 +131,14 @@ const ItemText = styled.span`
   z-index: 1;
 `;
 
-const ItemHover = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  border-radius: 10px;
-  opacity: 0;
-  background-color: var(--primaryTrans);
-  transform: scale(0.5);
-  transition: all 300ms cubic-bezier(0.18, 0.89, 0.43, 1.19);
+const ProfileItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
 
-  /* background-color: var(--primaryTrans); */
+  @media (min-width: 992px) {
+    display: none;
+  }
 `;
 
 const Hr = styled.hr`
