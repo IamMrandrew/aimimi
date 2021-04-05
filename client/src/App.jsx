@@ -13,9 +13,10 @@ import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
 
+import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
-
+import Details from "./components/Details";
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
@@ -36,18 +37,21 @@ const App = () => {
       <GlobalStyle />
       <Switch>
         {auth && (
-          <Route exact path="/">
-            <Wrapper>
-              <Sidebar showSidebar={showSidebar} />
-              <Main lg={9}>
-                <Nav
-                  showSidebar={showSidebar}
-                  setShowSidebar={setShowSidebar}
-                />
+          <Wrapper>
+            <Sidebar showSidebar={showSidebar} />
+            <Main lg={9}>
+              <Nav showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+              <Route exact path="/">
                 <Today />
-              </Main>
-            </Wrapper>
-          </Route>
+              </Route>
+              <Route exact path="/goals">
+                <Goals />
+              </Route>
+              <Route path="/goals/:id">
+                <Details />
+              </Route>
+            </Main>
+          </Wrapper>
         )}
         <Route exact path="/">
           <Onboarding />
