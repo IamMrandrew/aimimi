@@ -26,12 +26,6 @@ db.once("open", function () {
 
 const app = express();
 
-// handle ALL requests
-app.all("/", function (req, res) {
-  // send this to client
-  res.send("Hello World!");
-});
-
 app.use(
   require("express-session")({
     secret: process.env.SESSION_SECRET,
