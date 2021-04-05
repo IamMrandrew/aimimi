@@ -8,6 +8,8 @@ const { route } = require("./user");
 
 router.get("/", checkAuth, GoalController.read_all_goal);
 
+router.get("/today_view", checkAuth, GoalController.get_today_view);
+
 router.get("/:id", checkAuth, GoalController.get_a_goal);
 
 router.post("/", checkAuth, GoalController.add_goal);
@@ -21,8 +23,6 @@ router.put("/check_in", checkAuth, GoalController.check_in);
 router.get("/public_goal", checkAuth, GoalController.get_all_public_goal);
 
 router.put("/join", checkAuth, GoalController.join_goal);
-
-router.get("/today_view", checkAuth, GoalController.get_today_view);
 
 router.get("/leaderboard", checkAuth, GoalController.leaderboard);
 

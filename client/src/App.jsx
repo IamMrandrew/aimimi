@@ -40,22 +40,27 @@ const App = () => {
       <GlobalStyle />
       <Switch>
         {auth && (
-          <Overlay showModal={showModal} setShowModal={setShowModal} />
-          <Wrapper>
-            <Sidebar showSidebar={showSidebar} />
-            <Main lg={9}>
-              <Nav showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-              <Route exact path="/">
-                <Today />
-              </Route>
-              <Route exact path="/goals">
-                <Goals />
-              </Route>
-              <Route path="/goals/:id">
-                <Details />
-              </Route>
-            </Main>
-          </Wrapper>
+          <>
+            <Overlay showModal={showModal} setShowModal={setShowModal} />
+            <Wrapper>
+              <Sidebar showSidebar={showSidebar} />
+              <Main lg={9}>
+                <Nav
+                  showSidebar={showSidebar}
+                  setShowSidebar={setShowSidebar}
+                />
+                <Route exact path="/">
+                  <Today />
+                </Route>
+                <Route exact path="/goals">
+                  <Goals />
+                </Route>
+                <Route path="/goals/:id">
+                  <Details />
+                </Route>
+              </Main>
+            </Wrapper>
+          </>
         )}
         <Route exact path="/">
           <Onboarding />
