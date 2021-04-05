@@ -9,6 +9,7 @@ const CheckInModal = ({
   selectedGoalCheckIn,
 }) => {
   const [progress, setProgress] = useState(0);
+  const [showValue, setShowValue] = useState(false);
 
   const checkInHandler = () => {
     axios
@@ -28,6 +29,7 @@ const CheckInModal = ({
 
   const progressHandler = (e) => {
     setProgress(e.target.value);
+    setShowValue(true);
   };
 
   useEffect(() => {
@@ -38,17 +40,29 @@ const CheckInModal = ({
     <Wrapper showModal={showModal}>
       <Card showModal={showModal}>
         <Title>Add Progress</Title>
-        <SliderWrapper>
+        <SliderField>
           <Number>0</Number>
-          <Slider
-            onChange={progressHandler}
-            type="range"
-            value={progress}
-            min="0"
-            max={selectedGoal.frequency}
-          />
+          <SliderWrapper>
+            <SliderValue
+              showValue={showValue}
+              selectedGoal={selectedGoal}
+              progress={progress}
+            >
+              {progress}
+            </SliderValue>
+            <Slider
+              onChange={progressHandler}
+              onBlur={() => setShowValue(false)}
+              type="range"
+              value={progress}
+              min="0"
+              max={selectedGoal.frequency}
+              selectedGoal={selectedGoal}
+              progress={progress}
+            />
+          </SliderWrapper>
           <Number>{selectedGoal.frequency}</Number>
-        </SliderWrapper>
+        </SliderField>
         <Button onClick={checkInHandler}>Check in</Button>
       </Card>
     </Wrapper>
@@ -90,20 +104,79 @@ const Title = styled.span`
   display: block;
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 `;
 
-const Slider = styled.input`
+const SliderWrapper = styled.div`
+  position: relative;
   width: 100%;
   margin-left: 10px;
   margin-right: 10px;
 `;
 
-const SliderWrapper = styled.div`
+const SliderField = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+`;
+
+const Slider = styled.input`
+  width: 100%;
+  height: 10px;
+  border-radius: 13px;
+  appearance: none;
+  --webkit-appearance: none;
+  outline: none;
+  border: none;
+  background: ${(props) =>
+    "linear-gradient(90deg,var(--primaryGoal)" +
+    (props.progress / props.selectedGoal.frequency) * 100 +
+    "%,#eeeeee " +
+    (props.progress / props.selectedGoal.frequency) * 100 +
+    "%)"};
+
+  ::-webkit-slider-thumb {
+    appearance: none;
+    --webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const SliderValue = styled.span`
+  position: absolute;
+  top: -40px;
+  left: ${(props) =>
+    (props.progress / props.selectedGoal.frequency) * 100 > 50
+      ? (props.progress / props.selectedGoal.frequency) * 100 - 3
+      : (props.progress / props.selectedGoal.frequency) * 100 + 3}%;
+  transform: translateX(-50%)
+    ${(props) => (props.showValue ? "scale(1)" : "scale(0.5)")};
+  transform-origin: bottom;
+  opacity: ${(props) => (props.showValue ? "100%" : "0%")};
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  transition: all 200ms cubic-bezier(0.18, 0.89, 0.43, 1.19);
+
+  ::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 35px;
+    height: 35px;
+    z-index: -1;
+    background-color: var(--primaryGoal);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 50% 50% 0 50%;
+  }
 `;
 
 const Number = styled.div`
