@@ -148,12 +148,24 @@ exports.read_all_goal = (req, res, next) => {
   });
 };
 
+exports.get_a_goal = (req, res, next) => {
+  User.findOne({ _id: req.userData.userId }).then(async (user) => {
+    try {
+      res.status(200).json(await Goal.findById(req.params.id));
+    } catch (err) {
+      res.status(500).json({
+        Error: err,
+      });
+    }
+  });
+};
+
 exports.check_in = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
       user.onGoingGoals.forEach((element) => {
         if (element.goal_id == req.body.goal_id) {
-          element.check_in += req.body.check_in_time;
+          element.check_in = Number(req.body.check_in_time);
           Goal.findById(element.goal_id).then((goal) => {
             if (element.check_in == goal.frequency) {
               element.check_in_successful_time += 1;

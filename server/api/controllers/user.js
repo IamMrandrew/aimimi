@@ -77,7 +77,7 @@ exports.user_login = (req, res, next) => {
             .cookie("token", token, {
               sameSite: "strict",
               path: "/",
-              //expires: new Date(new Date().getTime() + 30 * 60 * 1000),
+              expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
               httpOnly: true,
               // secure: true,
             })

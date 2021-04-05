@@ -11,9 +11,11 @@ import ProfilePhoto from "../assets/ProfilePhoto.png";
 import Logo from "../assets/Logo.svg";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import NavItem from "./NavItem";
 
 const Sidebar = ({ showSidebar }) => {
   const history = useHistory();
+
   const Logout = () => {
     axios
       .delete("/user/logout", {
@@ -37,30 +39,18 @@ const Sidebar = ({ showSidebar }) => {
       <LogoWrapper>
         <LogoImg src={Logo} />
       </LogoWrapper>
-      <Item>
-        <ItemIcon>
-          <FaCalendarWeek />
-        </ItemIcon>
-        <ItemText>Today</ItemText>
-      </Item>
-      <Item>
-        <ItemIcon>
-          <FaBullseye />
-        </ItemIcon>
-        <ItemText>Goals</ItemText>
-      </Item>
-      <Item>
-        <ItemIcon>
-          <FaUsers />
-        </ItemIcon>
-        <ItemText>Shared Goal</ItemText>
-      </Item>
-      <Item>
-        <ItemIcon>
-          <FaTrophy />
-        </ItemIcon>
-        <ItemText>Leaderboard</ItemText>
-      </Item>
+      <NavItem path="/" exact={true} text="Today">
+        <FaCalendarWeek />
+      </NavItem>
+      <NavItem path="/goals" exaxt={false} text="Goals">
+        <FaBullseye />
+      </NavItem>
+      <NavItem path="/shares" exaxt={false} text="Shares">
+        <FaUsers />
+      </NavItem>
+      <NavItem path="/leaderboard" exaxt={false} text="Leaderboard">
+        <FaTrophy />
+      </NavItem>
       <Hr />
       <ProfileItem>
         <Avator>
@@ -124,17 +114,21 @@ const Wrapper = styled.div`
     `}
 `;
 
-const Item = styled.div`
-  max-width: 180px;
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
+const ItemIcon = styled.span`
+  font-size: 24px;
+  color: var(--primaryShaded);
+  font-weight: 700;
+  margin-right: 20px;
+  position: relative;
+  z-index: 1;
+`;
 
-  @media (max-width: 991.98px) {
-    margin-left: 0;
-  }
+const ItemText = styled.span`
+  font-size: 18px;
+  color: var(--primaryShaded);
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
 `;
 
 const ProfileItem = styled.div`
@@ -145,19 +139,6 @@ const ProfileItem = styled.div`
   @media (min-width: 992px) {
     display: none;
   }
-`;
-
-const ItemIcon = styled.span`
-  font-size: 24px;
-  color: var(--primaryShaded);
-  font-weight: 700;
-  margin-right: 20px;
-`;
-
-const ItemText = styled.span`
-  font-size: 18px;
-  color: var(--primaryShaded);
-  font-weight: 700;
 `;
 
 const Hr = styled.hr`
