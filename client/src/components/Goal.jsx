@@ -11,7 +11,7 @@ const Goal = ({
   setSelectedGoalCheckIn,
 }) => {
   const [showCheckInButton, setShowCheckInButton] = useState(false);
-  const [progressData, setProgressData] = useState(null);
+  const [progressData, setProgressData] = useState(0);
 
   const showCheckInButtonHandler = () => {
     setShowCheckInButton((prev) => !prev);
@@ -44,7 +44,9 @@ const Goal = ({
         onMouseOut={showCheckInButtonHandler}
       >
         <Wrapper showCheckInButton={showCheckInButton}>
-          <Progress percentage={goal.progress / goal.frequency}></Progress>
+          <Progress
+            percentage={(progressData.check_in / goal.frequency) * 100}
+          ></Progress>
           <TitleWrapper>
             <Title>{goal.title}</Title>
             <Description>{goal.period}</Description>
@@ -153,14 +155,14 @@ const Progress = styled.div`
   pointer-events: none;
   position: absolute;
   z-index: 1;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   left: 0;
   background-color: var(--primaryGoal);
   opacity: 0.9;
-  height: 100%;
+  height: 200%;
   width: 100%;
+  width: ${(props) => props.percentage + "%"};
+  border-radius: 0px 70px 70px 0px;
   transition: all 0.7s cubic-bezier(0.87, 0, 0.11, 1.2);
-  clip-path: circle(
-    calc(${(props) => props.percentage} * 180%) at calc(0% - 100px) 50%
-  ); // circle([size] at [position])
 `;
