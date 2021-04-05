@@ -50,7 +50,7 @@ const App = () => {
                   setShowSidebar={setShowSidebar}
                 />
                 <Route exact path="/">
-                  <Today />
+                  <Today showModal={showModal} setShowModal={setShowModal} />
                 </Route>
                 <Route exact path="/goals">
                   <Goals />
