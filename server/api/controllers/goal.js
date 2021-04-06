@@ -4,6 +4,7 @@ const schedule = require("node-schedule");
 
 const Goal = require("../models/goal");
 const User = require("../models/user");
+const { exists } = require("../models/goal");
 
 exports.add_goal = (req, res, next) => {
   User.findById(req.userData.userId)
@@ -91,7 +92,7 @@ exports.update_goal = (req, res, next) => {
 exports.remove_goal = (req, res, next) => {
   User.updateMany(
     {},
-    { $pull: { "onGoingGoals.$.goal_id": req.params.goal_id } },
+    { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } },
     { multi: true }
   )
     .exec()
@@ -111,17 +112,21 @@ exports.remove_goal = (req, res, next) => {
 };
 
 exports.quit_goal = (req, res, next) => {
+  console.log(req.params.goal_id);
   User.updateOne(
-    { _id: req.userData.userId },
-    { $pull: { "onGoingGoals.$.goal_id": req.params.goal_id } }
+    {
+      _id: req.userData.userId,
+    },
+    { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } }
   )
-    .exec()
-    .then(() => {
+    .then((result) => {
+      console.log(result);
       res.status(200).json({
         message: "Goal quited",
       });
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -274,9 +279,9 @@ exports.get_today_view = (req, res, next) => {
             return;
           } else if (goal.period == "Weekly") {
             let date_now = new Date(Date.now());
-            date_now.setHours(0, 0, 0, 0);
+            date_now.setUTCHours(0, 0, 0, 0);
             let date_start = new Date(element.join_time);
-            date_start.setHours(0, 0, 0, 0);
+            date_start.setUTCHours(0, 0, 0, 0);
             var diffDays = parseInt(
               (date_now - date_start) / (1000 * 60 * 60 * 24)
             );
@@ -361,33 +366,65 @@ const delete_check_in = schedule.scheduleJob("00 00 * * *", function () {
   });
 });
 
-const calculate_accuracy = schedule.scheduleJob("05 * * * *", function () {
+const calculate_accuracy = schedule.scheduleJob("00 00 * * *", function () {
   let date_now = new Date(Date.now());
-  date_now.setHours(0, 0, 0, 0);
-  let date_start = new Date();
+  date_now.setUTCHours(0, 0, 0, 0);
   User.find({}).then((user) => {
     user.forEach((element) => {
-      element.onGoingGoals.forEach((personal_goal) => {
-        date_start = personal_goal.join_time;
-        date_start.setHours(0, 0, 0, 0);
-        Goal.findById(personal_goal.goal_id).then((goal) => {
-          if (goal.period == "Daily") {
-            personal_goal.accuracy =
-              personal_goal.progress /
-              (((date_now - date_start) /
-                (1000 * 60 * 60 * 24) /
-                goal.timespan) *
-                100);
-            user.save();
-          } else if (goal.period == "Weekly") {
-            if (((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7 == 0)
-              personal_goal.accuracy =
-                personal_goal.progress /
-                (((date_now - date_start) /
-                  (1000 * 60 * 60 * 24) /
-                  (goal.timespan / 7)) *
-                  100);
-            user.save();
+      let data = [];
+      Promise.all(
+        element.onGoingGoals.map(async (personal_goal) => {
+          if (personal_goal.goal_id) {
+            if (personal_goal.progress != 0) {
+              await Goal.findById(personal_goal.goal_id).then((goal) => {
+                if (goal.period == "Daily") {
+                  let date_start = new Date(personal_goal.join_time);
+                  date_start.setUTCHours(0, 0, 0, 0);
+
+                  personal_goal.accuracy =
+                    personal_goal.progress /
+                    (((date_now - date_start) /
+                      (1000 * 60 * 60 * 24) /
+                      goal.timespan) *
+                      100);
+                  data.push(personal_goal);
+                  return;
+                } else if (goal.period == "Weekly") {
+                  let date_start = new Date(personal_goal.join_time);
+                  date_start.setUTCHours(0, 0, 0, 0);
+                  console.log(
+                    ((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7
+                  );
+                  if (
+                    ((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7 ==
+                    0
+                  ) {
+                    personal_goal.accuracy =
+                      personal_goal.progress /
+                      (((date_now - date_start) /
+                        (1000 * 60 * 60 * 24) /
+                        goal.timespan) *
+                        100);
+                    data.push(personal_goal);
+                    return;
+                  }
+                }
+              });
+            } else return;
+          } else return;
+        })
+      ).then(() => {
+        data.forEach(async (data) => {
+          if (data) {
+            await User.findOneAndUpdate(
+              {
+                $and: [
+                  { _id: element._id },
+                  { "onGoingGoals.goal_id": data.goal_id },
+                ],
+              },
+              { $set: { "onGoingGoals.$.accuracy": data.accuracy } }
+            );
           }
         });
       });
