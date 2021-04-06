@@ -6,43 +6,45 @@ const Goal = require("../models/goal");
 const User = require("../models/user");
 
 exports.add_goal = (req, res, next) => {
-  const goal = new Goal({
-    _id: new mongoose.Types.ObjectId(),
-    title: req.body.title,
-    startTime: Date.now(),
-    category: req.body.category,
-    frequency: req.body.frequency,
-    period: req.body.period,
-    publicity: req.body.publicity,
-    timespan: req.body.timespan,
-  });
-  goal.save(function (err) {
-    if (err) {
-      return res.status(400).json({
-        Error: err,
+  User.findById(req.userData.userId)
+    .then((user) => {
+      const goal = new Goal({
+        _id: new mongoose.Types.ObjectId(),
+        createdBy: user.username,
+        title: req.body.title,
+        startTime: Date.now(),
+        category: req.body.category,
+        frequency: req.body.frequency,
+        period: req.body.period,
+        publicity: req.body.publicity,
+        timespan: req.body.timespan,
       });
-    }
-  });
-  User.updateOne(
-    { _id: req.userData.userId },
-    {
-      $push: {
-        onGoingGoals: {
-          goal_id: goal._id,
-          join_time: Date.now(),
-          progress: 0,
-          check_in: 0,
-          check_in_successful_time: 0,
-          accuracy: 0,
-        },
-      },
-    }
-  )
-    .exec()
-    .then(() => {
-      res.status(200).json({
-        message: "Goal added",
+      goal.save(function (err) {
+        if (err) {
+          return res.status(400).json({
+            Error: err,
+          });
+        }
       });
+      user
+        .updateOne({
+          $push: {
+            onGoingGoals: {
+              goal_id: goal._id,
+              join_time: Date.now(),
+              progress: 0,
+              check_in: 0,
+              check_in_successful_time: 0,
+              accuracy: 0,
+            },
+          },
+        })
+        .exec()
+        .then(() => {
+          res.status(200).json({
+            message: "Goal added",
+          });
+        });
     })
     .catch((err) => {
       console.log(err);
