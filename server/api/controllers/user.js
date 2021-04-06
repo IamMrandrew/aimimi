@@ -26,7 +26,6 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
-              onGoingGoals: {},
             });
             user
               .save()
@@ -109,17 +108,9 @@ exports.user_info = (req, res, next) => {
 };
 
 exports.user_logout = (req, res, next) => {
-  res
-    .status(202)
-    .clearCookie("token")
-    .json({
-      message: "Logged out",
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
+  res.status(202).clearCookie("token").json({
+    message: "Logged out",
+  });
 };
 
 exports.user_delete = (req, res, next) => {

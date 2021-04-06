@@ -1,37 +1,50 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const schedule = require("node-schedule");
 
 const Goal = require("../models/goal");
 const User = require("../models/user");
 
 exports.add_goal = (req, res, next) => {
-  const goal = new Goal({
-    _id: new mongoose.Types.ObjectId(),
-    title: req.body.title,
-    startTime: Date.now(),
-    category: req.body.category,
-    frequency: req.body.frequency,
-    period: req.body.period,
-    publicity: req.body.publicity,
-    timespan: req.body.timespan,
-    progress: 0,
-  });
-  goal.save(function (err) {
-    if (err) {
-      return res.status(400).json({
-        Error: err,
+  User.findById(req.userData.userId)
+    .then((user) => {
+      const goal = new Goal({
+        _id: new mongoose.Types.ObjectId(),
+        createdBy: user.username,
+        title: req.body.title,
+        startTime: Date.now(),
+        category: req.body.category,
+        frequency: req.body.frequency,
+        period: req.body.period,
+        publicity: req.body.publicity,
+        timespan: req.body.timespan,
       });
-    }
-  });
-  User.updateOne(
-    { _id: req.userData.userId },
-    { $push: { onGoingGoals: { goal_id: goal._id, progress: 0, check_in: 0 } } }
-  )
-    .exec()
-    .then((result) => {
-      res.status(200).json({
-        message: "Goal added",
+      goal.save(function (err) {
+        if (err) {
+          return res.status(400).json({
+            Error: err,
+          });
+        }
       });
+      user
+        .updateOne({
+          $push: {
+            onGoingGoals: {
+              goal_id: goal._id,
+              join_time: Date.now(),
+              progress: 0,
+              check_in: 0,
+              check_in_successful_time: 0,
+              accuracy: 0,
+            },
+          },
+        })
+        .exec()
+        .then(() => {
+          res.status(200).json({
+            message: "Goal added",
+          });
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -61,9 +74,6 @@ exports.update_goal = (req, res, next) => {
   if (req.body.timespan != null) {
     update_item.timespan = req.body.timespan;
   }
-  if (req.body.progress != null) {
-    update_item.progress = req.body.progress;
-  }
   console.log(update_item);
   const goal = Goal.findByIdAndUpdate(req.body.id, update_item)
     .then(() => {
@@ -79,17 +89,36 @@ exports.update_goal = (req, res, next) => {
 };
 
 exports.remove_goal = (req, res, next) => {
-  User.updateOne(
-    { _id: req.userData.userId },
-    { $pull: { onGoingGoals: req.body.id } }
+  User.updateMany(
+    {},
+    { $pull: { "onGoingGoals.$.goal_id": req.params.goal_id } },
+    { multi: true }
   )
     .exec()
     .then(() => {
-      Goal.findByIdAndDelete(req.body.id).exec();
+      Goal.findByIdAndDelete(req.params.goal_id).exec();
     })
     .then(() => {
       res.status(200).json({
-        message: "Goal deleted",
+        message: "Goal removed",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.quit_goal = (req, res, next) => {
+  User.updateOne(
+    { _id: req.userData.userId },
+    { $pull: { "onGoingGoals.$.goal_id": req.params.goal_id } }
+  )
+    .exec()
+    .then(() => {
+      res.status(200).json({
+        message: "Goal quited",
       });
     })
     .catch((err) => {
@@ -109,6 +138,9 @@ exports.read_all_goal = (req, res, next) => {
         return;
       })
     ).then(() => {
+      data.sort((a, b) => {
+        return a - b;
+      });
       return data;
     });
   }
@@ -138,7 +170,7 @@ exports.check_in = (req, res, next) => {
           element.check_in = Number(req.body.check_in_time);
           Goal.findById(element.goal_id).then((goal) => {
             if (element.check_in == goal.frequency) {
-              // element.check_in = 0;
+              element.check_in_successful_time += 1;
               if (goal.period == "Daily") {
                 element.progress = element.progress + (1 / goal.timespan) * 100;
                 parseFloat(element.progress) +
@@ -158,7 +190,7 @@ exports.check_in = (req, res, next) => {
               } else {
                 user.save();
                 res.status(200).json({
-                  Message: "Checked-in",
+                  Message: "Enough Checked-in, added to progress",
                 });
               }
             } else {
@@ -181,8 +213,11 @@ exports.check_in = (req, res, next) => {
 exports.get_all_public_goal = (req, res, next) => {
   Goal.find({ publicity: true })
     .then((result) => {
+      result.sort((a, b) => {
+        return a - b;
+      });
       res.status(200).json({
-        data: JSON.stringify(result),
+        data: result,
       });
     })
     .catch((err) => {
@@ -201,8 +236,11 @@ exports.join_goal = (req, res, next) => {
           $push: {
             onGoingGoals: {
               goal_id: req.body.goal_id,
+              join_time: Date.now(),
               progress: 0,
               check_in: 0,
+              check_in_successful_time: 0,
+              accuracy: 0,
             },
           },
         }
@@ -230,16 +268,20 @@ exports.get_today_view = (req, res, next) => {
     let data = [];
     return Promise.all(
       user.onGoingGoals.map(async (element) => {
-        await Goal.findById(element.goal_id).then((element) => {
-          if (element.period == "Daily") {
-            data.push(element);
+        await Goal.findById(element.goal_id).then((goal) => {
+          if (goal.period == "Daily") {
+            data.push(goal);
             return;
-          } else if (element.period == "Weekly") {
+          } else if (goal.period == "Weekly") {
+            let date_now = new Date(Date.now());
+            date_now.setHours(0, 0, 0, 0);
+            let date_start = new Date(element.join_time);
+            date_start.setHours(0, 0, 0, 0);
             var diffDays = parseInt(
-              (Date.now() - element.startTime) / (1000 * 60 * 60 * 24) + 1
+              (date_now - date_start) / (1000 * 60 * 60 * 24)
             );
             if (diffDays % 7 == 0) {
-              data.push(element);
+              data.push(goal);
               return;
             } else {
               return;
@@ -248,6 +290,9 @@ exports.get_today_view = (req, res, next) => {
         });
       })
     ).then(() => {
+      data.sort((a, b) => {
+        return a - b;
+      });
       return data;
     });
   }
@@ -257,12 +302,12 @@ exports.get_today_view = (req, res, next) => {
 };
 
 exports.leaderboard = (req, res, next) => {
-  User.find({ "onGoingGoals.goal_id": req.body.goal_id })
+  User.find({ "onGoingGoals.goal_id": req.params.goal_id })
     .then((result) => {
       var data = [];
       result.forEach((element) => {
         var goal = element.onGoingGoals.find(
-          (element) => element.goal_id == req.body.goal_id
+          (element) => element.goal_id == req.parmas.goal_id
         );
         data.push({ user_id: element._id, progress: goal.progress });
       });
@@ -283,9 +328,18 @@ exports.leaderboard = (req, res, next) => {
 exports.goal_progress = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
-      var data = user.onGoingGoals.find(
-        (element) => element.goal_id == req.params.id
-      );
+      // var data = user.onGoingGoals.find(
+      //   (element) => element.goal_id == req.parmas.goal_id
+      // );
+
+      // Idk why this code dont work, but i dont work lol
+
+      let data;
+      for (const element of user.onGoingGoals) {
+        if (element.goal_id == req.params.goal_id) {
+          data = element;
+        }
+      }
       res.status(200).json({
         Data: data,
       });
@@ -296,3 +350,47 @@ exports.goal_progress = (req, res, next) => {
       });
     });
 };
+
+const delete_check_in = schedule.scheduleJob("00 00 * * *", function () {
+  User.updateMany(
+    {},
+    { $set: { "onGoingGoals.$[elem].check_in": 0 } },
+    { multi: true, arrayFilters: [{ "elem.check_in": { $gt: 0 } }] }
+  ).then((result) => {
+    console.log(result);
+  });
+});
+
+const calculate_accuracy = schedule.scheduleJob("05 * * * *", function () {
+  let date_now = new Date(Date.now());
+  date_now.setHours(0, 0, 0, 0);
+  let date_start = new Date();
+  User.find({}).then((user) => {
+    user.forEach((element) => {
+      element.onGoingGoals.forEach((personal_goal) => {
+        date_start = personal_goal.join_time;
+        date_start.setHours(0, 0, 0, 0);
+        Goal.findById(personal_goal.goal_id).then((goal) => {
+          if (goal.period == "Daily") {
+            personal_goal.accuracy =
+              personal_goal.progress /
+              (((date_now - date_start) /
+                (1000 * 60 * 60 * 24) /
+                goal.timespan) *
+                100);
+            user.save();
+          } else if (goal.period == "Weekly") {
+            if (((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7 == 0)
+              personal_goal.accuracy =
+                personal_goal.progress /
+                (((date_now - date_start) /
+                  (1000 * 60 * 60 * 24) /
+                  (goal.timespan / 7)) *
+                  100);
+            user.save();
+          }
+        });
+      });
+    });
+  });
+});
