@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const goalSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
+  createdBy: { type: String },
   title: { type: String, required: true },
   category: String,
   startTime: { type: Date, required: true },
