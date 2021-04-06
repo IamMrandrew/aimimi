@@ -58,7 +58,7 @@ const App = () => {
                   <Goals />
                 </Route>
                 <Route path="/goals/:id">
-                  <Details />
+                  <Details userInfo={userInfo} />
                 </Route>
                 <Route path="/shares">
                   <Shares />

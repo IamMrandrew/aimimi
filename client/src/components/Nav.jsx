@@ -49,7 +49,7 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
   return (
     <Wrapper>
       <NavContainer>
-        <CustomFaBars />
+        <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
         <Profile src={Profilephoto} />
         <Today>{title}</Today>
         <OutDropDown>

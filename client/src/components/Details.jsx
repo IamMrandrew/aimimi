@@ -6,10 +6,12 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 
-const Details = () => {
+const Details = ({ userInfo }) => {
   const [goalsDetails, setGoalDetails] = useState([]);
   const { id } = useParams();
   const history = useHistory();
+  const [goal, setGoal] = useState([]);
+  var Accuracy;
   useEffect(() => {
     axios
       .get(`/goal/${id}`, { withCredentials: true })
@@ -20,6 +22,14 @@ const Details = () => {
         console.log(error);
       });
   }, [goalsDetails]);
+
+  useEffect(() => {
+    for (const element of userInfo.onGoingGoals) {
+      if (element.goal_id === `${id}`) {
+        setGoal(element);
+      }
+    }
+  }, [goal]);
 
   const onClickHandler = (e) => {
     e.preventDefault();
@@ -60,7 +70,7 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How well you did?</DeatilTitle>
               <PercentageDiv>
-                <Number>87%</Number>
+                <Number>{goal.accuracy}%</Number>
                 <ItemIcon>
                   <FaClipboardCheck />
                 </ItemIcon>
@@ -72,7 +82,9 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How long did you lasted for?</DeatilTitle>
               <PercentageDiv>
-                <Number>3 days</Number>
+                <Number>
+                  {Math.round(goal.check_in_successful_time)} days
+                </Number>
                 <ItemIcon>
                   <FaFire />
                 </ItemIcon>
