@@ -12,6 +12,7 @@ require("dotenv").config();
 
 const userRoutes = require("./api/routes/user");
 const goalRoutes = require("./api/routes/goal");
+const feedRoutes = require("./api/routes/feed");
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -44,6 +45,7 @@ app.use(cookieParser());
 
 app.use("/user", userRoutes);
 app.use("/goal", goalRoutes);
+app.use("/feed", feedRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));

@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 const schedule = require("node-schedule");
 
 const Goal = require("../models/goal");
 const User = require("../models/user");
+const Feed = require("../models/feed");
+const FeedController = require("../controllers/feed");
 const { exists } = require("../models/goal");
 
 exports.add_goal = (req, res, next) => {
@@ -27,6 +28,8 @@ exports.add_goal = (req, res, next) => {
           });
         }
       });
+
+      FeedController.add_feed(goal._id, req.userData.userId, req.body.content);
       user
         .updateOne({
           $push: {
@@ -100,6 +103,7 @@ exports.remove_goal = (req, res, next) => {
       Goal.findByIdAndDelete(req.params.goal_id).exec();
     })
     .then(() => {
+      FeedController.remove_feed(req.params.goal_id);
       res.status(200).json({
         message: "Goal removed",
       });
@@ -120,7 +124,7 @@ exports.quit_goal = (req, res, next) => {
     { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } }
   )
     .then((result) => {
-      console.log(result);
+      FeedController.quit_feed(req.params.goal_id, req.userData.userId);
       res.status(200).json({
         message: "Goal quited",
       });
@@ -251,6 +255,7 @@ exports.join_goal = (req, res, next) => {
         }
       )
         .then(() => {
+          FeedController.join_feed(req.body.goal_id, req.userData.userId);
           res.status(200).json({
             Message: "join successful",
           });
