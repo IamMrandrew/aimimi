@@ -8,9 +8,11 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
+  const IsMatch = useLocation();
+  const [title, setTitle] = useState();
   const [showDropDown, setShowDropDown] = useState(false);
   const history = useHistory();
   const SideBarHandler = (showSidebar) => {
@@ -19,6 +21,12 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
   const DropDownHandler = (showDropDown) => {
     setShowDropDown(!showDropDown);
   };
+  useEffect(() => {
+    if (IsMatch.pathname === "/") setTitle("Today");
+    if (IsMatch.pathname === "/goals") setTitle("Goals");
+    if (IsMatch.pathname === "/shares") setTitle("Shares");
+    if (IsMatch.pathname === "/leaderboard") setTitle("Leaderboard");
+  }, [IsMatch]);
 
   const Logout = () => {
     axios
@@ -41,9 +49,9 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
   return (
     <Wrapper>
       <NavContainer>
-        <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
+        <CustomFaBars />
         <Profile src={Profilephoto} />
-        <Today>Today</Today>
+        <Today>{title}</Today>
         <OutDropDown>
           <WrapDropDownWrapper>
             <DropDownWrapper>

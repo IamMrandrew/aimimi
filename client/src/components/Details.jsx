@@ -7,29 +7,19 @@ import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 
 const Details = () => {
-  const [goals, setGoals] = useState([]);
   const [goalsDetails, setGoalDetails] = useState([]);
   const { id } = useParams();
   const history = useHistory();
   useEffect(() => {
     axios
-      .get("/goal", { withCredentials: true })
+      .get(`/goal/${id}`, { withCredentials: true })
       .then((response) => {
-        setGoals(response.data);
+        setGoalDetails(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
-
-  useEffect(() => {
-    var x;
-    for (x = 0; x < goals.length; x++) {
-      if (goals[x]._id === id) {
-        setGoalDetails(goals[x]);
-      }
-    }
-  }, [goals]);
+  }, [goalsDetails]);
 
   const onClickHandler = (e) => {
     e.preventDefault();
