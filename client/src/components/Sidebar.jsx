@@ -13,7 +13,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import NavItem from "./NavItem";
 
-const Sidebar = ({ showSidebar }) => {
+const Sidebar = ({ showSidebar, userInfo }) => {
   const history = useHistory();
 
   const Logout = () => {
@@ -56,7 +56,7 @@ const Sidebar = ({ showSidebar }) => {
         <Avator>
           <AvatorImg src={ProfilePhoto} />
         </Avator>
-        <ItemText>Magnus Nicholls</ItemText>
+        <ItemText>{userInfo.username}</ItemText>
       </ProfileItem>
 
       <ProfileItem>

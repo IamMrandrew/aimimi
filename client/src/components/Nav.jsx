@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import styled, { css } from "styled-components/macro";
 import { FaBell } from "react-icons/fa";
@@ -10,7 +10,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const Nav = ({ showSidebar, setShowSidebar }) => {
+const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const history = useHistory();
   const SideBarHandler = (showSidebar) => {
@@ -47,7 +47,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
         <OutDropDown>
           <WrapDropDownWrapper>
             <DropDownWrapper>
-              <UserName>Jane Doe</UserName>
+              <UserName>{userInfo.username}</UserName>
               <CustomFaChevronDown
                 onClick={() => DropDownHandler(showDropDown)}
               />
