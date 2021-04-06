@@ -357,12 +357,37 @@ exports.goal_progress = (req, res, next) => {
 };
 
 const delete_check_in = schedule.scheduleJob("00 00 * * *", function () {
-  User.updateMany(
-    {},
-    { $set: { "onGoingGoals.$[elem].check_in": 0 } },
-    { multi: true, arrayFilters: [{ "elem.check_in": { $gt: 0 } }] }
-  ).then((result) => {
-    console.log(result);
+  Goal.find({ period: "Daily" }).then((daily_goal) => {
+    daily_goal.forEach(async (goal) => {
+      await User.updateMany(
+        {},
+        { $set: { "onGoingGoals.$[elem].check_in": 0 } },
+        { multi: true, arrayFilters: [{ "elem.goal_id": goal._id }] }
+      );
+    });
+  });
+  User.find({}).then((user) => {
+    user.forEach(async (element) => {
+      if (element.onGoingGoals.length != 0) {
+        await element.onGoingGoals.forEach(async (personal_goal) => {
+          let date_start = new Date(personal_goal.join_time);
+          date_start.setUTCHours(0, 0, 0, 0);
+          let date_now = new Date(Date.now());
+          date_now.setUTCHours(0, 0, 0, 0);
+          if (((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7 == 0) {
+            await User.findOneAndUpdate(
+              {
+                $and: [
+                  { _id: element._id },
+                  { "onGoingGoals.goal_id": personal_goal.goal_id },
+                ],
+              },
+              { $set: { "onGoingGoals.$.check_in": 0 } }
+            );
+          }
+        });
+      }
+    });
   });
 });
 
@@ -392,9 +417,6 @@ const calculate_accuracy = schedule.scheduleJob("00 00 * * *", function () {
                 } else if (goal.period == "Weekly") {
                   let date_start = new Date(personal_goal.join_time);
                   date_start.setUTCHours(0, 0, 0, 0);
-                  console.log(
-                    ((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7
-                  );
                   if (
                     ((date_now - date_start) / (1000 * 60 * 60 * 24)) % 7 ==
                     0
