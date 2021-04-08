@@ -1,36 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import { FaAngleLeft, FaClipboardCheck, FaFire } from "react-icons/fa";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Details = () => {
-  const [goals, setGoals] = useState([]);
   const [goalsDetails, setGoalDetails] = useState([]);
   const { id } = useParams();
   const history = useHistory();
+  const [goal, setGoal] = useState([]);
+  const { auth, setAuth } = useContext(AuthContext);
+
   useEffect(() => {
     axios
-      .get("/goal", { withCredentials: true })
+      .get(`/goal/${id}`, { withCredentials: true })
       .then((response) => {
-        setGoals(response.data);
+        setGoalDetails(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [goalsDetails]);
 
   useEffect(() => {
-    var x;
-    for (x = 0; x < goals.length; x++) {
-      if (goals[x]._id === id) {
-        setGoalDetails(goals[x]);
-        console.log(goals);
+    for (const element of auth.onGoingGoals) {
+      if (element.goal_id == `${id}`) {
+        setGoal(element);
+        console.log(goal);
       }
     }
-  }, [goals]);
+  }, [goal]);
 
   const onClickHandler = (e) => {
     e.preventDefault();
@@ -39,11 +41,22 @@ const Details = () => {
 
   const onClickDeleteHandler = (e) => {
     axios
-      .delete(`/goal/${goalsDetails._id}`, {
+      .delete(`/goal/quit/${goalsDetails._id}`, {
         withCredentials: true,
       })
       .then((response) => {
-        alert("Deleted successfully!");
+        alert("Quit successfully!");
+
+        // Update user onGoingGoals for auth state
+        axios
+          .get("/user", { withCredentials: true })
+          .then((response) => {
+            setAuth(response.data);
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+          });
+
         history.push("/goals");
       })
       .catch((error) => {
@@ -71,7 +84,7 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How well you did?</DeatilTitle>
               <PercentageDiv>
-                <Number>87%</Number>
+                <Number>{goal.accuracy}%</Number>
                 <ItemIcon>
                   <FaClipboardCheck />
                 </ItemIcon>
@@ -83,7 +96,7 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How long did you lasted for?</DeatilTitle>
               <PercentageDiv>
-                <Number>3 days</Number>
+                <Number>{goal.check_in_successful_time} days</Number>
                 <ItemIcon>
                   <FaFire />
                 </ItemIcon>

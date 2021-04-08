@@ -11,7 +11,7 @@ const OngoingGoal = ({ goal }) => {
   };
   return (
     <div>
-      <Wrapper>
+      <Wrapper onClick={onClickHandler}>
         <TitleWrapper>
           <Title>{goal.title}</Title>
           <Description>{goal.category}</Description>
@@ -19,7 +19,7 @@ const OngoingGoal = ({ goal }) => {
           <Description> {goal.timespan} days left</Description>
         </TitleWrapper>
         <TimesWrapper>
-          <CustomFaAngleRight onClick={onClickHandler} />
+          <CustomFaAngleRight />
         </TimesWrapper>
       </Wrapper>
     </div>
@@ -38,7 +38,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
-
+  cursor: pointer;
   @media (max-width: 991.98px) {
     padding: 20px 20px;
     border-radius: 24px;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styled, { css } from "styled-components/macro";
 import {
   FaCalendarWeek,
@@ -10,11 +10,11 @@ import {
 import ProfilePhoto from "../assets/ProfilePhoto.png";
 import Logo from "../assets/Logo.svg";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import NavItem from "./NavItem";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Sidebar = ({ showSidebar }) => {
-  const history = useHistory();
+  const { auth, setAuth } = useContext(AuthContext);
 
   const Logout = () => {
     axios
@@ -22,13 +22,22 @@ const Sidebar = ({ showSidebar }) => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response);
-        history.push("/login");
+        setAuth(null);
       })
       .catch((error) => {
         alert("Logout Failed. Try Again.");
       });
   };
+  useEffect(() => {
+    axios
+      .get("/user", { withCredentials: true })
+      .then((response) => {
+        setAuth(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
+  }, [setAuth]);
   const onClickHandler = (e) => {
     e.preventDefault();
     Logout();
@@ -56,14 +65,16 @@ const Sidebar = ({ showSidebar }) => {
         <Avator>
           <AvatorImg src={ProfilePhoto} />
         </Avator>
-        <ItemText>Magnus Nicholls</ItemText>
+        <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
 
       <ProfileItem>
         <ItemIcon>
           <FaSignOutAlt />
         </ItemIcon>
-        <ItemText onClick={onClickHandler}>Log out</ItemText>
+        <Hover>
+          <ItemText onClick={onClickHandler}>Log out</ItemText>
+        </Hover>
       </ProfileItem>
     </Wrapper>
   );
@@ -179,4 +190,8 @@ const LogoWrapper = styled.div`
 const LogoImg = styled.img`
   width: 30px;
   height: 30px;
+`;
+
+const Hover = styled.div`
+  cursor: pointer;
 `;
