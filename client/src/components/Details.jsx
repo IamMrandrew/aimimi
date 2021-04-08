@@ -45,7 +45,18 @@ const Details = () => {
         withCredentials: true,
       })
       .then((response) => {
-        alert("Deleted successfully!");
+        alert("Quit successfully!");
+
+        // Update user onGoingGoals for auth state
+        axios
+          .get("/user", { withCredentials: true })
+          .then((response) => {
+            setAuth(response.data);
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+          });
+
         history.push("/goals");
       })
       .catch((error) => {
