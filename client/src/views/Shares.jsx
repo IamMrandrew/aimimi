@@ -3,9 +3,11 @@ import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
 import SharedGoal from "../components/SharedGoal";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Shares = () => {
   const [publicGoal, setPublicGoal] = useState(null);
+  const { auth, setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -19,6 +21,12 @@ const Shares = () => {
       });
   }, []);
 
+  const checkIfJoined = (goal) => {
+    return auth.onGoingGoals.find(
+      (onGoingGoal) => onGoingGoal.goal_id === goal._id
+    );
+  };
+
   return (
     <Wrapper>
       <CustomContainer>
@@ -27,7 +35,13 @@ const Shares = () => {
 
         <Subtitle>Trending</Subtitle>
         {publicGoal &&
-          publicGoal.map((goal) => <SharedGoal key={goal._id} goal={goal} />)}
+          publicGoal.map((goal) => (
+            <SharedGoal
+              key={goal._id}
+              goal={goal}
+              joined={checkIfJoined(goal)}
+            />
+          ))}
       </CustomContainer>
     </Wrapper>
   );

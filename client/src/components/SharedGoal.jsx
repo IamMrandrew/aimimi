@@ -6,7 +6,7 @@ import { FaUsers, FaCalendarAlt } from "react-icons/fa";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const SharedGoal = ({ goal }) => {
+const SharedGoal = ({ goal, joined }) => {
   const History = useHistory();
   const joinGoal = (e) => {
     e.preventDefault();
@@ -48,7 +48,13 @@ const SharedGoal = ({ goal }) => {
             <Stat>{goal ? goal.timespan : ""} days left</Stat>
           </SubtitleDiv>
 
-          <JoinButton onClick={joinGoal}>Join</JoinButton>
+          <JoinButton
+            disabled={joined}
+            onClick={joined ? undefined : joinGoal}
+            joined={joined}
+          >
+            {joined ? "Joined" : "Join"}
+          </JoinButton>
         </FlexDiv>
       </Container>
     </Wrapper>
@@ -127,7 +133,8 @@ const JoinButton = styled.button`
   justify-content: space-between;
   border: none;
   border-radius: 14px;
-  background-color: var(--primaryGoal);
+  background-color: ${(props) =>
+    props.joined ? "var(--placeholder)" : "var(--primaryGoal)"};
   color: #ffffff;
   font-weight: 700;
   font-size: 16px;
