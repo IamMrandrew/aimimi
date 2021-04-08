@@ -68,7 +68,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
         <OutDropDown>
           <WrapDropDownWrapper>
             <DropDownWrapper>
-              <UserName>{auth.username}</UserName>
+              <UserName>{auth ? auth.username : ""}</UserName>
               <CustomFaChevronDown
                 onClick={() => DropDownHandler(showDropDown)}
               />

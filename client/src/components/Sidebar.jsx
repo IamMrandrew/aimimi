@@ -65,7 +65,7 @@ const Sidebar = ({ showSidebar }) => {
         <Avator>
           <AvatorImg src={ProfilePhoto} />
         </Avator>
-        <ItemText>{auth.username}</ItemText>
+        <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
 
       <ProfileItem>
