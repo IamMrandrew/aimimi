@@ -13,8 +13,9 @@ import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 
-const Sidebar = ({ showSidebar, userInfo }) => {
+const Sidebar = ({ showSidebar }) => {
   const { auth, setAuth } = useContext(AuthContext);
+
   const Logout = () => {
     axios
       .delete("/user/logout", {

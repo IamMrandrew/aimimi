@@ -43,7 +43,7 @@ const App = () => {
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
-              <Sidebar showSidebar={showSidebar} userInfo={auth} />
+              <Sidebar showSidebar={showSidebar} />
               <Main lg={9}>
                 <Nav
                   showSidebar={showSidebar}
@@ -56,7 +56,7 @@ const App = () => {
                   <Goals />
                 </Route>
                 <Route path="/goals/:id">
-                  <Details userInfo={auth} />
+                  <Details />
                 </Route>
                 <Route path="/shares">
                   <Shares />

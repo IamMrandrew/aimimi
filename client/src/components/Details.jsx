@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import { FaAngleLeft, FaClipboardCheck, FaFire } from "react-icons/fa";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
-const Details = ({ userInfo }) => {
+const Details = () => {
   const [goalsDetails, setGoalDetails] = useState([]);
   const { id } = useParams();
   const history = useHistory();
   const [goal, setGoal] = useState([]);
+  const { auth, setAuth } = useContext(AuthContext);
+
   useEffect(() => {
     axios
       .get(`/goal/${id}`, { withCredentials: true })
@@ -23,7 +26,7 @@ const Details = ({ userInfo }) => {
   }, [goalsDetails]);
 
   useEffect(() => {
-    for (const element of userInfo.onGoingGoals) {
+    for (const element of auth.onGoingGoals) {
       if (element.goal_id == `${id}`) {
         setGoal(element);
         console.log(goal);
