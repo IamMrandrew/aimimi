@@ -19,17 +19,16 @@ import Onboarding from "./views/Onboarding";
 import Overlay from "./components/Overlay";
 import Details from "./components/Details";
 import Shares from "./views/Shares";
+
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
-        setUserInfo(response.data);
       })
       .catch((error) => {
         console.log(error.response.data.message);
@@ -44,12 +43,11 @@ const App = () => {
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
-              <Sidebar showSidebar={showSidebar} userInfo={userInfo} />
+              <Sidebar showSidebar={showSidebar} userInfo={auth} />
               <Main lg={9}>
                 <Nav
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
-                  userInfo={userInfo}
                 />
                 <Route exact path="/">
                   <Today showModal={showModal} setShowModal={setShowModal} />
@@ -58,7 +56,7 @@ const App = () => {
                   <Goals />
                 </Route>
                 <Route path="/goals/:id">
-                  <Details userInfo={userInfo} />
+                  <Details userInfo={auth} />
                 </Route>
                 <Route path="/shares">
                   <Shares />

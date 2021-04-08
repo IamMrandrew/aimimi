@@ -11,7 +11,6 @@ const Details = ({ userInfo }) => {
   const { id } = useParams();
   const history = useHistory();
   const [goal, setGoal] = useState([]);
-  var Accuracy;
   useEffect(() => {
     axios
       .get(`/goal/${id}`, { withCredentials: true })
@@ -25,8 +24,9 @@ const Details = ({ userInfo }) => {
 
   useEffect(() => {
     for (const element of userInfo.onGoingGoals) {
-      if (element.goal_id === `${id}`) {
+      if (element.goal_id == `${id}`) {
         setGoal(element);
+        console.log(goal);
       }
     }
   }, [goal]);
@@ -38,7 +38,7 @@ const Details = ({ userInfo }) => {
 
   const onClickDeleteHandler = (e) => {
     axios
-      .delete(`/goal/${goalsDetails._id}`, {
+      .delete(`/goal/quit/${goalsDetails._id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -82,9 +82,7 @@ const Details = ({ userInfo }) => {
             <EmptyDiv>
               <DeatilTitle>How long did you lasted for?</DeatilTitle>
               <PercentageDiv>
-                <Number>
-                  {Math.round(goal.check_in_successful_time)} days
-                </Number>
+                <Number>{goal.check_in_successful_time} days</Number>
                 <ItemIcon>
                   <FaFire />
                 </ItemIcon>

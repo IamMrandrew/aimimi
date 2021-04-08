@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Container from "react-bootstrap/Container";
 import styled, { css } from "styled-components/macro";
 import { FaBell } from "react-icons/fa";
@@ -9,11 +9,13 @@ import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import axios from "axios";
 import { useHistory, useLocation } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
-const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
+const Nav = ({ showSidebar, setShowSidebar }) => {
   const IsMatch = useLocation();
   const [title, setTitle] = useState();
   const [showDropDown, setShowDropDown] = useState(false);
+  const { auth, setAuth } = useContext(AuthContext);
   const history = useHistory();
   const SideBarHandler = (showSidebar) => {
     setShowSidebar(!showSidebar);
@@ -21,6 +23,17 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
   const DropDownHandler = (showDropDown) => {
     setShowDropDown(!showDropDown);
   };
+  useEffect(() => {
+    axios
+      .get("/user", { withCredentials: true })
+      .then((response) => {
+        setAuth(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
+  }, [setAuth]);
+
   useEffect(() => {
     if (IsMatch.pathname === "/") setTitle("Today");
     if (IsMatch.pathname === "/goals") setTitle("Goals");
@@ -34,8 +47,8 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response);
         history.push("/login");
+        setAuth(null);
       })
       .catch((error) => {
         alert("Logout Failed. Try Again.");
@@ -55,7 +68,7 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
         <OutDropDown>
           <WrapDropDownWrapper>
             <DropDownWrapper>
-              <UserName>{userInfo.username}</UserName>
+              <UserName>{auth.username}</UserName>
               <CustomFaChevronDown
                 onClick={() => DropDownHandler(showDropDown)}
               />
@@ -67,11 +80,9 @@ const Nav = ({ showSidebar, setShowSidebar, userInfo }) => {
                   <CustomFaUserAlt />
                   <DropDownText>Profile</DropDownText>
                 </ProfileWrapper>
-                <LogoutWrapper>
-                  <CustomFaSignOutAlt onClick={onClickHandler} />
-                  <LoginDropDownText onClick={onClickHandler}>
-                    Logout
-                  </LoginDropDownText>
+                <LogoutWrapper onClick={onClickHandler}>
+                  <CustomFaSignOutAlt />
+                  <LoginDropDownText>Logout</LoginDropDownText>
                 </LogoutWrapper>
               </BlockWrapper>
             </DownWrapper>

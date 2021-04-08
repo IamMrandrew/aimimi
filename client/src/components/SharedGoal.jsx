@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Profilephoto from "../assets/ProfilePhoto.png";
@@ -47,6 +47,7 @@ const SharedGoal = ({ goal }) => {
             </ItemIcon>
             <Stat>{goal ? goal.timespan : ""} days left</Stat>
           </SubtitleDiv>
+
           <JoinButton onClick={joinGoal}>Join</JoinButton>
         </FlexDiv>
       </Container>
