@@ -44,7 +44,10 @@ const App = () => {
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
-              <Sidebar showSidebar={showSidebar} />
+              <Sidebar
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+              />
               <Main lg={9}>
                 <Nav
                   showSidebar={showSidebar}
