@@ -196,6 +196,9 @@ exports.get_feed_view = (req, res, next) => {
 exports.get_one_user_feed = (req, res, next) => {
   Feed.find({ participant: req.userData.userId })
     .then((result) => {
+      result.sort((a, b) => {
+        return b.created_time - a.created_time;
+      });
       res.status(200).send(result);
     })
     .catch((err) => {
