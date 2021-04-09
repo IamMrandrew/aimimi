@@ -19,6 +19,7 @@ import Onboarding from "./views/Onboarding";
 import Overlay from "./components/Overlay";
 import Details from "./components/Details";
 import Shares from "./views/Shares";
+import Leaderboard from "./views/Leaderboard";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -61,6 +62,9 @@ const App = () => {
                 <Route path="/shares">
                   <Shares />
                 </Route>
+                <Route path="/leaderboard">
+                  <Leaderboard />
+                </Route>
               </Main>
             </Wrapper>
           </>
@@ -88,6 +92,7 @@ const Wrapper = styled(Row)`
   height: 100vh;
   width: 100%;
   background-color: white;
+  overflow: hidden;
 `;
 
 const Main = styled(Col)`
