@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Profilephoto from "../assets/ImageLarge.png";
 import { useHistory } from "react-router-dom";
-
-import {
-  FaCheckCircle,
-  FaBullseye,
-  FaRegCheckSquare,
-  FaAngleRight,
-} from "react-icons/fa";
+import axios from "axios";
+import { FaCheckCircle, FaBullseye, FaAngleRight } from "react-icons/fa";
 const Profile = ({ auth }) => {
   const history = useHistory();
   const ClickOngoing = (e) => {
     e.preventDefault();
     history.push("/goals");
   };
-  const ClickCompleted = (e) => {
+
+  const DeleteHandler = (e) => {
     e.preventDefault();
-    history.push("/completedgoals");
+    axios
+      .delete("/user", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        alert("Account deleted");
+        history.push("/onboarding");
+      })
+      .catch((err) => {
+        alert("Cannot delete account");
+      });
   };
+
   return (
     <Wrapper>
       <CustomContainer>
@@ -72,17 +79,6 @@ const Profile = ({ auth }) => {
           </SecondItemWrapper>
         </Flex>
 
-        <GoalsDiv onClick={ClickCompleted}>
-          <GoalsTitleDiv>
-            <ItemTextDiv>
-              <FaRegCheckSquare />
-            </ItemTextDiv>
-            <GoalsTitle>Completed Goals</GoalsTitle>
-          </GoalsTitleDiv>
-          <Angleright>
-            <FaAngleRight />
-          </Angleright>
-        </GoalsDiv>
         <GoalsDiv onClick={ClickOngoing}>
           <GoalsTitleDiv>
             <SecondItemTextDiv>
@@ -94,6 +90,7 @@ const Profile = ({ auth }) => {
             <FaAngleRight />
           </Angleright>
         </GoalsDiv>
+        <QuitButton onClick={DeleteHandler}>Delete Account</QuitButton>
       </CustomContainer>
     </Wrapper>
   );
@@ -136,7 +133,7 @@ const InformationWrapper = styled.div`
 
   @media (max-width: 768px) {
     height: 130px;
-    margin-top: 25px;
+    margin-top: 15px;
   }
 `;
 
@@ -249,6 +246,7 @@ const ItemWrapper = styled.div`
   margin-top: 53px;
   @media (max-width: 991.98px) {
     height: 172px;
+    margin-top: 37px;
   }
 `;
 
@@ -282,6 +280,7 @@ const SecondItemWrapper = styled.div`
   margin-left: 15px;
   @media (max-width: 991.98px) {
     height: 172px;
+    margin-top: 37px;
   }
 `;
 
@@ -317,10 +316,6 @@ const GoalsTitleDiv = styled.div`
   margin-left: 35px;
 `;
 
-const ItemTextDiv = styled.span`
-  color: #a3d2e6;
-  font-size: 30px;
-`;
 const GoalsTitle = styled.div`
   color: #000000;
   font-weight: 700;
@@ -337,4 +332,20 @@ const Angleright = styled.span`
 const SecondItemTextDiv = styled.span`
   color: #e87e45;
   font-size: 30px;
+`;
+
+const QuitButton = styled.button`
+  border-radius: 20px;
+  display: flex;
+  background-color: #f28f8f;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  height: 54px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+  border: none;
+  margin-top: 36px;
 `;

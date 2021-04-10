@@ -39,6 +39,8 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     if (IsMatch.pathname === "/goals") setTitle("Goals");
     if (IsMatch.pathname === "/shares") setTitle("Shares");
     if (IsMatch.pathname === "/leaderboard") setTitle("Leaderboard");
+    if (IsMatch.pathname === "/profile") setTitle("Profile");
+    if (IsMatch.pathname === "/activity") setTitle("Activity");
   }, [IsMatch]);
 
   const Logout = () => {

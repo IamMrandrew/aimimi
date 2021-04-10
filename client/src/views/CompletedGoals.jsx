@@ -1,32 +1,25 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
-import Profilephoto from "../assets/ImageLarge.png";
-import { useHistory } from "react-router-dom";
 import AddGoal from "../components/AddGoal";
 import OngoingGoal from "../components/OngoingGoal";
-import axios from "axios";
 
 const CompletedGoals = ({ auth }) => {
   const [goals, setGoals] = useState([]);
-
   useEffect(() => {
-    axios
-      .get("/goal", { withCredentials: true })
-      .then((response) => {
-        setGoals(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    setGoals(auth.completedGoals);
+    for (const element of goals) {
+      console.log(element);
+    }
+  }, [goals]);
+
   return (
     <Wrapper>
       <CustomContainer>
-        <Title>Goals</Title>
+        <Title>Completed Goals</Title>
 
         {goals.map((goal) => (
-          <OngoingGoal key={goal._id} goal={goal} />
+          <OngoingGoal key={goal} goal={goal} />
         ))}
 
         <AddGoal setGoals={setGoals} />

@@ -21,6 +21,7 @@ import Details from "./components/Details";
 import Shares from "./views/Shares";
 import Profile from "./views/Profile";
 import CompletedGoals from "./views/CompletedGoals";
+import Activity from "./views/Activity";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -68,6 +69,9 @@ const App = () => {
                 </Route>
                 <Route path="/completedgoals">
                   <CompletedGoals auth={auth} />
+                </Route>
+                <Route path="/activity">
+                  <Activity />
                 </Route>
               </Main>
             </Wrapper>
