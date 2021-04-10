@@ -20,7 +20,6 @@ import Overlay from "./components/Overlay";
 import Details from "./components/Details";
 import Shares from "./views/Shares";
 import Profile from "./views/Profile";
-import CompletedGoals from "./views/CompletedGoals";
 import Activity from "./views/Activity";
 
 const App = () => {
@@ -67,9 +66,7 @@ const App = () => {
                 <Route path="/profile">
                   <Profile auth={auth} />
                 </Route>
-                <Route path="/completedgoals">
-                  <CompletedGoals auth={auth} />
-                </Route>
+
                 <Route path="/activity">
                   <Activity />
                 </Route>

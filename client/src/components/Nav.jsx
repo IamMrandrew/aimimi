@@ -65,7 +65,10 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     e.preventDefault();
     history.push("/profile");
   };
-
+  const onClickBell = (e) => {
+    e.preventDefault();
+    history.push("/activity");
+  };
   return (
     <Wrapper>
       <NavContainer>
@@ -96,7 +99,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
           </WrapDropDownWrapper>
         </OutDropDown>
 
-        <BellWapper>
+        <BellWapper onClick={onClickBell}>
           <CustomFaBell />
         </BellWapper>
       </NavContainer>
@@ -129,6 +132,7 @@ const NavContainer = styled(Container)`
 `;
 const BellWapper = styled.div`
   padding-left: 23px;
+  cursor: pointer;
 `;
 const CustomFaBell = styled(FaBell)`
   width: 24px;
