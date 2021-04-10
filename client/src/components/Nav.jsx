@@ -59,6 +59,11 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     Logout();
   };
 
+  const onClickProfile = (e) => {
+    e.preventDefault();
+    history.push("/profile");
+  };
+
   return (
     <Wrapper>
       <NavContainer>
@@ -76,7 +81,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
 
             <DownWrapper showDropDown={showDropDown}>
               <BlockWrapper>
-                <ProfileWrapper>
+                <ProfileWrapper onClick={onClickProfile}>
                   <CustomFaUserAlt />
                   <DropDownText>Profile</DropDownText>
                 </ProfileWrapper>

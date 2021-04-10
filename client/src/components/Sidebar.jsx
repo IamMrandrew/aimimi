@@ -12,16 +12,18 @@ import Logo from "../assets/Logo.svg";
 import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
 const Sidebar = ({ showSidebar }) => {
   const { auth, setAuth } = useContext(AuthContext);
-
+  const history = useHistory();
   const Logout = () => {
     axios
       .delete("/user/logout", {
         withCredentials: true,
       })
       .then((response) => {
+        history.push("/login");
         setAuth(null);
       })
       .catch((error) => {
