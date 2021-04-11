@@ -1,29 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Profilephoto from "../assets/ImageLarge.png";
 import ClimbingPVG from "../assets/Feed_climbing.png";
 import { FaHeart, FaComments } from "react-icons/fa";
+import axios from "axios";
+const Feed = ({ feed, liked }) => {
+  const [userName, setUserName] = useState();
+  useEffect(() => {
+    axios
+      .get(`/user/name/${feed.creator}`, { withCredentials: true })
+      .then((res) => {
+        setUserName(res.data);
+      });
+  }, [userName]);
 
-const Feed = () => {
+  const Like = (e) => {
+    e.preventDefault();
+
+    axios
+      .post(`/feed/like/${feed._id}`, { withCredentials: true })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const UnLike = (e) => {
+    e.preventDefault();
+
+    axios
+      .delete(`/feed/unlike/${feed._id}`, { withCredentials: true })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Wrapper>
       <LeftDiv>
         <FlexWrapper>
           <ProfileImage src={Profilephoto} />
           <BlockDiv>
-            <Name>Jane Doe</Name>
-            <Time>3 mins ago</Time>
+            <Name>{userName}</Name>
+            <Time>
+              {Math.floor((Date.now() - Date.parse(feed.created_time)) / 86400)}{" "}
+              minutes ago
+            </Time>
           </BlockDiv>
         </FlexWrapper>
-        <Status>Jane Doe has just finish his “Drink water” goal!</Status>
+        <Status>{feed.content}</Status>
         <ButtonDiv>
-          <UnClickButton>
+          <UnClickButton onClick={liked ? UnLike : Like} liked={liked}>
             <FaHeart />
-            <Number>2 likes</Number>
+            <Number>{feed.like.length} likes</Number>
           </UnClickButton>
           <UnClickButton>
             <FaComments />
-            <Number>13 comments</Number>
+            <Number>{feed.comment.length} comments</Number>
           </UnClickButton>
         </ButtonDiv>
       </LeftDiv>
@@ -97,13 +130,13 @@ const UnClickButton = styled.button`
   height: 26px;
   padding: 11px 11px;
   font-size: 14px;
-  color: #888888;
+  color: ${(props) => (props.liked ? "#fe7400" : "#888888")};
   border: none;
   margin-right: 5px;
 `;
 
 const Number = styled.span`
-  color: #888888;
+  ${(props) => (props.liked ? "#fe7400" : "#888888")};
   font-weight: 500;
   font-size: 14px;
   margin-left: 5px;

@@ -1,16 +1,32 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
 import Feed from "../components/Feed";
+import { AuthContext } from "../contexts/AuthContext";
 const Activity = () => {
+  const [feeds, setFeeds] = useState([]);
+  const { auth, setAuth } = useContext(AuthContext);
+  useEffect(() => {
+    axios
+      .get("/feed", { withCredentials: true })
+      .then((response) => {
+        setFeeds(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [feeds]);
+  const checkIfLiked = (feed) => {
+    return feed.like.find((liked) => liked === auth._id);
+  };
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Activity</Title>
-        <Feed />
-        <Feed />
-        <Feed />
+        {feeds.map((feed) => (
+          <Feed feed={feed} key={feed._id} liked={checkIfLiked(feed)} />
+        ))}
       </CustomContainer>
     </Wrapper>
   );

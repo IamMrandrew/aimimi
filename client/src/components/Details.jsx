@@ -27,7 +27,7 @@ const Details = () => {
 
   useEffect(() => {
     for (const element of auth.onGoingGoals) {
-      if (element.goal_id == `${id}`) {
+      if (element.goal_id === `${id}`) {
         setGoal(element);
         console.log(goal);
       }

@@ -107,6 +107,18 @@ exports.user_info = (req, res, next) => {
     });
 };
 
+exports.other_user_name = (req, res, next) => {
+  User.findOne({ _id: req.params.id }).then(async (user) => {
+    try {
+      res.status(200).send(user.username);
+    } catch (err) {
+      res.status(500).json({
+        Error: err,
+      });
+    }
+  });
+};
+
 exports.user_logout = (req, res, next) => {
   res.status(202).clearCookie("token").json({
     message: "Logged out",
