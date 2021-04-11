@@ -114,8 +114,7 @@ exports.user_logout = (req, res, next) => {
 };
 
 exports.user_delete = (req, res, next) => {
-  const ObjectId = require("mongoose").Types.ObjectId;
-  User.remove({ _id: new ObjectId(req.body.userID) })
+  User.remove({ _id: req.userData.userId })
     .exec()
     .then((result) => {
       console.log(result);
