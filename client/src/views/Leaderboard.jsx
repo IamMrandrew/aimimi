@@ -4,11 +4,12 @@ import Container from "react-bootstrap/Container";
 import Rank from "../components/Rank";
 import TopRank from "../components/TopRank";
 import axios from "axios";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router-dom";
 
 const Leaderboard = ({ sharedGoals }) => {
   const [ranks, setRanks] = useState();
   const { id } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     axios
@@ -22,23 +23,44 @@ const Leaderboard = ({ sharedGoals }) => {
       });
   }, [id]);
 
+  const selectBoxHandler = (e) => {
+    history.push(`/leaderboard/${e.target.value}`);
+  };
+
   return (
     <Wrapper>
       <CustomContainer>
+        <SelectBox onChange={selectBoxHandler}>
+          {sharedGoals.map((goal) => (
+            <Option value={goal._id}>{goal.title}</Option>
+          ))}
+        </SelectBox>
         <Title>
           {sharedGoals.length > 0 &&
             sharedGoals.find((goal) => goal._id === id).title}
         </Title>
+        <Meta>
+          <Desc>Everyday</Desc>
+          <Desc>86 days left</Desc>
+        </Meta>
         <TopBoard>
           {ranks &&
             ranks
               .slice(0, 3)
-              .map((rank) => <TopRank key={rank._id} rank={rank} />)}
+              .map((rank, index) => (
+                <TopRank key={rank._id} index={index + 1} rank={rank} />
+              ))}
         </TopBoard>
-        <Board>
-          {ranks &&
-            ranks.slice(3).map((rank) => <Rank key={rank._id} rank={rank} />)}
-        </Board>
+        {ranks && ranks.slice(3).length > 0 && (
+          <Board>
+            {ranks &&
+              ranks
+                .slice(3)
+                .map((rank, index) => (
+                  <Rank key={rank._id} index={index + 4} rank={rank} />
+                ))}
+          </Board>
+        )}
       </CustomContainer>
     </Wrapper>
   );
@@ -85,4 +107,21 @@ const Title = styled.h1`
   font-size: 28px;
   font-weight: 600;
   color: var(--primaryShaded);
+  margin-bottom: 2px;
 `;
+
+const Meta = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+`;
+const Desc = styled.span`
+  color: var(--primaryTinted);
+  font-weight: 500;
+  font-size: 16px;
+  margin-right: 16px;
+`;
+
+const SelectBox = styled.select``;
+
+const Option = styled.option``;
