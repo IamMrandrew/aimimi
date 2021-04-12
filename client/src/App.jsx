@@ -64,7 +64,7 @@ const App = () => {
                   <Shares />
                 </Route>
                 <Route path="/profile">
-                  <Profile auth={auth} />
+                  <Profile />
                 </Route>
 
                 <Route path="/activity">

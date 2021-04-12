@@ -1,16 +1,55 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
+import Collapse from "react-bootstrap/Collapse";
 import Profilephoto from "../assets/ImageLarge.png";
+import GoalFromProfile from "../components/GoalFromProfile";
+import CompletedProfile from "../components/CompletedProfile";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { FaCheckCircle, FaBullseye, FaAngleRight } from "react-icons/fa";
-const Profile = ({ auth }) => {
+import {
+  FaCheckCircle,
+  FaBullseye,
+  FaAngleDown,
+  FaRegCheckSquare,
+} from "react-icons/fa";
+import { AuthContext } from "../contexts/AuthContext";
+
+const Profile = () => {
   const history = useHistory();
-  const ClickOngoing = (e) => {
-    e.preventDefault();
-    history.push("/goals");
-  };
+  const { auth, setAuth } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
+  const [secondOpen, setSecondOpen] = useState(false);
+  const [goals, setGoals] = useState([]);
+  const [completed, setCompleted] = useState([]);
+  useEffect(() => {
+    axios
+      .get("/goal", { withCredentials: true })
+      .then((response) => {
+        setGoals(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/goal", { withCredentials: true })
+      .then((response) => {
+        setGoals(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setCompleted(auth.completedGoals);
+    console.log(completed);
+  }, []);
+
+  useEffect(() => {
+    setCompleted(auth.completedGoals);
+    console.log(completed);
+  }, [completed]);
 
   const DeleteHandler = (e) => {
     e.preventDefault();
@@ -34,62 +73,97 @@ const Profile = ({ auth }) => {
         <InformationWrapper>
           <BlockDiv>
             <ProfileImage src={Profilephoto} />
-            <Name>{auth.username}</Name>
           </BlockDiv>
-          <FlexDiv>
-            <Line />
-            <BlockDiv>
-              <Joined>Joined</Joined>
-              <FlexDiv>
-                <Times>
-                  {Math.floor(
-                    (Date.now() - Date.parse(auth.joinDate)) /
-                      (1000 * 3600 * 24)
-                  )}
-                </Times>
-                <DaysAgo> days ago</DaysAgo>
-              </FlexDiv>
-            </BlockDiv>
-          </FlexDiv>
+          <BlockDiv>
+            <Name>{auth.username}</Name>
+            <Joined>Joined</Joined>
+            <FlexDiv>
+              <Times>
+                {Math.floor(
+                  (Date.now() - Date.parse(auth.joinDate)) / (1000 * 3600 * 24)
+                )}
+              </Times>
+              <Times> days ago</Times>
+            </FlexDiv>
+          </BlockDiv>
         </InformationWrapper>
 
         <Flex>
-          <ItemWrapper>
-            <CustomContainer1>
-              <ItemDiv>
-                <ItemText>
-                  <FaCheckCircle />
-                </ItemText>
-              </ItemDiv>
-              <Status>{auth.completedGoals.length}</Status>
-              <GoalTitle>Compelted</GoalTitle>
-            </CustomContainer1>
-          </ItemWrapper>
+          <HalfFlexDiv>
+            <ItemWrapper>
+              <CustomContainer1>
+                <ItemDiv>
+                  <ItemText>
+                    <FaCheckCircle />
+                  </ItemText>
+                </ItemDiv>
+                <Status>{auth.completedGoals.length}</Status>
+                <GoalTitle>Compelted</GoalTitle>
+              </CustomContainer1>
+            </ItemWrapper>
 
-          <SecondItemWrapper>
-            <CustomContainer1>
-              <SecondItemDiv>
-                <ItemText>
+            <SecondItemWrapper>
+              <CustomContainer1>
+                <SecondItemDiv>
+                  <ItemText>
+                    <FaBullseye />
+                  </ItemText>
+                </SecondItemDiv>
+                <Status>{auth.onGoingGoals.length}</Status>
+                <GoalTitle>Ongoing</GoalTitle>
+              </CustomContainer1>
+            </SecondItemWrapper>
+          </HalfFlexDiv>
+
+          <HalfBlockDiv>
+            <GoalsDiv
+              onClick={() => setOpen(!open)}
+              aria-expanded={open}
+              aria-controls="ongoing"
+            >
+              <GoalsTitleDiv>
+                <SecondItemTextDiv>
                   <FaBullseye />
-                </ItemText>
-              </SecondItemDiv>
-              <Status>{auth.onGoingGoals.length}</Status>
-              <GoalTitle>Ongoing</GoalTitle>
-            </CustomContainer1>
-          </SecondItemWrapper>
+                </SecondItemTextDiv>
+                <GoalsTitle>Ongoing Goals</GoalsTitle>
+              </GoalsTitleDiv>
+              <Angleright>
+                <FaAngleDown />
+              </Angleright>
+            </GoalsDiv>
+            <Collapse in={open}>
+              <div>
+                {goals.map((goal) => (
+                  <GoalFromProfile id="ongoing" goal={goal} />
+                ))}
+              </div>
+            </Collapse>
+
+            <GoalsDiv
+              onClick={() => setSecondOpen(!secondOpen)}
+              aria-expanded={secondOpen}
+              aria-controls="completed"
+            >
+              <GoalsTitleDiv>
+                <ItemTextDiv>
+                  <FaRegCheckSquare />
+                </ItemTextDiv>
+                <GoalsTitle>Completed Goals</GoalsTitle>
+              </GoalsTitleDiv>
+              <Angleright>
+                <FaAngleDown />
+              </Angleright>
+            </GoalsDiv>
+            <Collapse in={secondOpen}>
+              <div>
+                {completed.map((goal) => (
+                  <CompletedProfile id="completed" goal={goal} />
+                ))}
+              </div>
+            </Collapse>
+          </HalfBlockDiv>
         </Flex>
 
-        <GoalsDiv onClick={ClickOngoing}>
-          <GoalsTitleDiv>
-            <SecondItemTextDiv>
-              <FaBullseye />
-            </SecondItemTextDiv>
-            <GoalsTitle>Ongoing Goals</GoalsTitle>
-          </GoalsTitleDiv>
-          <Angleright>
-            <FaAngleRight />
-          </Angleright>
-        </GoalsDiv>
         <QuitButton onClick={DeleteHandler}>Delete Account</QuitButton>
       </CustomContainer>
     </Wrapper>
@@ -122,141 +196,90 @@ const CustomContainer = styled(Container)`
 `;
 
 const InformationWrapper = styled.div`
-  height: 200px;
+  height: 152px;
   width: 100%;
   background-color: #ffffff;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 45px;
+  margin-top: 32px;
   border-radius: 20px;
-
+  padding: 25px 28px;
   @media (max-width: 768px) {
     height: 130px;
     margin-top: 15px;
   }
 `;
 
-const BlockDiv = styled.div`
-  margin-left: 82px;
-  @media (max-width: 768px) {
-    margin-left: 27px;
-  }
-`;
+const BlockDiv = styled.div``;
 
 const ProfileImage = styled.img`
+  margin-right: 62px;
   border-radius: 18px;
   width: 100px;
   height: 100px;
-  @media (max-width: 768.98px) {
-    width: 70px;
-    height: 70px;
-  }
 `;
 const Name = styled.h1`
-  font-size: 40px;
+  font-size: 20px;
   font-weight: 700;
-  color: #1c4b56;
-  margin-top: 5px;
-  @media (max-width: 768px) {
-    font-size: 30px;
-  }
+  color: #000000;
+  margin-bottom: 20px;
 `;
 const FlexDiv = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const Line = styled.div`
-  border-left: 1px solid #f3f3f3;
-  height: 182px;
-  @media (max-width: 768px) {
-    height: 82px;
-  }
-`;
-
 const Joined = styled.span`
-  font-size: 30px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--primaryTinted);
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
 `;
 
 const Status = styled.h1`
   color: #1c4b56;
   font-weight: 700;
-  font-size: 50px;
-  @media (max-width: 991.98px) {
-    font-size: 30px;
-  }
+  font-size: 24px;
 `;
 
 const Times = styled.h1`
   color: #1c4b56;
   font-weight: 700;
-  font-size: 50px;
+  font-size: 16px;
   margin-right: 5px;
-  @media (max-width: 768px) {
-    font-size: 30px;
-  }
 `;
-const DaysAgo = styled.span`
-  font-size: 40px;
-  font-weight: 400;
-  color: #1c4b56;
-  margin-right: 82px;
-  @media (max-width: 768px) {
-    font-size: 20px;
-    margin-right: 14px;
-  }
-`;
+
 const ItemDiv = styled.div`
   background-color: #a3d2e6;
   border-radius: 10px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 90.25px;
-  height: 83.43px;
-  margin-bottom: 9px;
-  @media (max-width: 991.98px) {
-    width: 50px;
-    height: 50px;
-  }
+  width: 50px;
+  height: 50px;
+  margin-bottom: 16px;
 `;
 
 const ItemText = styled.span`
   color: #ffffff;
-  font-size: 50px;
-  @media (max-width: 991.98px) {
-    font-size: 36px;
-  }
+  font-size: 32px;
 `;
 
 const ItemWrapper = styled.div`
   background-color: #edf7fa;
-  height: 287px;
-  width: 50%;
+  height: 172px;
+  width: 200px;
   display: flex;
   align-items: center;
   border-radius: 10px;
-  margin-top: 53px;
-  @media (max-width: 991.98px) {
-    height: 172px;
-    margin-top: 37px;
+  margin-right: 17px;
+  @media (max-width: 768px) {
+    width: 50%;
   }
 `;
 
 const GoalTitle = styled.span`
   color: #777777;
-  font-size: 30px;
+  font-size: 16px;
   font-weight: 400px;
-  @media (max-width: 991.98px) {
-    font-size: 18px;
-  }
 `;
 
 const CustomContainer1 = styled.div`
@@ -265,22 +288,22 @@ const CustomContainer1 = styled.div`
 
 const Flex = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding-top: 20px;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const SecondItemWrapper = styled.div`
   background-color: #fceee6;
-  height: 287px;
-  width: 50%;
+  height: 172px;
+  width: 200px;
   display: flex;
   align-items: center;
   border-radius: 10px;
-  margin-top: 53px;
-  margin-left: 15px;
-  @media (max-width: 991.98px) {
-    height: 172px;
-    margin-top: 37px;
+  @media (max-width: 768px) {
+    width: 50%;
   }
 `;
 
@@ -288,15 +311,10 @@ const SecondItemDiv = styled.div`
   background-color: #e87e45;
   border-radius: 10px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 90.25px;
-  height: 83.43px;
-  margin-bottom: 9px;
-  @media (max-width: 991.98px) {
-    width: 50px;
-    height: 50px;
-  }
+  width: 50px;
+  height: 50px;
+  margin-bottom: 16px;
 `;
 
 const GoalsDiv = styled.div`
@@ -304,9 +322,10 @@ const GoalsDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: white;
-  height: 71px;
+  height: 58px;
+  width: 100%;
   border-radius: 20px;
-  margin-top: 23px;
+  margin-bottom: 10px;
   cursor: pointer;
 `;
 
@@ -320,13 +339,13 @@ const GoalsTitle = styled.div`
   color: #000000;
   font-weight: 700;
   font-size: 18px;
-  margin-left: 25px;
+  margin-left: 27px;
 `;
 
 const Angleright = styled.span`
   font-size: 18px;
   color: #1c4b56;
-  margin-right: 27px;
+  margin-right: 13px;
 `;
 
 const SecondItemTextDiv = styled.span`
@@ -345,7 +364,32 @@ const QuitButton = styled.button`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  width: 100%;
+  width: 50%;
   border: none;
   margin-top: 36px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const HalfBlockDiv = styled.div`
+  width: 50%;
+  padding-left: 30px;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding-left: 0px;
+    margin-top: 20px;
+  }
+`;
+const HalfFlexDiv = styled.div`
+  display: flex;
+  width: 50%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const ItemTextDiv = styled.div`
+  color: #a3d2e6;
+  font-size: 30px;
 `;
