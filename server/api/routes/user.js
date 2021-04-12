@@ -33,6 +33,8 @@ router.post("/login", UserController.user_login);
 
 router.get("/", checkAuth, UserController.user_info);
 
+router.get("/other_user/:user_id", checkAuth, UserController.other_user_info);
+
 router.get("/propic", checkAuth, UserController.user_propic);
 
 router.delete("/logout", checkAuth, UserController.user_logout);
