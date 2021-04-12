@@ -312,10 +312,8 @@ exports.get_today_view = (req, res, next) => {
 };
 
 exports.leaderboard = (req, res, next) => {
-  console.log(req.params.goal_id);
   User.find({ "onGoingGoals.goal_id": req.params.goal_id })
     .then((result) => {
-      console.log(result);
       let data = [];
       result.forEach((element) => {
         element.onGoingGoals.forEach((goal) => {

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const UserController = require("../controllers/user");
 const checkAuth = require("../middleware/auth");
+const checkAdmin = require("../middleware/admin");
 const { route } = require("./goal");
 var multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
@@ -39,6 +40,6 @@ router.get("/propic", checkAuth, UserController.user_propic);
 
 router.delete("/logout", checkAuth, UserController.user_logout);
 
-router.delete("/", checkAuth, UserController.user_delete);
+router.delete("/:user_id", checkAuth, checkAdmin, UserController.user_delete);
 
 module.exports = router;

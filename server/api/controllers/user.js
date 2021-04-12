@@ -22,6 +22,7 @@ exports.user_signup = (req, res, next) => {
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
+              role: "user",
               username: req.body.username,
               email: req.body.email,
               password: hash,
@@ -99,8 +100,9 @@ exports.user_login = (req, res, next) => {
 exports.user_info = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
-      res.status(200).end(user);
+      res.status(200).json(user);
     })
+
     .catch((err) => {
       res.status(500).end(err);
     });
@@ -155,7 +157,7 @@ exports.user_logout = (req, res, next) => {
 };
 
 exports.user_delete = (req, res, next) => {
-  User.remove({ _id: req.userData.userId })
+  User.remove({ _id: req.params.user_id })
     .exec()
     .then((result) => {
       console.log(result);
