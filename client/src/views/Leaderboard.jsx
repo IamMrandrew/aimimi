@@ -6,38 +6,29 @@ import TopRank from "../components/TopRank";
 import axios from "axios";
 import { useParams } from "react-router";
 
-const Leaderboard = () => {
+const Leaderboard = ({ sharedGoals }) => {
   const [ranks, setRanks] = useState();
   const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(`/goal/leaderboard${id}`, { withCredentials: true })
+      .get(`/goal/leaderboard/${id}`, { withCredentials: true })
       .then((response) => {
-        setRanks(response.data);
+        setRanks(response.data.data);
+        console.log(response.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    setRanks([
-      {
-        _id: "606b3414d71340278d3b0da0",
-        username: "Andrew Li",
-        accuracy: 50.0,
-      },
-      { _id: "606b3414d71340278d3b0da0", username: "Andrew B", accuracy: 50.0 },
-      { _id: "606b3414d71340278d3b0da0", username: "Andrew C", accuracy: 50.0 },
-      { _id: "606b3414d71340278d3b0da0", username: "Andrew D", accuracy: 70.0 },
-      { _id: "606b3414d71340278d3b0da0", username: "Andrew E", accuracy: 40.0 },
-      { _id: "606b3414d71340278d3b0da0", username: "Andrew F", accuracy: 30.0 },
-    ]);
-  }, []);
+  }, [id]);
 
   return (
     <Wrapper>
       <CustomContainer>
-        <Title>Drink water</Title>
+        <Title>
+          {sharedGoals.length > 0 &&
+            sharedGoals.find((goal) => goal._id === id).title}
+        </Title>
         <TopBoard>
           {ranks &&
             ranks

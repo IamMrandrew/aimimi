@@ -82,7 +82,7 @@ const App = () => {
                   <Shares />
                 </Route>
                 <Route path="/leaderboard/:id">
-                  <Leaderboard />
+                  <Leaderboard sharedGoals={sharedGoals} />
                 </Route>
               </Main>
             </Wrapper>
