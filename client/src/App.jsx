@@ -22,6 +22,7 @@ import Shares from "./views/Shares";
 import Profile from "./views/Profile";
 import Activity from "./views/Activity";
 import Leaderboard from "./views/Leaderboard";
+import Loader from "./components/Loader";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -32,12 +33,14 @@ const App = () => {
   const [todayGoals, setTodayGoals] = useState([]);
 
   const { auth, setAuth } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -72,7 +75,7 @@ const App = () => {
     <>
       <GlobalStyle />
       <Switch>
-        {auth && (
+        {!loading && auth && (
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
@@ -116,6 +119,7 @@ const App = () => {
             </Wrapper>
           </>
         )}
+        {loading && <Loader />}
         <Route exact path="/">
           <Onboarding />
         </Route>
