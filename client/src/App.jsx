@@ -43,7 +43,8 @@ const App = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
+        setLoading(false);
       });
   }, [setAuth]);
 
@@ -56,9 +57,9 @@ const App = () => {
         console.log(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
       });
-  }, []);
+  }, [auth]);
 
   useEffect(() => {
     axios
@@ -67,9 +68,9 @@ const App = () => {
         setTodayGoals(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
       });
-  }, [goals]);
+  }, [auth, goals]);
 
   return (
     <>

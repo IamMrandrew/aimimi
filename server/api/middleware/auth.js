@@ -5,21 +5,21 @@ module.exports = (req, res, next) => {
     req.cookies.token,
     process.env.JWT_TOKEN,
     async (error, decoded) => {
-      try {
-        if (decoded) {
-          req.userData = decoded;
-          next();
-        }
-      } catch (error) {
+      if (error) {
         if (error.message === "TokenExpiredError") {
           return res
             .status(403)
             .send({ sucess: false, message: "Token expired" });
         } else {
-          res.status(401).json({
+          return res.status(401).json({
             message: "Auth failed",
           });
         }
+      }
+
+      if (decoded) {
+        req.userData = decoded;
+        next();
       }
     }
   );

@@ -7,7 +7,7 @@ import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
 import { useHistory, Link } from "react-router-dom";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useReducer } from "react";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
