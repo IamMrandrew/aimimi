@@ -312,20 +312,24 @@ exports.get_today_view = (req, res, next) => {
 };
 
 exports.leaderboard = (req, res, next) => {
+  console.log(req.params.goal_id);
   User.find({ "onGoingGoals.goal_id": req.params.goal_id })
     .then((result) => {
-      var data = [];
+      console.log(result);
+      let data = [];
       result.forEach((element) => {
-        var goal = element.onGoingGoals.find(
-          (element) => element.goal_id == req.parmas.goal_id
-        );
-        data.push({ user_id: element._id, progress: goal.progress });
+        element.onGoingGoals.forEach((goal) => {
+          if (goal.goal_id == req.params.goal_id) {
+            data.push({ username: element.username, accuracy: goal.accuracy });
+          }
+        });
       });
+
       data.sort((a, b) => {
-        return b.progress - a.progress;
+        return b.accuracy - a.accuracy;
       });
       res.status(200).json({
-        Data: data,
+        data,
       });
     })
     .catch((err) => {
