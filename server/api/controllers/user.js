@@ -97,7 +97,7 @@ exports.user_login = (req, res, next) => {
 };
 
 exports.user_info = (req, res, next) => {
-  User.findOne({ _id: req.userData.userId })
+  User.findById(req.userData.userId)
     .then((user) => {
       res.status(200).end(user);
     })
@@ -105,6 +105,17 @@ exports.user_info = (req, res, next) => {
       res.status(500).end(err);
     });
 };
+
+exports.other_user_info = (req, res, next) => {
+  User.findById(req.params.user_id)
+    .then((user) => {
+      res.status.end(user);
+    })
+    .catch((err) => {
+      res.status(500).end(err);
+    });
+};
+
 exports.user_propic = (req, res, next) => {
   User.findOne({ _id: req.userData.userId })
     .then((user) => {
