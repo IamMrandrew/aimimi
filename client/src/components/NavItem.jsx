@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components/macro";
 import { Link, useRouteMatch } from "react-router-dom";
 
-const NavItem = ({ path, exact, text, children }) => {
+const NavItem = ({ path, exact, text, showSidebarHandler, children }) => {
   let match = useRouteMatch({ path: path, exact: exact });
 
   return (
-    <Wrapper to={path}>
+    <Wrapper to={path} onClick={showSidebarHandler}>
       <Icon>{children}</Icon>
       <Text>{text}</Text>
       <Hover match={match} />

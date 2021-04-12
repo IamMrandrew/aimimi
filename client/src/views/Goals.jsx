@@ -40,11 +40,16 @@ const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
+  overflow: scroll;
+  height: calc(100vh - 60px);
+
+  @media (min-width: 992px) {
+    height: calc(100vh - 80px);
+  }
 `;
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
-  position: relative;
 `;
 
 const Title = styled.h1`
