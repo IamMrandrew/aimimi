@@ -39,6 +39,8 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     if (IsMatch.pathname === "/goals") setTitle("Goals");
     if (IsMatch.pathname === "/shares") setTitle("Shares");
     if (IsMatch.pathname === "/leaderboard") setTitle("Leaderboard");
+    if (IsMatch.pathname === "/profile") setTitle("Profile");
+    if (IsMatch.pathname === "/activity") setTitle("Activity");
   }, [IsMatch]);
 
   const Logout = () => {
@@ -59,6 +61,14 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     Logout();
   };
 
+  const onClickProfile = (e) => {
+    e.preventDefault();
+    history.push("/profile");
+  };
+  const onClickBell = (e) => {
+    e.preventDefault();
+    history.push("/activity");
+  };
   return (
     <Wrapper>
       <NavContainer>
@@ -76,7 +86,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
 
             <DownWrapper showDropDown={showDropDown}>
               <BlockWrapper>
-                <ProfileWrapper>
+                <ProfileWrapper onClick={onClickProfile}>
                   <CustomFaUserAlt />
                   <DropDownText>Profile</DropDownText>
                 </ProfileWrapper>
@@ -89,7 +99,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
           </WrapDropDownWrapper>
         </OutDropDown>
 
-        <BellWapper>
+        <BellWapper onClick={onClickBell}>
           <CustomFaBell />
         </BellWapper>
       </NavContainer>
@@ -122,6 +132,7 @@ const NavContainer = styled(Container)`
 `;
 const BellWapper = styled.div`
   padding-left: 23px;
+  cursor: pointer;
 `;
 const CustomFaBell = styled(FaBell)`
   width: 24px;

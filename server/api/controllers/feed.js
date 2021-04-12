@@ -44,11 +44,11 @@ exports.remove_feed = (goal_id) => {
 
 exports.like_feed = (req, res, next) => {
   Feed.findOneAndUpdate(
-    { _id: req.body.feed_id },
+    // { _id: req.body.feed_id },
+    { _id: req.params.feed_id },
     { $push: { like: req.userData.userId } }
   )
     .then((result) => {
-      console.log(result);
       res.status(200).send("Liked");
     })
     .catch((err) => {

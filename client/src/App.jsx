@@ -19,8 +19,9 @@ import Onboarding from "./views/Onboarding";
 import Overlay from "./components/Overlay";
 import Details from "./components/Details";
 import Shares from "./views/Shares";
+import Profile from "./views/Profile";
+import Activity from "./views/Activity";
 import Leaderboard from "./views/Leaderboard";
-
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -81,6 +82,12 @@ const App = () => {
                 </Route>
                 <Route path="/shares">
                   <Shares />
+                </Route>
+                <Route path="/profile">
+                  <Profile />
+                </Route>
+                <Route path="/activity">
+                  <Activity />
                 </Route>
                 <Route path="/leaderboard/:id">
                   <Leaderboard sharedGoals={sharedGoals} />
