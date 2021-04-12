@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components/macro";
 
-const Rank = () => {
+const Rank = ({ rank }) => {
   return (
     <Wrapper>
       <Item>#4</Item>
       <ItemWrapper>
-        <Item>Jane Doe</Item>
+        <Item>{rank.username}</Item>
       </ItemWrapper>
-      <Item>89%</Item>
+      <Item>{rank.accuracy}%</Item>
     </Wrapper>
   );
 };

@@ -1,29 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Rank from "../components/Rank";
 import TopRank from "../components/TopRank";
+import axios from "axios";
+import { useParams } from "react-router";
 
 const Leaderboard = () => {
   const [ranks, setRanks] = useState();
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`/goal/leaderboard${id}`, { withCredentials: true })
+      .then((response) => {
+        setRanks(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setRanks([
+      {
+        _id: "606b3414d71340278d3b0da0",
+        username: "Andrew Li",
+        accuracy: 50.0,
+      },
+      { _id: "606b3414d71340278d3b0da0", username: "Andrew B", accuracy: 50.0 },
+      { _id: "606b3414d71340278d3b0da0", username: "Andrew C", accuracy: 50.0 },
+      { _id: "606b3414d71340278d3b0da0", username: "Andrew D", accuracy: 70.0 },
+      { _id: "606b3414d71340278d3b0da0", username: "Andrew E", accuracy: 40.0 },
+      { _id: "606b3414d71340278d3b0da0", username: "Andrew F", accuracy: 30.0 },
+    ]);
+  }, []);
 
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Drink water</Title>
         <TopBoard>
-          <TopRank />
-          <TopRank />
-          <TopRank />
+          {ranks &&
+            ranks
+              .slice(0, 3)
+              .map((rank) => <TopRank key={rank._id} rank={rank} />)}
         </TopBoard>
         <Board>
-          <Rank />
-          <Rank />
-          <Rank />
-          <Rank />
-          <Rank />
-          <Rank />
-          <Rank />
+          {ranks &&
+            ranks.slice(3).map((rank) => <Rank key={rank._id} rank={rank} />)}
         </Board>
       </CustomContainer>
     </Wrapper>

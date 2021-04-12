@@ -13,7 +13,7 @@ import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 
-const Sidebar = ({ showSidebar, setShowSidebar }) => {
+const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
   const { auth, setAuth } = useContext(AuthContext);
 
   const Logout = () => {
@@ -78,7 +78,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
         <FaUsers />
       </NavItem>
       <NavItem
-        path="/leaderboard"
+        path={sharedGoals[0] ? "/leaderboard/" + sharedGoals[0]._id : ""}
         exact={false}
         showSidebarHandler={showSidebarHandler}
         text="Leaderboard"

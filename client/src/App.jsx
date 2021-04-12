@@ -25,6 +25,9 @@ const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
+  const [goals, setGoals] = useState([]);
+  const [sharedGoals, setSharedGoals] = useState([]);
+
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
@@ -32,9 +35,21 @@ const App = () => {
         setAuth(response.data);
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        console.log(error);
       });
   }, [setAuth]);
+
+  useEffect(() => {
+    axios
+      .get("/goal", { withCredentials: true })
+      .then((response) => {
+        setGoals(response.data);
+        setSharedGoals(response.data.filter((goal) => goal.publicity === true));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -47,6 +62,7 @@ const App = () => {
               <Sidebar
                 showSidebar={showSidebar}
                 setShowSidebar={setShowSidebar}
+                sharedGoals={sharedGoals}
               />
               <Main lg={9}>
                 <Nav
@@ -65,7 +81,7 @@ const App = () => {
                 <Route path="/shares">
                   <Shares />
                 </Route>
-                <Route path="/leaderboard">
+                <Route path="/leaderboard/:id">
                   <Leaderboard />
                 </Route>
               </Main>
