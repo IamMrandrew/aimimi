@@ -133,9 +133,10 @@ const Profile = () => {
             </GoalsDiv>
             <Collapse in={open}>
               <div>
-                {goals.map((goal) => (
-                  <GoalFromProfile id="ongoing" goal={goal} />
-                ))}
+                {goals &&
+                  goals.map((goal) => (
+                    <GoalFromProfile id="ongoing" goal={goal} />
+                  ))}
               </div>
             </Collapse>
 
@@ -156,9 +157,10 @@ const Profile = () => {
             </GoalsDiv>
             <Collapse in={secondOpen}>
               <div>
-                {completed.map((goal) => (
-                  <CompletedProfile id="completed" goal={goal} />
-                ))}
+                {completed &&
+                  completed.map((goal) => (
+                    <CompletedProfile id="completed" goal={goal} />
+                  ))}
               </div>
             </Collapse>
           </HalfBlockDiv>

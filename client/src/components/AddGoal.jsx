@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components/macro";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
@@ -134,7 +134,6 @@ const AddGoal = ({ setGoals }) => {
 
         <FloatButton showModal={showModal} onClick={showModalHandler}>
           <FaPlus />
-          <FaTimes />
         </FloatButton>
       </CustomContainer>
     </>
@@ -154,8 +153,11 @@ const Wrapper = styled.div`
   padding: 40px 20px;
   border-radius: 12px;
   border: 1px solid #e6e6e6;
-  pointer-events: all;
-  display: ${(props) => (props.showModal ? "block" : "none")};
+  pointer-events: ${(props) => (props.showModal ? "all" : "none")};
+  /* display: ${(props) => (props.showModal ? "block" : "none")}; */
+  opacity: ${(props) => (props.showModal ? "100%" : "0")};
+  transform: ${(props) => (props.showModal ? "scale(1)" : "scale(0.75)")};
+  transition: all 300ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
   @media (max-width: 575.98px) {
     width: 100%;
@@ -206,6 +208,7 @@ const Select = styled.select`
   -moz-appearance: none; */
   font-size: 16px;
   font-family: inherit;
+
   &:focus,
   &:hover {
     outline: none;
@@ -283,15 +286,15 @@ const FloatButton = styled.button`
   border-radius: 50px;
   font-weight: 600;
   margin-right: 14px;
-  font-size: 25px;
   color: white;
   pointer-events: all;
+  transform: ${(props) => (props.showModal ? "scale(1.15)" : "scale(1)")};
+  transition: all 400ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
-  svg:nth-child(1) {
-    display: ${(props) => (props.showModal ? "none" : "block")};
-  }
-
-  svg:nth-child(2) {
-    display: ${(props) => (props.showModal ? "block" : "none")};
+  svg {
+    height: 25px;
+    width: 25px;
+    transform: ${(props) => (props.showModal ? "rotate(135deg)" : "rotate(0)")};
+    transition: all 400ms cubic-bezier(0.87, 0, 0.11, 1.2);
   }
 `;
