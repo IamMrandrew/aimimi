@@ -21,6 +21,7 @@ import Details from "./components/Details";
 import Shares from "./views/Shares";
 import Leaderboard from "./views/Leaderboard";
 
+
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
