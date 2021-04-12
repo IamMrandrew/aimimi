@@ -88,5 +88,4 @@ const Subtitle = styled.span`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
-  /* position: relative; */
 `;
