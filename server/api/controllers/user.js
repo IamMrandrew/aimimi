@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const User = require("../models/user");
+const Grid = require("gridfs-stream");
 
 exports.user_signup = (req, res, next) => {
   User.findOne({ email: req.body.email })
@@ -26,6 +26,7 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
+              propic: req.file.originalname,
             });
             user
               .save()
@@ -98,7 +99,36 @@ exports.user_login = (req, res, next) => {
 exports.user_info = (req, res, next) => {
   User.findOne({ _id: req.userData.userId })
     .then((user) => {
-      return res.status(202).end(JSON.stringify(user));
+      res.status(200).end(user);
+    })
+    .catch((err) => {
+      res.status(500).end(err);
+    });
+};
+exports.user_propic = (req, res, next) => {
+  User.findOne({ _id: req.userData.userId })
+    .then((user) => {
+      const db = mongoose.connection;
+      let gridfs = Grid(db.db, mongoose.mongo);
+      gridfs.collection("propics");
+      gridfs.files.findOne({ filename: user.propic }, (err, file) => {
+        if (!file || file.length === 0) {
+          return res.status(404).json({
+            err: "No file exists",
+          });
+        }
+        if (
+          file.contentType === "image/jpeg" ||
+          file.contentType === "image/png"
+        ) {
+          const readstream = gridfs.createReadStream(file.filename);
+          readstream.pipe(res);
+        } else {
+          res.status(404).json({
+            err: "Not an image",
+          });
+        }
+      });
     })
     .catch((err) => {
       return res.status(500).json({
@@ -114,8 +144,7 @@ exports.user_logout = (req, res, next) => {
 };
 
 exports.user_delete = (req, res, next) => {
-  const ObjectId = require("mongoose").Types.ObjectId;
-  User.remove({ _id: new ObjectId(req.body.userID) })
+  User.remove({ _id: req.userData.userId })
     .exec()
     .then((result) => {
       console.log(result);
