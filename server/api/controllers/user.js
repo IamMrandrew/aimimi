@@ -99,7 +99,7 @@ exports.user_login = (req, res, next) => {
 exports.user_info = (req, res, next) => {
   User.findById(req.userData.userId)
     .then((user) => {
-      res.status(200).end(user);
+      res.status(200).json(user);
     })
     .catch((err) => {
       res.status(500).end(err);

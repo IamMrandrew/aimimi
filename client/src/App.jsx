@@ -19,11 +19,16 @@ import Onboarding from "./views/Onboarding";
 import Overlay from "./components/Overlay";
 import Details from "./components/Details";
 import Shares from "./views/Shares";
+import Leaderboard from "./views/Leaderboard";
+
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
+  const [goals, setGoals] = useState([]);
+  const [sharedGoals, setSharedGoals] = useState([]);
+
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
@@ -31,9 +36,21 @@ const App = () => {
         setAuth(response.data);
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        console.log(error);
       });
   }, [setAuth]);
+
+  useEffect(() => {
+    axios
+      .get("/goal", { withCredentials: true })
+      .then((response) => {
+        setGoals(response.data);
+        setSharedGoals(response.data.filter((goal) => goal.publicity === true));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -43,7 +60,11 @@ const App = () => {
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
-              <Sidebar showSidebar={showSidebar} />
+              <Sidebar
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+                sharedGoals={sharedGoals}
+              />
               <Main lg={9}>
                 <Nav
                   showSidebar={showSidebar}
@@ -60,6 +81,9 @@ const App = () => {
                 </Route>
                 <Route path="/shares">
                   <Shares />
+                </Route>
+                <Route path="/leaderboard/:id">
+                  <Leaderboard sharedGoals={sharedGoals} />
                 </Route>
               </Main>
             </Wrapper>
@@ -88,6 +112,7 @@ const Wrapper = styled(Row)`
   height: 100vh;
   width: 100%;
   background-color: white;
+  overflow: hidden;
 `;
 
 const Main = styled(Col)`

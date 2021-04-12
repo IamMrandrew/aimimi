@@ -13,7 +13,7 @@ import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 
-const Sidebar = ({ showSidebar }) => {
+const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
   const { auth, setAuth } = useContext(AuthContext);
 
   const Logout = () => {
@@ -43,21 +43,46 @@ const Sidebar = ({ showSidebar }) => {
     Logout();
   };
 
+  const showSidebarHandler = () => {
+    console.log("hihihi");
+    setShowSidebar(!showSidebar);
+  };
+
   return (
     <Wrapper showSidebar={showSidebar}>
       <LogoWrapper>
         <LogoImg src={Logo} />
       </LogoWrapper>
-      <NavItem path="/" exact={true} text="Today">
+      <NavItem
+        path="/"
+        exact={true}
+        showSidebarHandler={showSidebarHandler}
+        text="Today"
+      >
         <FaCalendarWeek />
       </NavItem>
-      <NavItem path="/goals" exaxt={false} text="Goals">
+      <NavItem
+        path="/goals"
+        exact={false}
+        showSidebarHandler={showSidebarHandler}
+        text="Goals"
+      >
         <FaBullseye />
       </NavItem>
-      <NavItem path="/shares" exaxt={false} text="Shares">
+      <NavItem
+        path="/shares"
+        exact={false}
+        showSidebarHandler={showSidebarHandler}
+        text="Shares"
+      >
         <FaUsers />
       </NavItem>
-      <NavItem path="/leaderboard" exaxt={false} text="Leaderboard">
+      <NavItem
+        path={sharedGoals[0] ? "/leaderboard/" + sharedGoals[0]._id : ""}
+        exact={false}
+        showSidebarHandler={showSidebarHandler}
+        text="Leaderboard"
+      >
         <FaTrophy />
       </NavItem>
       <Hr />
@@ -105,7 +130,7 @@ const Wrapper = styled.div`
     height: 100%;
     top: 60px;
     left: 0;
-    z-index: 100;
+    z-index: 200;
     transform: translateX(-100%);
     border-right: none;
     padding: 30px;

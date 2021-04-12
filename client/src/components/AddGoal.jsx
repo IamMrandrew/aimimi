@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { FaPlus, FaTimes } from "react-icons/fa";
+import Container from "react-bootstrap/Container";
 import axios from "axios";
 
 const AddGoal = ({ setGoals }) => {
@@ -65,61 +66,64 @@ const AddGoal = ({ setGoals }) => {
 
   return (
     <>
-      <Wrapper showModal={showModal}>
-        <Title>Add Goal</Title>
-        <Label>Name</Label>
-        <Input
-          type="text"
-          onChange={goalNameHandler}
-          value={goalName}
-          placeholder="Goal name"
-        />
-        <Label>In what category?</Label>
-        <Select value={goalCategory} onChange={goalCategoryHandler}>
-          <Option value="Sports">Sports</Option>
-          <Option value="Lifestyle">Lifestyle</Option>
-        </Select>
-        <Label>Repeating period?</Label>
-        <Button
-          selected={goalPeriod === "Daily" ? true : false}
-          onClick={goalPeriodHandler}
-        >
-          Daily
-        </Button>
-        <Button
-          selected={goalPeriod === "Weekly" ? true : false}
-          onClick={goalPeriodHandler}
-        >
-          Weekly
-        </Button>
-        <Label>How many times?</Label>
-        <Input
-          type="number"
-          onChange={goalFrequencyHandler}
-          value={goalFrequency}
-          placeholder="1"
-        />
-        <Label>Last for how long? (days)</Label>
-        <Input
-          type="number"
-          onChange={goalTimespanHandler}
-          value={goalTimespan}
-          placeholder="21"
-        />
-        <Field>
-          <CheckBox
-            type="checkbox"
-            onChange={goalPublicityHandler}
-            checked={goalPublicity}
+      <CustomContainer>
+        <Wrapper showModal={showModal}>
+          <Title>Add Goal</Title>
+          <Label>Name</Label>
+          <Input
+            type="text"
+            onChange={goalNameHandler}
+            value={goalName}
+            placeholder="Goal name"
           />
-          <Label>Shared Goal</Label>
-        </Field>
-        <SubmitButton onClick={addGoalHandler}>Done</SubmitButton>
-      </Wrapper>
-      <FloatButton showModal={showModal} onClick={showModalHandler}>
-        <FaPlus />
-        <FaTimes />
-      </FloatButton>
+          <Label>In what category?</Label>
+          <Select value={goalCategory} onChange={goalCategoryHandler}>
+            <Option value="Sports">Sports</Option>
+            <Option value="Lifestyle">Lifestyle</Option>
+          </Select>
+          <Label>Repeating period?</Label>
+          <Button
+            selected={goalPeriod === "Daily" ? true : false}
+            onClick={goalPeriodHandler}
+          >
+            Daily
+          </Button>
+          <Button
+            selected={goalPeriod === "Weekly" ? true : false}
+            onClick={goalPeriodHandler}
+          >
+            Weekly
+          </Button>
+          <Label>How many times?</Label>
+          <Input
+            type="number"
+            onChange={goalFrequencyHandler}
+            value={goalFrequency}
+            placeholder="1"
+          />
+          <Label>Last for how long? (days)</Label>
+          <Input
+            type="number"
+            onChange={goalTimespanHandler}
+            value={goalTimespan}
+            placeholder="21"
+          />
+          <Field>
+            <CheckBox
+              type="checkbox"
+              onChange={goalPublicityHandler}
+              checked={goalPublicity}
+            />
+            <Label>Shared Goal</Label>
+          </Field>
+          <SubmitButton onClick={addGoalHandler}>Done</SubmitButton>
+        </Wrapper>
+
+        <FloatButton showModal={showModal} onClick={showModalHandler}>
+          <FaPlus />
+          <FaTimes />
+        </FloatButton>
+      </CustomContainer>
     </>
   );
 };
@@ -137,7 +141,7 @@ const Wrapper = styled.div`
   padding: 40px 20px;
   border-radius: 12px;
   border: 1px solid #e6e6e6;
-
+  pointer-events: all;
   display: ${(props) => (props.showModal ? "block" : "none")};
 
   @media (max-width: 575.98px) {
@@ -239,6 +243,17 @@ const SubmitButton = styled.button`
   color: white;
 `;
 
+const CustomContainer = styled(Container)`
+  max-width: 888px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 100;
+  height: 100vh;
+  pointer-events: none;
+  transform: translateX(-50%);
+`;
+
 const FloatButton = styled.button`
   position: absolute;
   bottom: 60px;
@@ -257,6 +272,7 @@ const FloatButton = styled.button`
   margin-right: 14px;
   font-size: 25px;
   color: white;
+  pointer-events: all;
 
   svg:nth-child(1) {
     display: ${(props) => (props.showModal ? "none" : "block")};
