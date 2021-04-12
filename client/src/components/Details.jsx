@@ -15,14 +15,18 @@ const Details = ({ goals, setGoals }) => {
   const [userGoal, setUserGoal] = useState([]);
 
   useEffect(() => {
-    if (auth && auth.onGoingGoals.length > 0) {
-      setUserGoal(auth.onGoingGoals.find((item) => item.goal_id === goal._id));
-    }
-  }, [auth, id]);
-
-  useEffect(() => {
     setGoal(goals.find((goal) => goal._id === id));
   }, [id, goals]);
+
+  useEffect(() => {
+    if (auth.onGoingGoals) {
+      if (auth.onGoingGoals.length > 0) {
+        setUserGoal(
+          auth.onGoingGoals.find((item) => item.goal_id === goal._id)
+        );
+      }
+    }
+  }, [goal, auth, id]);
 
   const backGoalsHandler = (e) => {
     e.preventDefault();
@@ -56,7 +60,7 @@ const Details = ({ goals, setGoals }) => {
   };
 
   return (
-    <div>
+    <>
       <CustomContainer>
         <LeftButtonWrapper onClick={backGoalsHandler}>
           <CustomFaAngleLeft />
@@ -83,7 +87,7 @@ const Details = ({ goals, setGoals }) => {
             <EmptyDiv>
               <DeatilTitle>How well you did?</DeatilTitle>
               <PercentageDiv>
-                <Number>{userGoal.accuracy}%</Number>
+                <Number>{userGoal && userGoal.accuracy}%</Number>
                 <ItemIcon>
                   <FaClipboardCheck />
                 </ItemIcon>
@@ -95,7 +99,9 @@ const Details = ({ goals, setGoals }) => {
             <EmptyDiv>
               <DeatilTitle>How long did you lasted for?</DeatilTitle>
               <PercentageDiv>
-                <Number>{userGoal.check_in_successful_time} days</Number>
+                <Number>
+                  {userGoal && userGoal.check_in_successful_time} days
+                </Number>
                 <ItemIcon>
                   <FaFire />
                 </ItemIcon>
@@ -109,7 +115,7 @@ const Details = ({ goals, setGoals }) => {
               <PercentageDiv>
                 <PastDay>
                   {Math.floor(
-                    (Date.now() - Date.parse(userGoal.join_time)) /
+                    (Date.now() - Date.parse(userGoal && userGoal.join_time)) /
                       (1000 * 3600 * 24)
                   )}{" "}
                   day passed
@@ -117,7 +123,7 @@ const Details = ({ goals, setGoals }) => {
               </PercentageDiv>
               <CustomProgressbar
                 now={Math.floor(
-                  (Date.now() - Date.parse(userGoal.join_time)) /
+                  (Date.now() - Date.parse(userGoal && userGoal.join_time)) /
                     (1000 * 3600 * 24)
                 )}
                 max={`${goal.timespan}`}
@@ -132,7 +138,7 @@ const Details = ({ goals, setGoals }) => {
         </ContentWrapper>
         <QuitButton onClick={onClickDeleteHandler}>Quit goal</QuitButton>
       </CustomContainer>
-    </div>
+    </>
   );
 };
 
