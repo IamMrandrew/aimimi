@@ -40,8 +40,22 @@ const Leaderboard = ({ sharedGoals }) => {
             sharedGoals.find((goal) => goal._id === id).title}
         </Title>
         <Meta>
-          <Desc>Everyday</Desc>
-          <Desc>86 days left</Desc>
+          <Desc>
+            {sharedGoals.length > 0 &&
+              sharedGoals.find((goal) => goal._id === id).period}
+          </Desc>
+          <Desc>
+            {sharedGoals.length > 0 &&
+              sharedGoals.find((goal) => goal._id === id).timespan -
+                Math.floor(
+                  (Date.now() -
+                    Date.parse(
+                      sharedGoals.find((goal) => goal._id === id).startTime
+                    )) /
+                    (1000 * 3600 * 24)
+                )}{" "}
+            days left
+          </Desc>
         </Meta>
         <TopBoard>
           {ranks &&
