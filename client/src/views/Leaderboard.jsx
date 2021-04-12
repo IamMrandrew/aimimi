@@ -5,17 +5,20 @@ import Rank from "../components/Rank";
 import TopRank from "../components/TopRank";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const Leaderboard = ({ sharedGoals }) => {
   const [ranks, setRanks] = useState();
   const { id } = useParams();
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get(`/goal/leaderboard/${id}`, { withCredentials: true })
       .then((response) => {
         setRanks(response.data.data);
+        setLoading(false);
         console.log(response.data.data);
       })
       .catch((error) => {
@@ -29,53 +32,56 @@ const Leaderboard = ({ sharedGoals }) => {
 
   return (
     <Wrapper>
-      <CustomContainer>
-        <SelectBox onChange={selectBoxHandler}>
-          {sharedGoals.map((goal) => (
-            <Option value={goal._id}>{goal.title}</Option>
-          ))}
-        </SelectBox>
-        <Title>
-          {sharedGoals.length > 0 &&
-            sharedGoals.find((goal) => goal._id === id).title}
-        </Title>
-        <Meta>
-          <Desc>
+      {!loading && (
+        <CustomContainer>
+          <SelectBox onChange={selectBoxHandler}>
+            {sharedGoals.map((goal) => (
+              <Option value={goal._id}>{goal.title}</Option>
+            ))}
+          </SelectBox>
+          <Title>
             {sharedGoals.length > 0 &&
-              sharedGoals.find((goal) => goal._id === id).period}
-          </Desc>
-          <Desc>
-            {sharedGoals.length > 0 &&
-              sharedGoals.find((goal) => goal._id === id).timespan -
-                Math.floor(
-                  (Date.now() -
-                    Date.parse(
-                      sharedGoals.find((goal) => goal._id === id).startTime
-                    )) /
-                    (1000 * 3600 * 24)
-                )}{" "}
-            days left
-          </Desc>
-        </Meta>
-        <TopBoard>
-          {ranks &&
-            ranks
-              .slice(0, 3)
-              .map((rank, index) => (
-                <TopRank key={rank._id} index={index + 1} rank={rank} />
-              ))}
-        </TopBoard>
-        {ranks && ranks.slice(3).length > 0 && (
-          <Board>
+              sharedGoals.find((goal) => goal._id === id).title}
+          </Title>
+          <Meta>
+            <Desc>
+              {sharedGoals.length > 0 &&
+                sharedGoals.find((goal) => goal._id === id).period}
+            </Desc>
+            <Desc>
+              {sharedGoals.length > 0 &&
+                sharedGoals.find((goal) => goal._id === id).timespan -
+                  Math.floor(
+                    (Date.now() -
+                      Date.parse(
+                        sharedGoals.find((goal) => goal._id === id).startTime
+                      )) /
+                      (1000 * 3600 * 24)
+                  )}{" "}
+              days left
+            </Desc>
+          </Meta>
+          <TopBoard>
             {ranks &&
               ranks
-                .slice(3)
+                .slice(0, 3)
                 .map((rank, index) => (
-                  <Rank key={rank._id} index={index + 4} rank={rank} />
+                  <TopRank key={rank._id} index={index + 1} rank={rank} />
                 ))}
-          </Board>
-        )}
-      </CustomContainer>
+          </TopBoard>
+          {ranks && ranks.slice(3).length > 0 && (
+            <Board>
+              {ranks &&
+                ranks
+                  .slice(3)
+                  .map((rank, index) => (
+                    <Rank key={rank._id} index={index + 4} rank={rank} />
+                  ))}
+            </Board>
+          )}
+        </CustomContainer>
+      )}
+      {loading && <Loader />}
     </Wrapper>
   );
 };

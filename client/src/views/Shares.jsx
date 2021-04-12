@@ -4,17 +4,19 @@ import Container from "react-bootstrap/Container";
 import axios from "axios";
 import SharedGoal from "../components/SharedGoal";
 import { AuthContext } from "../contexts/AuthContext";
+import Loader from "../components/Loader";
 
 const Shares = () => {
   const [publicGoal, setPublicGoal] = useState(null);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/goal/public_goal", { withCredentials: true })
       .then((response) => {
         setPublicGoal(response.data.data);
-        console.log(publicGoal);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -29,20 +31,23 @@ const Shares = () => {
 
   return (
     <Wrapper>
-      <CustomContainer>
-        <Title>Shares</Title>
-        <Subtitle>Recommended For You</Subtitle>
+      {!loading && (
+        <CustomContainer>
+          <Title>Shares</Title>
+          <Subtitle>Recommended For You</Subtitle>
 
-        <Subtitle>Trending</Subtitle>
-        {publicGoal &&
-          publicGoal.map((goal) => (
-            <SharedGoal
-              key={goal._id}
-              goal={goal}
-              joined={checkIfJoined(goal)}
-            />
-          ))}
-      </CustomContainer>
+          <Subtitle>Trending</Subtitle>
+          {publicGoal &&
+            publicGoal.map((goal) => (
+              <SharedGoal
+                key={goal._id}
+                goal={goal}
+                joined={checkIfJoined(goal)}
+              />
+            ))}
+        </CustomContainer>
+      )}
+      {loading && <Loader />}
     </Wrapper>
   );
 };
