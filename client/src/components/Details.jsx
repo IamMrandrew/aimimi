@@ -7,45 +7,38 @@ import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
-const Details = () => {
-  const [goalsDetails, setGoalDetails] = useState([]);
+const Details = ({ goals, setGoals }) => {
   const { id } = useParams();
   const history = useHistory();
-  const [goal, setGoal] = useState([]);
   const { auth, setAuth } = useContext(AuthContext);
-
-  useEffect(() => {
-    axios
-      .get(`/goal/${id}`, { withCredentials: true })
-      .then((response) => {
-        setGoalDetails(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [goalsDetails]);
+  const [goal, setGoal] = useState({});
+  const [userGoal, setUserGoal] = useState([]);
 
   useEffect(() => {
     for (const element of auth.onGoingGoals) {
-      if (element.goal_id === `${id}`) {
-        setGoal(element);
-        console.log(goal);
+      if (element.goal_id === id) {
+        setUserGoal(element);
       }
     }
-  }, [goal]);
+  }, [auth, id]);
 
-  const onClickHandler = (e) => {
+  useEffect(() => {
+    setGoal(goals.find((goal) => goal._id === id));
+  }, [id, goals]);
+
+  const backGoalsHandler = (e) => {
     e.preventDefault();
     history.push(`/goals`);
   };
 
-  const onClickDeleteHandler = (e) => {
+  const onClickDeleteHandler = () => {
     axios
-      .delete(`/goal/quit/${goalsDetails._id}`, {
+      .delete(`/goal/quit/${goal._id}`, {
         withCredentials: true,
       })
       .then((response) => {
         alert("Quit successfully!");
+        setGoals(goals.filter((element) => element.id !== goal.id));
 
         // Update user onGoingGoals for auth state
         axios
@@ -67,15 +60,23 @@ const Details = () => {
   return (
     <div>
       <CustomContainer>
-        <LeftButtonWrapper onClick={onClickHandler}>
+        <LeftButtonWrapper onClick={backGoalsHandler}>
           <CustomFaAngleLeft />
         </LeftButtonWrapper>
         <HeadingWrapper>
           <TitleWrapper>
-            <Title> {goalsDetails.title} </Title>
-            <Description>{goalsDetails.category}</Description>
-            <Description>{goalsDetails.period}</Description>
-            <Description>{goalsDetails.timespan} days left</Description>
+            <Title> {goal.title} </Title>
+            <Description>{goal.category}</Description>
+            <Description>{goal.period}</Description>
+            <Description>
+              {goals.length > 0 &&
+                goal.timespan -
+                  Math.floor(
+                    (Date.now() - Date.parse(goal.startTime)) /
+                      (1000 * 3600 * 24)
+                  )}{" "}
+              days left
+            </Description>
           </TitleWrapper>
         </HeadingWrapper>
 
@@ -84,7 +85,7 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How well you did?</DeatilTitle>
               <PercentageDiv>
-                <Number>{goal.accuracy}%</Number>
+                <Number>{userGoal.accuracy}%</Number>
                 <ItemIcon>
                   <FaClipboardCheck />
                 </ItemIcon>
@@ -96,7 +97,7 @@ const Details = () => {
             <EmptyDiv>
               <DeatilTitle>How long did you lasted for?</DeatilTitle>
               <PercentageDiv>
-                <Number>{goal.check_in_successful_time} days</Number>
+                <Number>{userGoal.check_in_successful_time} days</Number>
                 <ItemIcon>
                   <FaFire />
                 </ItemIcon>
@@ -110,7 +111,7 @@ const Details = () => {
               <PercentageDiv>
                 <PastDay>
                   {Math.floor(
-                    (Date.now() - Date.parse(goalsDetails.startTime)) /
+                    (Date.now() - Date.parse(userGoal.join_time)) /
                       (1000 * 3600 * 24)
                   )}{" "}
                   day passed
@@ -118,15 +119,15 @@ const Details = () => {
               </PercentageDiv>
               <CustomProgressbar
                 now={Math.floor(
-                  (Date.now() - Date.parse(goalsDetails.startTime)) /
+                  (Date.now() - Date.parse(userGoal.join_time)) /
                     (1000 * 3600 * 24)
                 )}
-                max={`${goalsDetails.timespan}`}
+                max={`${goal.timespan}`}
                 variant="info"
               />
               <LabelDiv>
                 <Label>0</Label>
-                <Label>{goalsDetails.timespan}</Label>
+                <Label>{goal.timespan}</Label>
               </LabelDiv>
             </EmptyDiv>
           </LastWrapper>

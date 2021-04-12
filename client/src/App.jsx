@@ -25,10 +25,13 @@ import Leaderboard from "./views/Leaderboard";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
+
   const [goals, setGoals] = useState([]);
   const [sharedGoals, setSharedGoals] = useState([]);
+  const [todayGoals, setTodayGoals] = useState([]);
+
+  const { auth, setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -53,6 +56,17 @@ const App = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("/goal/today_view", { withCredentials: true })
+      .then((response) => {
+        setTodayGoals(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [goals]);
+
   return (
     <>
       <GlobalStyle />
@@ -72,13 +86,18 @@ const App = () => {
                   setShowSidebar={setShowSidebar}
                 />
                 <Route exact path="/">
-                  <Today showModal={showModal} setShowModal={setShowModal} />
+                  <Today
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    todayGoals={todayGoals}
+                    setGoals={setGoals}
+                  />
                 </Route>
                 <Route exact path="/goals">
-                  <Goals />
+                  <Goals goals={goals} setGoals={setGoals} />
                 </Route>
                 <Route path="/goals/:id">
-                  <Details />
+                  <Details goals={goals} setGoals={setGoals} />
                 </Route>
                 <Route path="/shares">
                   <Shares />

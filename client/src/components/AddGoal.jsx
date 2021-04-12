@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components/macro";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 
 const AddGoal = ({ setGoals }) => {
   const [goalName, setGoalName] = useState("");
@@ -11,8 +12,9 @@ const AddGoal = ({ setGoals }) => {
   const [goalFrequency, setGoalFrequency] = useState("");
   const [goalTimespan, setGoalTimespan] = useState("");
   const [goalPublicity, setGoalPublicity] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
+
+  const { setAuth } = useContext(AuthContext);
 
   const goalNameHandler = (e) => {
     setGoalName(e.target.value);
@@ -56,6 +58,17 @@ const AddGoal = ({ setGoals }) => {
       .then((response) => {
         axios.get("/goal", { withCredentials: true }).then((response) => {
           setGoals(response.data);
+
+          // Update user onGoingGoals for auth state
+          axios
+            .get("/user", { withCredentials: true })
+            .then((response) => {
+              setAuth(response.data);
+            })
+            .catch((error) => {
+              console.log(error.response.data.message);
+            });
+
           setShowModal(!showModal);
         });
       })
