@@ -32,11 +32,10 @@ const Goal = ({
   };
 
   useEffect(() => {
-    for (const element of auth.onGoingGoals) {
-      if (element.goal_id === goal._id) {
-        setProgressData(element);
-        console.log(element);
-      }
+    if (auth && auth.onGoingGoals.length > 0) {
+      setProgressData(
+        auth.onGoingGoals.find((item) => item.goal_id === goal._id)
+      );
     }
   }, [auth, goal._id]);
 

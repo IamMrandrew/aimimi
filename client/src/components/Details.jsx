@@ -15,10 +15,8 @@ const Details = ({ goals, setGoals }) => {
   const [userGoal, setUserGoal] = useState([]);
 
   useEffect(() => {
-    for (const element of auth.onGoingGoals) {
-      if (element.goal_id === id) {
-        setUserGoal(element);
-      }
+    if (auth && auth.onGoingGoals.length > 0) {
+      setUserGoal(auth.onGoingGoals.find((item) => item.goal_id === goal._id));
     }
   }, [auth, id]);
 

@@ -50,6 +50,7 @@ const App = () => {
       .then((response) => {
         setGoals(response.data);
         setSharedGoals(response.data.filter((goal) => goal.publicity === true));
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
