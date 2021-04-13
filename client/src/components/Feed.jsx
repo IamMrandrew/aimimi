@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import Profilephoto from "../assets/ImageLarge.png";
 import ClimbingPVG from "../assets/Feed_climbing.png";
@@ -6,16 +6,7 @@ import { FaHeart, FaComments } from "react-icons/fa";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 const Feed = ({ feed, liked, feeds, setFeeds }) => {
-  const [userName, setUserName] = useState();
   const { auth } = useContext(AuthContext);
-
-  useEffect(() => {
-    axios
-      .get(`/user/name/${feed.creator}`, { withCredentials: true })
-      .then((res) => {
-        setUserName(res.data);
-      });
-  }, [feed]);
 
   const Like = (e) => {
     e.preventDefault();
@@ -65,7 +56,7 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
         <FlexWrapper>
           <ProfileImage src={Profilephoto} />
           <BlockDiv>
-            <Name>{userName}</Name>
+            <Name>{feed.creator.username}</Name>
             <Time>
               {Math.floor((Date.now() - Date.parse(feed.created_time)) / 86400)}{" "}
               minutes ago
@@ -96,7 +87,7 @@ const Wrapper = styled.div`
   background-color: white;
   overflow: hidden;
   border-radius: 20px;
-  padding: 20px 23px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -117,7 +108,8 @@ const ProfileImage = styled.img`
   width: 50px;
   height: 50px;
 `;
-const Name = styled.h2`
+const Name = styled.span`
+  display: block;
   position: relative;
   z-index: 10;
   color: var(--primaryShaded);
@@ -125,6 +117,7 @@ const Name = styled.h2`
   font-weight: 700;
   line-height: 0.3;
   margin-left: 15px;
+  margin-bottom: 5px;
 `;
 const Time = styled.span`
   color: #999999;
@@ -133,11 +126,13 @@ const Time = styled.span`
   margin-left: 15px;
 `;
 
-const Status = styled.h2`
+const Status = styled.span`
   color: #202020;
   font-size: 15px;
   font-weight: 500;
-  margin-top: 11px;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const ButtonDiv = styled.div`
