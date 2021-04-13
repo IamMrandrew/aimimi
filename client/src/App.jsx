@@ -56,6 +56,7 @@ const App = () => {
           response.data.filter((goal) => goal.publicity === true)
         );
         console.log(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.response.data);
@@ -115,7 +116,7 @@ const App = () => {
           <Onboarding />
         </Route>
         <Route path="/login">
-          <Login />
+          <Login setLoading={setLoading} />
         </Route>
         <Route path="/signup">
           <Signup />
