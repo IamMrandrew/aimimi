@@ -11,7 +11,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
-const Login = () => {
+const Login = ({ setLoading }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const { setAuth } = useContext(AuthContext);
   const history = useHistory();
@@ -24,6 +24,7 @@ const Login = () => {
       .then((response) => {
         setAuth(response.data);
         history.push("/");
+        setLoading(true);
       })
       .catch((error) => {
         alert("Login Failed. Try Again.");
