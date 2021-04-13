@@ -15,7 +15,6 @@ const Login = ({ setLoading }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const { setAuth } = useContext(AuthContext);
   const history = useHistory();
-
   const Login = (details) => {
     axios
       .post("/user/login", details, {
@@ -35,7 +34,10 @@ const Login = ({ setLoading }) => {
     e.preventDefault();
     Login(details);
   };
-
+  const clearInput = (e) => {
+    e.preventDefault();
+    setDetails({ email: "", password: "" });
+  };
   return (
     <Wrapper>
       <Main>
@@ -69,7 +71,7 @@ const Login = ({ setLoading }) => {
                     ></EmailInput>
                   </TagWrapper>
                 </IconAndTagWrapper>
-                <CustomFaTimes />
+                <CustomFaTimes onClick={clearInput} />
               </BarWrapper>
               <PasswordBarWrapper>
                 <CustomFiLock />
@@ -86,7 +88,7 @@ const Login = ({ setLoading }) => {
                     required
                   />
                 </TagWrapper>
-                <CustomFaTimes />
+                <CustomFaTimes onClick={clearInput} />
               </PasswordBarWrapper>
               <LoginBar>
                 <LoginTitle>Login</LoginTitle>
@@ -203,7 +205,7 @@ const CustomFaTimes = styled(FaTimes)`
   width: 20px;
   height: 20px;
   color: #a0a3bd;
-
+  cursor: pointer;
   margin-right: 26px;
 `;
 

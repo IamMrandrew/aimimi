@@ -178,7 +178,12 @@ const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
-  overflow: hidden;
+  overflow: scroll;
+  height: calc(100vh - 60px);
+
+  @media (min-width: 992px) {
+    height: calc(100vh - 80px);
+  }
 `;
 
 const Title = styled.h1`
@@ -194,7 +199,6 @@ const Title = styled.h1`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
-  position: relative;
 `;
 
 const InformationWrapper = styled.div`
