@@ -231,19 +231,55 @@ const Button = styled.button`
 
 const Field = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: top;
   margin-bottom: 20px;
 `;
 
 const CheckBox = styled.input`
-  padding: 11px 17px;
+  /* padding: 11px 17px;
   background-color: var(--background);
   border: none;
   outline: none;
   border-radius: 12px;
   font-weight: 500;
   margin-right: 14px;
-  color: var(--monoPrimary);
+  color: var(--monoPrimary); */
+
+  position: relative;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  background-color: red;
+  background-color: var(--background);
+  border-radius: 5px;
+  appearance: none;
+  outline: 0;
+  cursor: pointer;
+  transition: background 175ms cubic-bezier(0.1, 0.1, 0.25, 1);
+
+  &::before {
+    position: absolute;
+    content: "";
+    display: block;
+    top: 4px;
+    left: 9px;
+    width: 8px;
+    height: 14px;
+    border-style: solid;
+    border-color: white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+  }
+
+  &:checked {
+    color: white;
+    background: var(--primaryGoal);
+
+    &::before {
+      opacity: 1;
+    }
+  }
 `;
 
 const SubmitButton = styled.button`
