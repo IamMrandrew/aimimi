@@ -28,7 +28,7 @@ const storage = new GridFsStorage({
 });
 var upload = multer({ storage });
 
-router.post("/signup", upload.single("img"), UserController.user_signup);
+router.post("/signup", UserController.user_signup);
 
 router.get("/verify/:random_string", UserController.verify);
 
@@ -39,6 +39,13 @@ router.get("/", checkAuth, UserController.user_info);
 router.get("/other_user/:user_id", checkAuth, UserController.other_user_info);
 
 router.get("/propic", checkAuth, UserController.user_propic);
+
+router.post(
+  "/add_propic",
+  checkAuth,
+  upload.single("img"),
+  UserController.add_propic
+);
 
 router.delete("/logout", checkAuth, UserController.user_logout);
 

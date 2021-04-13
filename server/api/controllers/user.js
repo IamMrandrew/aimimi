@@ -16,7 +16,7 @@ const sendEmail = (email, randomString) => {
     },
   });
   let text;
-  process.env.NODE_ENV == development
+  process.env.NODE_ENV == "development"
     ? (text =
         "Welcome to Aimimi! Please click http://localhost:3001/user/verify/" +
         randomString +
@@ -65,7 +65,7 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
-              propic: req.file.originalname,
+              propic: "image.jpg",
             });
             sendEmail(req.body.email, user.randomString);
             user
@@ -175,6 +175,19 @@ exports.other_user_info = (req, res, next) => {
     })
     .catch((err) => {
       res.status(500).end(err);
+    });
+};
+
+exports.add_propic = (req, res, next) => {
+  User.findOneAndUpdate(
+    { _id: req.userData.userId },
+    { $set: { propic: req.file.originalname } }
+  )
+    .then(() => {
+      res.status(200).json("Propic added");
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
 };
 
