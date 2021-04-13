@@ -15,14 +15,21 @@ const sendEmail = (email, randomString) => {
       pass: process.env.GMAIL_PASSWORD,
     },
   });
+  let text;
+  process.env.NODE_ENV = development
+    ? (text =
+        "Welcome to Aimimi! Please click http://localhost:3001/user/verify/" +
+        randomString +
+        " to verify your email.")
+    : (text =
+        "Welcome to Aimimi! Please click http://aimimi.herokuapp.com/user/verify/" +
+        randomString +
+        " to verify your email.");
   let mailOptions = {
     from: "Aimimi",
     to: email,
     subject: "Aimimi Email Confirmation",
-    text:
-      "Welcome to Aimimi! Please press http://localhost:3001/user/verify/" +
-      randomString +
-      " to verify your email.",
+    text: text,
   };
   transoprt.sendMail(mailOptions, (err, result) => {
     if (err) {
