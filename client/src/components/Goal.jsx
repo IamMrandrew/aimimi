@@ -39,7 +39,7 @@ const Goal = ({
         );
       }
     }
-  }, [auth, goal._id]);
+  }, [auth, goal]);
 
   return (
     <div>
@@ -49,7 +49,11 @@ const Goal = ({
       >
         <Wrapper showCheckInButton={showCheckInButton}>
           <Progress
-            percentage={(progressData.check_in / goal.frequency) * 100}
+            percentage={
+              progressData
+                ? (progressData.check_in / goal.frequency) * 100
+                : 100
+            }
           ></Progress>
           <TitleWrapper>
             <Title>{goal.title}</Title>
