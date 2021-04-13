@@ -3,6 +3,35 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const Grid = require("gridfs-stream");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+const sendEmail = (email, randomString) => {
+  let transoprt = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.GMAIL_ACCOUNT,
+      pass: process.env.GMAIL_PASSWORD,
+    },
+  });
+  let mailOptions = {
+    from: "Aimimi",
+    to: email,
+    subject: "Aimimi Email Confirmation",
+    text:
+      "Welcome to Aimimi! Please press http://localhost:3001/user/verify/" +
+      randomString +
+      " to verify your email.",
+  };
+  transoprt.sendMail(mailOptions, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Email sent");
+    }
+  });
+};
 
 exports.user_signup = (req, res, next) => {
   User.findOne({ email: req.body.email })
@@ -22,6 +51,8 @@ exports.user_signup = (req, res, next) => {
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
+              randomString: crypto.randomBytes(16).toString("hex"),
+              isValid: false,
               role: "User",
               username: req.body.username,
               email: req.body.email,
@@ -29,6 +60,7 @@ exports.user_signup = (req, res, next) => {
               joinDate: Date.now(),
               propic: req.file.originalname,
             });
+            sendEmail(req.body.email, user.randomString);
             user
               .save()
               .then((result) => {
@@ -48,14 +80,35 @@ exports.user_signup = (req, res, next) => {
     });
 };
 
+exports.verify = (req, res, next) => {
+  console.log(req.params.random_string);
+  User.findOne({ randomString: req.params.random_string })
+    .then((user) => {
+      if (user) {
+        user.isValid = true;
+        user.save().then(() => {
+          console.log("verified");
+          res.status(200).json("User verified");
+        });
+      } else {
+        res.status(500).json("User not found");
+      }
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+};
+
 exports.user_login = (req, res, next) => {
   User.findOne({ email: req.body.email })
-    .exec()
     .then((user) => {
       if (user == null) {
         return res.status(401).json({
           message: "User does not exist",
         });
+      }
+      if (user.isValid == false) {
+        return res.status(400).json("Email not yet verified");
       }
       bcrypt.compare(req.body.password, user.password, (err, result) => {
         if (err) {

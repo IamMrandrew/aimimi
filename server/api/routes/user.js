@@ -30,6 +30,8 @@ var upload = multer({ storage });
 
 router.post("/signup", upload.single("img"), UserController.user_signup);
 
+router.get("/verify/:random_string", UserController.verify);
+
 router.post("/login", UserController.user_login);
 
 router.get("/", checkAuth, UserController.user_info);
