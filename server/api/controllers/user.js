@@ -16,7 +16,7 @@ const sendEmail = (email, randomString) => {
     },
   });
   let text;
-  process.env.NODE_ENV = development
+  process.env.NODE_ENV == development
     ? (text =
         "Welcome to Aimimi! Please click http://localhost:3001/user/verify/" +
         randomString +
