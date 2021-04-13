@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Collapse from "react-bootstrap/Collapse";
-import Profilephoto from "../assets/ImageLarge.png";
 import GoalFromProfile from "../components/GoalFromProfile";
 import CompletedProfile from "../components/CompletedProfile";
 import { useHistory } from "react-router-dom";
@@ -17,7 +16,7 @@ import { AuthContext } from "../contexts/AuthContext";
 
 const Profile = () => {
   const history = useHistory();
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, propic } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [goals, setGoals] = useState([]);
@@ -72,7 +71,7 @@ const Profile = () => {
         <Title>Profile</Title>
         <InformationWrapper>
           <BlockDiv>
-            <ProfileImage src={Profilephoto} />
+            <ProfileImage src={propic} />
           </BlockDiv>
           <BlockDiv>
             <Name>{auth.username}</Name>

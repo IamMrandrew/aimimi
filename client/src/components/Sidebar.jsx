@@ -7,7 +7,6 @@ import {
   FaTrophy,
   FaSignOutAlt,
 } from "react-icons/fa";
-import ProfilePhoto from "../assets/ProfilePhoto.png";
 import Logo from "../assets/Logo.svg";
 import axios from "axios";
 import NavItem from "./NavItem";
@@ -15,7 +14,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useHistory, Link } from "react-router-dom";
 
 const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, propic } = useContext(AuthContext);
   const history = useHistory();
   const Logout = () => {
     axios
@@ -51,7 +50,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
 
   return (
     <Wrapper showSidebar={showSidebar}>
-      <LogoWrapper>
+      <LogoWrapper to="/">
         <LogoImg src={Logo} />
       </LogoWrapper>
       <NavItem
@@ -91,7 +90,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       <Hr />
       <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>
-          <AvatorImg src={ProfilePhoto} />
+          <AvatorImg src={propic} />
         </Avator>
         <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
@@ -206,7 +205,7 @@ const AvatorImg = styled.img`
   object-position: center center;
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled(Link)`
   max-width: 180px;
   display: flex;
   align-items: baseline;

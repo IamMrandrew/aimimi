@@ -208,7 +208,21 @@ exports.user_propic = (req, res, next) => {
           file.contentType === "image/png"
         ) {
           const readstream = gridfs.createReadStream(file.filename);
-          readstream.pipe(res);
+          let data = [];
+
+          readstream.on("data", (chunk) => {
+            data.push(chunk);
+          });
+          readstream.on("end", () => {
+            data = Buffer.concat(data);
+            let img =
+              "data:image/png;base64," + Buffer(data).toString("base64");
+            res.end(img);
+          });
+          readstream.on("error", (err) => {
+            res.status(500).send(err);
+            console.log("An error occurred!", err);
+          });
         } else {
           res.status(404).json({
             err: "Not an image",
