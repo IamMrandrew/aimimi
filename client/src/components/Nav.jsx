@@ -58,11 +58,13 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
   };
   const onClickHandler = (e) => {
     e.preventDefault();
+    setShowDropDown(!showDropDown);
     Logout();
   };
 
   const onClickProfile = (e) => {
     e.preventDefault();
+    setShowDropDown(!showDropDown);
     history.push("/profile");
   };
   const onClickBell = (e) => {
@@ -77,11 +79,9 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
         <Today>{title}</Today>
         <OutDropDown>
           <WrapDropDownWrapper>
-            <DropDownWrapper>
+            <DropDownWrapper onClick={() => DropDownHandler(showDropDown)}>
               <UserName>{auth ? auth.username : ""}</UserName>
-              <CustomFaChevronDown
-                onClick={() => DropDownHandler(showDropDown)}
-              />
+              <CustomFaChevronDown />
             </DropDownWrapper>
 
             <DownWrapper showDropDown={showDropDown}>
@@ -183,6 +183,7 @@ const DropDownWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 40px;
+  cursor: pointer;
 
   @media (max-width: 991.98px) {
     display: none;
@@ -211,18 +212,22 @@ const DownWrapper = styled.div`
   border-radius: 16px;
   position: absolute;
   right: 0;
-  display: none;
+  display: flex;
   align-items: center;
   width: 145px;
   height: 81px;
   justify-content: center;
   margin-top: 12px;
+  pointer-events: ${(props) => (props.showDropDown ? "all" : "none")};
+  transform: ${(props) => (props.showDropDown ? "scale(1.15)" : "scale(1)")};
+  opacity: ${(props) => (props.showDropDown ? "1" : "0")};
+  transition: all 200ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
-  ${(props) =>
+  /* ${(props) =>
     props.showDropDown &&
     css`
       display: flex;
-    `}
+    `} */
 `;
 
 const ProfileWrapper = styled.div`
