@@ -16,8 +16,10 @@ const Goal = ({
   const { auth } = useContext(AuthContext);
 
   const showCheckInButtonHandler = () => {
-    if (progressData.check_in < goal.frequency) {
-      setShowCheckInButton(true);
+    if (progressData) {
+      if (progressData.check_in < goal.frequency) {
+        setShowCheckInButton(true);
+      }
     }
   };
 
