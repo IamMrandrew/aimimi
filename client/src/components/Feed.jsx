@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Profilephoto from "../assets/ImageLarge.png";
 import ClimbingPVG from "../assets/Feed_climbing.png";
 import { FaHeart, FaComments } from "react-icons/fa";
 import axios from "axios";
-const Feed = ({ feed, liked }) => {
+import { AuthContext } from "../contexts/AuthContext";
+const Feed = ({ feed, liked, feeds, setFeeds }) => {
   const [userName, setUserName] = useState();
+  const { auth } = useContext(AuthContext);
+
   useEffect(() => {
     axios
       .get(`/user/name/${feed.creator}`, { withCredentials: true })
@@ -23,6 +26,15 @@ const Feed = ({ feed, liked }) => {
       .catch((err) => {
         console.log(err);
       });
+
+    setFeeds(
+      feeds.map((item) => {
+        if (item._id === feed._id) {
+          return { ...item, like: [...item.like, auth._id] };
+        }
+        return item;
+      })
+    );
   };
 
   const UnLike = (e) => {
@@ -34,6 +46,18 @@ const Feed = ({ feed, liked }) => {
       .catch((err) => {
         console.log(err);
       });
+
+    setFeeds(
+      feeds.map((item) => {
+        if (item._id === feed._id) {
+          return {
+            ...item,
+            like: item.like.filter((e) => e !== auth._id),
+          };
+        }
+        return item;
+      })
+    );
   };
   return (
     <Wrapper>

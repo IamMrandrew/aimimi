@@ -4,15 +4,18 @@ import Container from "react-bootstrap/Container";
 import axios from "axios";
 import Feed from "../components/Feed";
 import { AuthContext } from "../contexts/AuthContext";
+import Loader from "../components/Loader";
 const Activity = () => {
   const [feeds, setFeeds] = useState([]);
   const { auth } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/feed", { withCredentials: true })
       .then((response) => {
         setFeeds(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -25,12 +28,21 @@ const Activity = () => {
 
   return (
     <Wrapper>
-      <CustomContainer>
-        <Title>Activity</Title>
-        {feeds.map((feed) => (
-          <Feed feed={feed} key={feed._id} liked={checkIfLiked(feed)} />
-        ))}
-      </CustomContainer>
+      {!loading && (
+        <CustomContainer>
+          <Title>Activity</Title>
+          {feeds.map((feed) => (
+            <Feed
+              feed={feed}
+              key={feed._id}
+              liked={checkIfLiked(feed)}
+              feeds={feeds}
+              setFeeds={setFeeds}
+            />
+          ))}
+        </CustomContainer>
+      )}
+      {loading && <Loader />}
     </Wrapper>
   );
 };
