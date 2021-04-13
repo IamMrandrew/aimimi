@@ -11,7 +11,7 @@ const onGoingGoalsSchema = Schema({
 });
 const userSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  role: { type: String },
+  role: { type: String, enum: ["User", "Admin"] },
   username: { type: String, required: true },
   propic: { type: String },
   email: { type: String, required: true, unique: true },

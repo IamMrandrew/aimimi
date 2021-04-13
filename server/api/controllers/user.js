@@ -22,7 +22,7 @@ exports.user_signup = (req, res, next) => {
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
-              role: "user",
+              role: "User",
               username: req.body.username,
               email: req.body.email,
               password: hash,

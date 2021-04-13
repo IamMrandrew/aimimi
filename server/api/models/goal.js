@@ -8,7 +8,7 @@ const goalSchema = Schema({
   category: String,
   startTime: { type: Date, required: true },
   frequency: { type: Number, require: true },
-  period: { type: String, required: true },
+  period: { type: String, required: true, enum: ["Daily, Weekly"] },
   timespan: { type: Number, required: true },
   publicity: { type: Boolean, requied: true },
 });
