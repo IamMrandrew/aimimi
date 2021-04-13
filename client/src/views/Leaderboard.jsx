@@ -7,7 +7,7 @@ import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 
-const Leaderboard = ({ sharedGoals }) => {
+const Leaderboard = ({ userSharedGoals }) => {
   const [ranks, setRanks] = useState();
   const { id } = useParams();
   const history = useHistory();
@@ -35,26 +35,27 @@ const Leaderboard = ({ sharedGoals }) => {
       {!loading && (
         <CustomContainer>
           <SelectBox onChange={selectBoxHandler}>
-            {sharedGoals.map((goal) => (
+            {userSharedGoals.map((goal) => (
               <Option value={goal._id}>{goal.title}</Option>
             ))}
           </SelectBox>
           <Title>
-            {sharedGoals.length > 0 &&
-              sharedGoals.find((goal) => goal._id === id).title}
+            {userSharedGoals.length > 0 &&
+              userSharedGoals.find((goal) => goal._id === id).title}
           </Title>
           <Meta>
             <Desc>
-              {sharedGoals.length > 0 &&
-                sharedGoals.find((goal) => goal._id === id).period}
+              {userSharedGoals.length > 0 &&
+                userSharedGoals.find((goal) => goal._id === id).period}
             </Desc>
             <Desc>
-              {sharedGoals.length > 0 &&
-                sharedGoals.find((goal) => goal._id === id).timespan -
+              {userSharedGoals.length > 0 &&
+                userSharedGoals.find((goal) => goal._id === id).timespan -
                   Math.floor(
                     (Date.now() -
                       Date.parse(
-                        sharedGoals.find((goal) => goal._id === id).startTime
+                        userSharedGoals.find((goal) => goal._id === id)
+                          .startTime
                       )) /
                       (1000 * 3600 * 24)
                   )}{" "}

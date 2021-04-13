@@ -14,7 +14,7 @@ import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 
-const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
+const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
   const { auth, setAuth } = useContext(AuthContext);
   const history = useHistory();
   const Logout = () => {
@@ -80,7 +80,9 @@ const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
         <FaUsers />
       </NavItem>
       <NavItem
-        path={sharedGoals[0] ? "/leaderboard/" + sharedGoals[0]._id : ""}
+        path={
+          userSharedGoals[0] ? "/leaderboard/" + userSharedGoals[0]._id : ""
+        }
         exact={false}
         showSidebarHandler={showSidebarHandler}
         text="Leaderboard"

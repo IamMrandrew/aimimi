@@ -29,8 +29,7 @@ const App = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [goals, setGoals] = useState([]);
-  const [sharedGoals, setSharedGoals] = useState([]);
-  const [todayGoals, setTodayGoals] = useState([]);
+  const [userSharedGoals, setUserSharedGoals] = useState([]);
 
   const { auth, setAuth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
@@ -53,24 +52,15 @@ const App = () => {
       .get("/goal", { withCredentials: true })
       .then((response) => {
         setGoals(response.data);
-        setSharedGoals(response.data.filter((goal) => goal.publicity === true));
+        setUserSharedGoals(
+          response.data.filter((goal) => goal.publicity === true)
+        );
         console.log(response.data);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
   }, [auth]);
-
-  useEffect(() => {
-    axios
-      .get("/goal/today_view", { withCredentials: true })
-      .then((response) => {
-        setTodayGoals(response.data);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  }, [auth, goals]);
 
   return (
     <>
@@ -83,7 +73,7 @@ const App = () => {
               <Sidebar
                 showSidebar={showSidebar}
                 setShowSidebar={setShowSidebar}
-                sharedGoals={sharedGoals}
+                userSharedGoals={userSharedGoals}
               />
               <Main lg={9}>
                 <Nav
@@ -94,7 +84,7 @@ const App = () => {
                   <Today
                     showModal={showModal}
                     setShowModal={setShowModal}
-                    todayGoals={todayGoals}
+                    goals={goals}
                     setGoals={setGoals}
                   />
                 </Route>
@@ -114,7 +104,7 @@ const App = () => {
                   <Activity />
                 </Route>
                 <Route path="/leaderboard/:id">
-                  <Leaderboard sharedGoals={sharedGoals} />
+                  <Leaderboard userSharedGoals={userSharedGoals} />
                 </Route>
               </Main>
             </Wrapper>

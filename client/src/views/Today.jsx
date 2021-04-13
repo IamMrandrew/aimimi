@@ -5,7 +5,7 @@ import Goal from "../components/Goal";
 import AddGoal from "../components/AddGoal";
 import CheckInModal from "../components/CheckInModal";
 
-const Today = ({ showModal, setShowModal, todayGoals, setGoals }) => {
+const Today = ({ showModal, setShowModal, goals, setGoals }) => {
   const [selectedGoal, setSelectedGoal] = useState(0);
   const [selectedGoalCheckIn, setSelectedGoalCheckIn] = useState(0);
 
@@ -14,7 +14,7 @@ const Today = ({ showModal, setShowModal, todayGoals, setGoals }) => {
       <CustomContainer>
         <Title>Today</Title>
         <Subtitle>Three task left for today</Subtitle>
-        {todayGoals.map((goal) => (
+        {goals.map((goal) => (
           <Goal
             key={goal._id}
             goal={goal}
