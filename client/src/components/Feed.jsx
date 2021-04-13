@@ -12,7 +12,7 @@ const Feed = ({ feed, liked }) => {
       .then((res) => {
         setUserName(res.data);
       });
-  }, [userName]);
+  }, [feed]);
 
   const Like = (e) => {
     e.preventDefault();

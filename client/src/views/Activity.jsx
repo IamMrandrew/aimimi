@@ -6,7 +6,8 @@ import Feed from "../components/Feed";
 import { AuthContext } from "../contexts/AuthContext";
 const Activity = () => {
   const [feeds, setFeeds] = useState([]);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
+
   useEffect(() => {
     axios
       .get("/feed", { withCredentials: true })
@@ -16,10 +17,12 @@ const Activity = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [feeds]);
+  }, []);
+
   const checkIfLiked = (feed) => {
     return feed.like.find((liked) => liked === auth._id);
   };
+
   return (
     <Wrapper>
       <CustomContainer>
