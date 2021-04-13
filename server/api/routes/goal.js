@@ -4,6 +4,7 @@ const router = express.Router();
 const GoalController = require("../controllers/goal");
 
 const checkAuth = require("../middleware/auth");
+const checkAdmin = require("../middleware/admin");
 const { route } = require("./user");
 
 router.get("/", checkAuth, GoalController.read_all_goal);
@@ -26,7 +27,7 @@ router.put("/check_in", checkAuth, GoalController.check_in);
 
 router.put("/join", checkAuth, GoalController.join_goal);
 
-router.delete("/:goal_id", checkAuth, GoalController.remove_goal);
+router.delete("/:goal_id", checkAuth, checkAdmin, GoalController.remove_goal);
 
 router.delete("/quit/:goal_id", checkAuth, GoalController.quit_goal);
 
