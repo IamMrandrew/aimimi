@@ -185,6 +185,7 @@ exports.unlike_comment = (req, res, next) => {
 
 exports.get_feed_view = (req, res, next) => {
   Feed.findOne({ goal_id: req.params.goal_id })
+    .populate("creator")
     .then((result) => {
       res.status(200).send(result);
     })
