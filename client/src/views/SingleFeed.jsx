@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router-dom";
 import styled from "styled-components/macro";
 import ClimbingPVG from "../assets/Feed_climbing.png";
 import Profilephoto from "../assets/ImageLarge.png";
-import { FaHeart, FaComments } from "react-icons/fa";
+import { FaAngleLeft, FaHeart, FaComments } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import { AuthContext } from "../contexts/AuthContext";
 import Container from "react-bootstrap/esm/Container";
@@ -23,22 +23,27 @@ const SingleFeed = () => {
   };
 
   const leaveCommentHandler = () => {
+    const newComment = {
+      feed_id: feed._id,
+      content: input,
+      creator: { username: auth.username },
+      created_time: new Date(),
+      like: [],
+    };
     axios
-      .post(
-        "/feed/add_comment",
-        { feed_id: feed._id, content: input },
-        { withCredentials: true }
-      )
+      .post("/feed/add_comment", newComment, { withCredentials: true })
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+
+    setFeed({ ...feed, comment: [...feed.comment, newComment] });
     setInput("");
   };
 
-  const checkIfLiked = (feed) => {
+  const checkIfLiked = () => {
     return feed.like.find((liked) => liked === auth._id);
   };
 
@@ -52,14 +57,7 @@ const SingleFeed = () => {
         console.log(err);
       });
 
-    // setFeeds(
-    //   feeds.map((item) => {
-    //     if (item._id === feed._id) {
-    //       return { ...item, like: [...item.like, auth._id] };
-    //     }
-    //     return item;
-    //   })
-    // );
+    setFeed({ ...feed, like: [...feed.like, auth._id] });
   };
 
   const UnLike = (e) => {
@@ -72,17 +70,7 @@ const SingleFeed = () => {
         console.log(err);
       });
 
-    // setFeeds(
-    //   feeds.map((item) => {
-    //     if (item._id === feed._id) {
-    //       return {
-    //         ...item,
-    //         like: item.like.filter((e) => e !== auth._id),
-    //       };
-    //     }
-    //     return item;
-    //   })
-    // );
+    setFeed({ ...feed, like: feed.like.filter((e) => e !== auth._id) });
   };
 
   useEffect(() => {
@@ -95,12 +83,15 @@ const SingleFeed = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [id]);
 
   return (
     <Wrapper>
       {!loading && (
         <CustomContainer>
+          <BackButton to="/activity">
+            <FaAngleLeft />
+          </BackButton>
           <FeedWrapper>
             <Feed>
               <Content>
@@ -120,8 +111,10 @@ const SingleFeed = () => {
                 </User>
                 <Status>{feed ? feed.content : ""}</Status>
                 <Buttons>
-                  {/* <UnClickButton onClick={liked ? UnLike : Like} liked={liked}> */}
-                  <Button>
+                  <Button
+                    onClick={checkIfLiked() ? UnLike : Like}
+                    liked={checkIfLiked()}
+                  >
                     <FaHeart />
                     <Number>{feed ? feed.like.length : ""} likes</Number>
                   </Button>
@@ -291,5 +284,23 @@ const Input = styled.input`
   &::placeholder {
     color: var(--placeholder);
     font-weight: 500;
+  }
+`;
+
+const BackButton = styled(Link)`
+  background-color: #f2f4f6;
+  width: 44px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin-bottom: 21px;
+  cursor: pointer;
+
+  svg {
+    color: #202020;
+    height: 18px;
+    width: 10px;
   }
 `;

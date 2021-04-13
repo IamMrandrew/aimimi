@@ -199,11 +199,15 @@ exports.get_one_user_feed = (req, res, next) => {
             return;
           });
       })
-    ).then(() => {
-      data.sort((a, b) => {
-        return b.created_time - a.created_time;
+    )
+      .then(() => {
+        data.sort((a, b) => {
+          return b.created_time - a.created_time;
+        });
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
       });
-      res.status(200).json(data);
-    });
   });
 };
