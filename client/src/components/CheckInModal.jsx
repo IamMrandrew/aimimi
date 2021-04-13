@@ -47,7 +47,7 @@ const CheckInModal = ({
 
   useEffect(() => {
     setProgress(selectedGoalCheckIn);
-  }, [selectedGoalCheckIn]);
+  }, [selectedGoal, selectedGoalCheckIn]);
 
   return (
     <Wrapper showModal={showModal}>
