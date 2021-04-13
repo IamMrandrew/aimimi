@@ -14,6 +14,7 @@ const Leaderboard = ({ userSharedGoals }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`/goal/leaderboard/${id}`, { withCredentials: true })
       .then((response) => {
@@ -34,15 +35,11 @@ const Leaderboard = ({ userSharedGoals }) => {
     <Wrapper>
       {!loading && (
         <CustomContainer>
-          <SelectBox onChange={selectBoxHandler}>
+          <SelectBox onChange={selectBoxHandler} value={id}>
             {userSharedGoals.map((goal) => (
               <Option value={goal._id}>{goal.title}</Option>
             ))}
           </SelectBox>
-          <Title>
-            {userSharedGoals.length > 0 &&
-              userSharedGoals.find((goal) => goal._id === id).title}
-          </Title>
           <Meta>
             <Desc>
               {userSharedGoals.length > 0 &&
@@ -124,17 +121,11 @@ const Board = styled.div`
   border-radius: 12px;
 `;
 
-const Title = styled.h1`
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--primaryShaded);
-  margin-bottom: 2px;
-`;
-
 const Meta = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+  padding: 5px 12px;
 `;
 const Desc = styled.span`
   color: var(--primaryTinted);
@@ -143,6 +134,26 @@ const Desc = styled.span`
   margin-right: 16px;
 `;
 
-const SelectBox = styled.select``;
+const SelectBox = styled.select`
+  padding: 8px 12px;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--primaryShaded);
+  margin-bottom: 2px;
+  border: 0px;
+  cursor: pointer;
+  background-color: #f2f4f6;
+  border-radius: 8px;
+  /* appearance: none;
+-webkit-appearance: none;
+-moz-appearance: none; */
+  font-size: 18px;
+  font-family: inherit;
+
+  &:focus,
+  &:hover {
+    outline: none;
+  }
+`;
 
 const Option = styled.option``;
