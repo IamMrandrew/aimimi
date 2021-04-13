@@ -35,6 +35,7 @@ const SingleFeed = () => {
       .catch((err) => {
         console.log(err);
       });
+    setInput("");
   };
 
   const checkIfLiked = (feed) => {
@@ -86,7 +87,7 @@ const SingleFeed = () => {
 
   useEffect(() => {
     axios
-      .get(`/feed/get_feed_view/${id}`, { withCredentials: true })
+      .get(`/feed/${id}`, { withCredentials: true })
       .then((response) => {
         setFeed(response.data);
         setLoading(false);

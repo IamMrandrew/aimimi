@@ -11,10 +11,15 @@ const Comment = ({ comment }) => {
       </Propic>
       <TextWrapper>
         <Item>
-          <Name>Oliva Clerk</Name>
-          <Timestamp>3 minutes ago</Timestamp>
+          <Name>{comment.creator.username}</Name>
+          <Timestamp>
+            {Math.floor(
+              (Date.now() - Date.parse(comment.created_time)) / 86400
+            )}{" "}
+            minutes ago
+          </Timestamp>
         </Item>
-        <Content>Nice job, well done!</Content>
+        <Content>{comment.content}</Content>
         <Button>
           <FaHeart />
           <Number>{comment ? comment.like.length : ""} likes</Number>
