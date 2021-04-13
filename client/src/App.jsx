@@ -22,22 +22,28 @@ import Shares from "./views/Shares";
 import Profile from "./views/Profile";
 import Activity from "./views/Activity";
 import Leaderboard from "./views/Leaderboard";
+import Loader from "./components/Loader";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
+
   const [goals, setGoals] = useState([]);
-  const [sharedGoals, setSharedGoals] = useState([]);
+  const [userSharedGoals, setUserSharedGoals] = useState([]);
+
+  const { auth, setAuth } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
+        setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
+        setLoading(false);
       });
   }, [setAuth]);
 
@@ -46,25 +52,28 @@ const App = () => {
       .get("/goal", { withCredentials: true })
       .then((response) => {
         setGoals(response.data);
-        setSharedGoals(response.data.filter((goal) => goal.publicity === true));
+        setUserSharedGoals(
+          response.data.filter((goal) => goal.publicity === true)
+        );
+        console.log(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
       });
-  }, []);
+  }, [auth]);
 
   return (
     <>
       <GlobalStyle />
       <Switch>
-        {auth && (
+        {!loading && auth && (
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
             <Wrapper>
               <Sidebar
                 showSidebar={showSidebar}
                 setShowSidebar={setShowSidebar}
-                sharedGoals={sharedGoals}
+                userSharedGoals={userSharedGoals}
               />
               <Main lg={9}>
                 <Nav
@@ -72,13 +81,18 @@ const App = () => {
                   setShowSidebar={setShowSidebar}
                 />
                 <Route exact path="/">
-                  <Today showModal={showModal} setShowModal={setShowModal} />
+                  <Today
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    goals={goals}
+                    setGoals={setGoals}
+                  />
                 </Route>
                 <Route exact path="/goals">
-                  <Goals />
+                  <Goals goals={goals} setGoals={setGoals} />
                 </Route>
                 <Route path="/goals/:id">
-                  <Details />
+                  <Details goals={goals} setGoals={setGoals} />
                 </Route>
                 <Route path="/shares">
                   <Shares />
@@ -90,12 +104,13 @@ const App = () => {
                   <Activity />
                 </Route>
                 <Route path="/leaderboard/:id">
-                  <Leaderboard sharedGoals={sharedGoals} />
+                  <Leaderboard userSharedGoals={userSharedGoals} />
                 </Route>
               </Main>
             </Wrapper>
           </>
         )}
+        {loading && <Loader />}
         <Route exact path="/">
           <Onboarding />
         </Route>

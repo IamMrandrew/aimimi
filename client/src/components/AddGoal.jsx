@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components/macro";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 
 const AddGoal = ({ setGoals }) => {
   const [goalName, setGoalName] = useState("");
@@ -11,8 +12,9 @@ const AddGoal = ({ setGoals }) => {
   const [goalFrequency, setGoalFrequency] = useState("");
   const [goalTimespan, setGoalTimespan] = useState("");
   const [goalPublicity, setGoalPublicity] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
+
+  const { setAuth } = useContext(AuthContext);
 
   const goalNameHandler = (e) => {
     setGoalName(e.target.value);
@@ -56,6 +58,17 @@ const AddGoal = ({ setGoals }) => {
       .then((response) => {
         axios.get("/goal", { withCredentials: true }).then((response) => {
           setGoals(response.data);
+
+          // Update user onGoingGoals for auth state
+          axios
+            .get("/user", { withCredentials: true })
+            .then((response) => {
+              setAuth(response.data);
+            })
+            .catch((error) => {
+              console.log(error.response.data.message);
+            });
+
           setShowModal(!showModal);
         });
       })
@@ -121,7 +134,6 @@ const AddGoal = ({ setGoals }) => {
 
         <FloatButton showModal={showModal} onClick={showModalHandler}>
           <FaPlus />
-          <FaTimes />
         </FloatButton>
       </CustomContainer>
     </>
@@ -141,8 +153,11 @@ const Wrapper = styled.div`
   padding: 40px 20px;
   border-radius: 12px;
   border: 1px solid #e6e6e6;
-  pointer-events: all;
-  display: ${(props) => (props.showModal ? "block" : "none")};
+  pointer-events: ${(props) => (props.showModal ? "all" : "none")};
+  /* display: ${(props) => (props.showModal ? "block" : "none")}; */
+  opacity: ${(props) => (props.showModal ? "100%" : "0")};
+  transform: ${(props) => (props.showModal ? "scale(1)" : "scale(0.75)")};
+  transition: all 300ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
   @media (max-width: 575.98px) {
     width: 100%;
@@ -193,6 +208,7 @@ const Select = styled.select`
   -moz-appearance: none; */
   font-size: 16px;
   font-family: inherit;
+
   &:focus,
   &:hover {
     outline: none;
@@ -215,19 +231,55 @@ const Button = styled.button`
 
 const Field = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: top;
   margin-bottom: 20px;
 `;
 
 const CheckBox = styled.input`
-  padding: 11px 17px;
+  /* padding: 11px 17px;
   background-color: var(--background);
   border: none;
   outline: none;
   border-radius: 12px;
   font-weight: 500;
   margin-right: 14px;
-  color: var(--monoPrimary);
+  color: var(--monoPrimary); */
+
+  position: relative;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  background-color: red;
+  background-color: var(--background);
+  border-radius: 5px;
+  appearance: none;
+  outline: 0;
+  cursor: pointer;
+  transition: background 175ms cubic-bezier(0.1, 0.1, 0.25, 1);
+
+  &::before {
+    position: absolute;
+    content: "";
+    display: block;
+    top: 4px;
+    left: 9px;
+    width: 8px;
+    height: 14px;
+    border-style: solid;
+    border-color: white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+  }
+
+  &:checked {
+    color: white;
+    background: var(--primaryGoal);
+
+    &::before {
+      opacity: 1;
+    }
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -270,15 +322,15 @@ const FloatButton = styled.button`
   border-radius: 50px;
   font-weight: 600;
   margin-right: 14px;
-  font-size: 25px;
   color: white;
   pointer-events: all;
+  transform: ${(props) => (props.showModal ? "scale(1.15)" : "scale(1)")};
+  transition: all 400ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
-  svg:nth-child(1) {
-    display: ${(props) => (props.showModal ? "none" : "block")};
-  }
-
-  svg:nth-child(2) {
-    display: ${(props) => (props.showModal ? "block" : "none")};
+  svg {
+    height: 25px;
+    width: 25px;
+    transform: ${(props) => (props.showModal ? "rotate(135deg)" : "rotate(0)")};
+    transition: all 400ms cubic-bezier(0.87, 0, 0.11, 1.2);
   }
 `;

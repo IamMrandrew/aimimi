@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
-import axios from "axios";
 import AddGoal from "../components/AddGoal";
 import OngoingGoal from "../components/OngoingGoal";
 
-const Goals = () => {
-  const [goals, setGoals] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("/goal", { withCredentials: true })
-      .then((response) => {
-        setGoals(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
+const Goals = ({ goals, setGoals }) => {
   return (
     <Wrapper>
       <CustomContainer>

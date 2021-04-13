@@ -11,7 +11,7 @@ import { AiOutlineEye } from "react-icons/ai";
 import styled from "styled-components/macro";
 import { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const Signup = () => {
   const [details, setDetails] = useState({
@@ -52,7 +52,7 @@ const Signup = () => {
             <CustomContainer>
               <Title>Sign Up</Title>
               <Subtitle>or </Subtitle>
-              <LoginLink href="/Login"> Log In</LoginLink>
+              <LoginLink to="/login"> Log In</LoginLink>
               <Subtitle> (if you already have an account) </Subtitle>
               <Signupform method="POST" onSubmit={submitHandler}>
                 <BarWrapper>
@@ -313,7 +313,7 @@ const SignupTitle = styled.h1`
   }
 `;
 
-const LoginLink = styled.a`
+const LoginLink = styled(Link)`
   font-family: "Roboto";
   font-size: 19px;
   color: #1c4b56;

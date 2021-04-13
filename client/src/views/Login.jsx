@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import { FaRegEnvelope } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { FiLock } from "react-icons/fi";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
@@ -46,7 +46,7 @@ const Login = () => {
           <CustomContainer>
             <Title>Log In</Title>
             <Subtitle>or </Subtitle>
-            <SignupLink href="/Signup">Sign up </SignupLink>
+            <SignupLink to="/signup">Sign up </SignupLink>
 
             <Subtitle> (if you do not have an account) </Subtitle>
             <LoginForm method="POST" onSubmit={submitHandler}>
@@ -309,7 +309,7 @@ const IconAndTagWrapper = styled.div`
   width: 100%;
 `;
 
-const SignupLink = styled.a`
+const SignupLink = styled(Link)`
   font-family: "Roboto";
   font-size: 19px;
   color: #1c4b56;

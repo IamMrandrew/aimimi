@@ -1,26 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Goal from "../components/Goal";
 import AddGoal from "../components/AddGoal";
 import CheckInModal from "../components/CheckInModal";
-import axios from "axios";
 
-const Today = ({ showModal, setShowModal }) => {
-  const [goals, setGoals] = useState([]);
+const Today = ({ showModal, setShowModal, goals, setGoals }) => {
   const [selectedGoal, setSelectedGoal] = useState(0);
   const [selectedGoalCheckIn, setSelectedGoalCheckIn] = useState(0);
-
-  useEffect(() => {
-    axios
-      .get("/goal/today_view", { withCredentials: true })
-      .then((response) => {
-        setGoals(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   return (
     <Wrapper>

@@ -1,19 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Profilephoto from "../assets/ProfilePhoto.png";
 import { FaUsers, FaCalendarAlt } from "react-icons/fa";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const SharedGoal = ({ goal, joined }) => {
   const History = useHistory();
+  const { setAuth } = useContext(AuthContext);
+
   const joinGoal = (e) => {
     e.preventDefault();
     axios
       .put("/goal/join", { goal_id: goal._id }, { withCredentials: true })
       .then((res) => {
         History.push("/goals");
+
+        // Update user onGoingGoals for auth state
+        axios
+          .get("/user", { withCredentials: true })
+          .then((response) => {
+            setAuth(response.data);
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+          });
       })
       .catch((err) => {
         console.log(err);

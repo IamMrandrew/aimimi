@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
 import { FaCheck } from "react-icons/fa";
-import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Goal = ({
   goal,
@@ -12,6 +12,8 @@ const Goal = ({
 }) => {
   const [showCheckInButton, setShowCheckInButton] = useState(false);
   const [progressData, setProgressData] = useState(0);
+
+  const { auth } = useContext(AuthContext);
 
   const showCheckInButtonHandler = () => {
     if (progressData.check_in < goal.frequency) {
@@ -30,12 +32,14 @@ const Goal = ({
   };
 
   useEffect(() => {
-    axios
-      .get(`/goal/progress/${goal._id}`, { withCredentials: true })
-      .then((response) => {
-        setProgressData(response.data.Data);
-      });
-  }, [showModal]);
+    if (auth.onGoingGoals) {
+      if (auth.onGoingGoals.length > 0) {
+        setProgressData(
+          auth.onGoingGoals.find((item) => item.goal_id === goal._id)
+        );
+      }
+    }
+  }, [auth, goal]);
 
   return (
     <div>
@@ -45,12 +49,22 @@ const Goal = ({
       >
         <Wrapper showCheckInButton={showCheckInButton}>
           <Progress
-            percentage={(progressData.check_in / goal.frequency) * 100}
+            percentage={
+              progressData
+                ? (progressData.check_in / goal.frequency) * 100
+                : 100
+            }
           ></Progress>
           <TitleWrapper>
             <Title>{goal.title}</Title>
             <Description>{goal.period}</Description>
-            <Description>{goal.timespan} days left</Description>
+            <Description>
+              {goal.timespan -
+                Math.floor(
+                  (Date.now() - Date.parse(goal.startTime)) / (1000 * 3600 * 24)
+                )}{" "}
+              days left
+            </Description>
           </TitleWrapper>
           <TimesWrapper>
             <Times>

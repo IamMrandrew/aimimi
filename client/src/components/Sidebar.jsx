@@ -12,9 +12,9 @@ import Logo from "../assets/Logo.svg";
 import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
-const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
+const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
   const { auth, setAuth } = useContext(AuthContext);
   const history = useHistory();
   const Logout = () => {
@@ -46,7 +46,6 @@ const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
   };
 
   const showSidebarHandler = () => {
-    console.log("hihihi");
     setShowSidebar(!showSidebar);
   };
 
@@ -80,7 +79,9 @@ const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
         <FaUsers />
       </NavItem>
       <NavItem
-        path={sharedGoals[0] ? "/leaderboard/" + sharedGoals[0]._id : ""}
+        path={
+          userSharedGoals[0] ? "/leaderboard/" + userSharedGoals[0]._id : ""
+        }
         exact={false}
         showSidebarHandler={showSidebarHandler}
         text="Leaderboard"
@@ -88,7 +89,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, sharedGoals }) => {
         <FaTrophy />
       </NavItem>
       <Hr />
-      <ProfileItem>
+      <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>
           <AvatorImg src={ProfilePhoto} />
         </Avator>
@@ -140,7 +141,7 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 575.98px) {
-    transition: transform 0.65s;
+    transition: all 300ms cubic-bezier(0.87, 0, 0.11, 1.2);
   }
 
   ${(props) =>
@@ -169,10 +170,14 @@ const ItemText = styled.span`
   z-index: 1;
 `;
 
-const ProfileItem = styled.div`
+const ProfileItem = styled(Link)`
   display: flex;
   align-items: center;
   margin-bottom: 24px;
+
+  &:hover {
+    text-decoration: none;
+  }
 
   @media (min-width: 992px) {
     display: none;

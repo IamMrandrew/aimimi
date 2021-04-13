@@ -148,7 +148,7 @@ exports.read_all_goal = (req, res, next) => {
       })
     ).then(() => {
       data.sort((a, b) => {
-        return a - b;
+        return a.startTime - b.startTime;
       });
       return data;
     });
@@ -301,7 +301,7 @@ exports.get_today_view = (req, res, next) => {
       })
     ).then(() => {
       data.sort((a, b) => {
-        return a - b;
+        return a.startTime - b.startTime;
       });
       return data;
     });

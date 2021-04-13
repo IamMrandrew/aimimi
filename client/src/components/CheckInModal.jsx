@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 
 const CheckInModal = ({
   showModal,
@@ -11,6 +12,8 @@ const CheckInModal = ({
   const [progress, setProgress] = useState(0);
   const [showValue, setShowValue] = useState(false);
 
+  const { setAuth } = useContext(AuthContext);
+
   const checkInHandler = () => {
     axios
       .put(
@@ -20,6 +23,16 @@ const CheckInModal = ({
       )
       .then((res) => {
         console.log(res);
+
+        // Update user onGoingGoals for auth state
+        axios
+          .get("/user", { withCredentials: true })
+          .then((response) => {
+            setAuth(response.data);
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+          });
         setShowModal(!showModal);
       })
       .catch((error) => {
@@ -34,7 +47,7 @@ const CheckInModal = ({
 
   useEffect(() => {
     setProgress(selectedGoalCheckIn);
-  }, [selectedGoalCheckIn]);
+  }, [selectedGoal, selectedGoalCheckIn]);
 
   return (
     <Wrapper showModal={showModal}>
