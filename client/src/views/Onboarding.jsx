@@ -10,7 +10,7 @@ import Onboarding2 from "../assets/Onboarding_2.png";
 import { Link } from "react-router-dom";
 const Onboarding = () => {
   return (
-    <Wrapper>
+    <Wrapper data-testid='onboardingComponent'>
       <CustomNavbar expand="lg">
         <CustomContainer>
           <Navbar.Brand>
