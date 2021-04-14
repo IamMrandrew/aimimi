@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components/macro";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaAngleDown } from "react-icons/fa";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
@@ -88,25 +88,34 @@ const AddGoal = ({ setGoals }) => {
             onChange={goalNameHandler}
             value={goalName}
             placeholder="Goal name"
-            data-testid='goalName'
+            data-testid="goalName"
           />
           <Label>In what category?</Label>
-          <Select value={goalCategory} onChange={goalCategoryHandler} data-testid='goalCategory'>
-            <Option value="Sports">Sports</Option>
-            <Option value="Lifestyle">Lifestyle</Option>
-          </Select>
+          <SelectBoxWrapper>
+            <Select
+              value={goalCategory}
+              onChange={goalCategoryHandler}
+              data-testid="goalCategory"
+            >
+              <Option value="Sports">Sports</Option>
+              <Option value="Lifestyle">Lifestyle</Option>
+              <Option value="Financial">Financial</Option>
+              <Option value="Spiritual">Spiritual</Option>
+            </Select>
+            <FaAngleDown />
+          </SelectBoxWrapper>
           <Label>Repeating period?</Label>
           <Button
             selected={goalPeriod === "Daily" ? true : false}
             onClick={goalPeriodHandler}
-            data-testid='goalPeriod_daily'
+            data-testid="goalPeriod_daily"
           >
             Daily
           </Button>
           <Button
             selected={goalPeriod === "Weekly" ? true : false}
             onClick={goalPeriodHandler}
-            data-testid='goalPeriod_weekly'
+            data-testid="goalPeriod_weekly"
           >
             Weekly
           </Button>
@@ -116,7 +125,7 @@ const AddGoal = ({ setGoals }) => {
             onChange={goalFrequencyHandler}
             value={goalFrequency}
             placeholder="1"
-            data-testid='goalFrequency'
+            data-testid="goalFrequency"
           />
           <Label>Last for how long? (days)</Label>
           <Input
@@ -124,21 +133,30 @@ const AddGoal = ({ setGoals }) => {
             onChange={goalTimespanHandler}
             value={goalTimespan}
             placeholder="21"
-            data-testid='goalTimespan'
+            data-testid="goalTimespan"
           />
           <Field>
             <CheckBox
               type="checkbox"
               onChange={goalPublicityHandler}
               checked={goalPublicity}
-              data-testid='goalPublicity'
+              data-testid="goalPublicity"
             />
             <Label>Shared Goal</Label>
           </Field>
-          <SubmitButton onClick={addGoalHandler} data-testid='addGoalSubmitButton'>Done</SubmitButton>
+          <SubmitButton
+            onClick={addGoalHandler}
+            data-testid="addGoalSubmitButton"
+          >
+            Done
+          </SubmitButton>
         </Wrapper>
 
-        <FloatButton showModal={showModal} onClick={showModalHandler} data-testid='showModalButton'>
+        <FloatButton
+          showModal={showModal}
+          onClick={showModalHandler}
+          data-testid="showModalButton"
+        >
           <FaPlus />
         </FloatButton>
       </CustomContainer>
@@ -201,17 +219,41 @@ const Input = styled.input`
   }
 `;
 
+const SelectBoxWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: var(--background);
+  border-radius: 12px;
+  max-width: 120px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--monoPrimary);
+    pointer-events: none;
+    position: absolute;
+    top: 6px;
+    right: 15px;
+
+    @media screen and (max-width: 768px) {
+      right: 0px;
+    }
+  }
+`;
+
 const Select = styled.select`
   padding: 5px 12px;
   padding-right: 15px;
   color: var(--monoPrimary);
+  background: none;
   font-weight: 500;
   border: 0px;
   cursor: pointer;
-  background-color: var(--background);
-  /* appearance: none;
+  appearance: none;
+  width: 100%;
   -webkit-appearance: none;
-  -moz-appearance: none; */
+  -moz-appearance: none;
   font-size: 16px;
   font-family: inherit;
 
