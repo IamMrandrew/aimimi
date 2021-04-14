@@ -34,7 +34,6 @@ const Shares = () => {
       {!loading && (
         <CustomContainer>
           <Title>Shares</Title>
-          <Subtitle>Recommended For You</Subtitle>
 
           <Subtitle>Trending</Subtitle>
           {publicGoal &&
