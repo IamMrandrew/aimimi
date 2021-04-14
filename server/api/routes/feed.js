@@ -7,7 +7,7 @@ const checkAuth = require("../middleware/auth");
 
 router.get("/", checkAuth, FeedController.get_one_user_feed);
 
-router.get("/get_feed_view/:goal_id", checkAuth, FeedController.get_feed_view);
+router.get("/:feed_id", checkAuth, FeedController.get_feed_view);
 
 router.post("/like/:feed_id", checkAuth, FeedController.like_feed);
 

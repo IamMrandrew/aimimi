@@ -23,6 +23,7 @@ import Profile from "./views/Profile";
 import Activity from "./views/Activity";
 import Leaderboard from "./views/Leaderboard";
 import Loader from "./components/Loader";
+import SingleFeed from "./views/SingleFeed";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -103,6 +104,9 @@ const App = () => {
                 </Route>
                 <Route path="/activity">
                   <Activity />
+                </Route>
+                <Route path="/feed/:id">
+                  <SingleFeed />
                 </Route>
                 <Route path="/leaderboard/:id">
                   <Leaderboard userSharedGoals={userSharedGoals} />
