@@ -3,11 +3,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components/macro";
 import ClimbingPVG from "../assets/Feed_climbing.png";
-import Profilephoto from "../assets/ImageLarge.png";
 import { FaAngleLeft, FaHeart, FaComments } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import { AuthContext } from "../contexts/AuthContext";
-import Container from "react-bootstrap/esm/Container";
+import Container from "react-bootstrap/Container";
 import Loader from "../components/Loader";
 import Comment from "../components/Comment";
 
@@ -15,8 +14,10 @@ const SingleFeed = () => {
   const { id } = useParams();
   const [feed, setFeed] = useState({});
   const [loading, setLoading] = useState(true);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const [input, setInput] = useState("");
+  const [feedPropic, setFeedPropic] = useState(null);
+  const [propicloading, setPropicLoading] = useState(true);
 
   const inputHandler = (e) => {
     setInput(e.target.value);
@@ -78,6 +79,17 @@ const SingleFeed = () => {
       .get(`/feed/${id}`, { withCredentials: true })
       .then((response) => {
         setFeed(response.data);
+        axios
+          .get(`/user/propic/${response.data.creator._id}`, {
+            withCredentials: true,
+          })
+          .then((response) => {
+            setFeedPropic(response.data);
+            setPropicLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         setLoading(false);
       })
       .catch((error) => {
@@ -96,7 +108,10 @@ const SingleFeed = () => {
             <Feed>
               <Content>
                 <User>
-                  <Propic src={Profilephoto} />
+                  <Avator>
+                    {!propicloading && <AvatorImg src={feedPropic} />}
+                    {propicloading && <Loader />}
+                  </Avator>
                   <Meta>
                     <Name>{feed ? feed.creator.username : ""}</Name>
                     <Time>
@@ -138,7 +153,7 @@ const SingleFeed = () => {
             </InputField>
           </FeedWrapper>
           {feed.comment.map((item) => (
-            <Comment comment={item} />
+            <Comment key={item._id} comment={item} />
           ))}
         </CustomContainer>
       )}
@@ -187,9 +202,27 @@ const User = styled.div`
   align-items: center;
 `;
 
-const Propic = styled.img`
-  width: 50px;
-  height: 50px;
+const Avator = styled.div`
+  width: 45px;
+  height: 45px;
+  border-radius: 24px;
+  margin-right: 18px;
+  overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
+`;
+
+const AvatorImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 `;
 
 const Name = styled.span`

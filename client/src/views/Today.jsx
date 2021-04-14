@@ -1,19 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Goal from "../components/Goal";
 import AddGoal from "../components/AddGoal";
 import CheckInModal from "../components/CheckInModal";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Today = ({ showModal, setShowModal, goals, setGoals }) => {
   const [selectedGoal, setSelectedGoal] = useState(0);
   const [selectedGoalCheckIn, setSelectedGoalCheckIn] = useState(0);
+  const { auth } = useContext(AuthContext);
+  const [tasksLeft, setTaskLeft] = useState(0);
+
+  useEffect(() => {
+    if (goals.length > 0) {
+      setTaskLeft(
+        auth.onGoingGoals.filter(
+          (goal) =>
+            goal.check_in !==
+            goals.find((item) => item._id === goal.goal_id).frequency
+        ).length
+      );
+    }
+  }, [goals, auth.onGoingGoals]);
 
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Today</Title>
-        <Subtitle>Three task left for today</Subtitle>
+        <Subtitle>{tasksLeft} tasks left for today</Subtitle>
         {goals.map((goal) => (
           <Goal
             key={goal._id}

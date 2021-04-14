@@ -8,16 +8,19 @@ import {
   FaSignOutAlt,
   FaUserCog,
 } from "react-icons/fa";
-import ProfilePhoto from "../assets/ProfilePhoto.png";
 import Logo from "../assets/Logo.svg";
 import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory, Link } from "react-router-dom";
+import Loader from "./Loader";
 
 const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, propic, setPropic, authLoading } = useContext(
+    AuthContext
+  );
   const history = useHistory();
+
   const Logout = () => {
     axios
       .delete("/user/logout", {
@@ -26,6 +29,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       .then((response) => {
         history.push("/login");
         setAuth(null);
+        setPropic(null);
       })
       .catch((error) => {
         alert("Logout Failed. Try Again.");
@@ -52,7 +56,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
 
   return (
     <Wrapper showSidebar={showSidebar}>
-      <LogoWrapper>
+      <LogoWrapper to="/">
         <LogoImg src={Logo} />
       </LogoWrapper>
       <NavItem
@@ -103,7 +107,8 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       <Hr />
       <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>
-          <AvatorImg src={ProfilePhoto} />
+          {!authLoading && <AvatorImg src={propic} />}
+          {authLoading && <Loader />}
         </Avator>
         <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
@@ -224,15 +229,24 @@ const Avator = styled.div`
   border-radius: 24px;
   margin-right: 18px;
   overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled(Link)`
   max-width: 180px;
   display: flex;
   align-items: baseline;

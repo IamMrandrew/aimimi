@@ -12,7 +12,7 @@ exports.add_goal = (req, res, next) => {
     .then((user) => {
       const goal = new Goal({
         _id: new mongoose.Types.ObjectId(),
-        createdBy: user.username,
+        createdBy: user._id,
         title: req.body.title,
         startTime: Date.now(),
         category: req.body.category,
@@ -98,9 +98,8 @@ exports.remove_goal = (req, res, next) => {
     { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } },
     { multi: true }
   )
-    .exec()
     .then(() => {
-      Goal.findByIdAndDelete(req.params.goal_id).exec();
+      Goal.findByIdAndDelete(req.params.goal_id);
     })
     .then(() => {
       FeedController.remove_feed(req.params.goal_id);
@@ -181,7 +180,7 @@ exports.check_in = (req, res, next) => {
     .then((user) => {
       user.onGoingGoals.forEach((element) => {
         if (element.goal_id == req.body.goal_id) {
-          element.check_in += Number(req.body.check_in_time);
+          element.check_in = Number(req.body.check_in_time);
           Goal.findById(element.goal_id).then((goal) => {
             if (element.check_in == goal.frequency) {
               element.check_in_successful_time += 1;
@@ -234,6 +233,7 @@ exports.check_in = (req, res, next) => {
 
 exports.get_all_public_goal = (req, res, next) => {
   Goal.find({ publicity: true })
+    .populate("createdBy")
     .then((result) => {
       result.sort((a, b) => {
         return a - b;
@@ -335,7 +335,11 @@ exports.leaderboard = (req, res, next) => {
       result.forEach((element) => {
         element.onGoingGoals.forEach((goal) => {
           if (goal.goal_id == req.params.goal_id) {
-            data.push({ username: element.username, accuracy: goal.accuracy });
+            data.push({
+              _id: element._id,
+              username: element.username,
+              accuracy: goal.accuracy,
+            });
           }
         });
       });

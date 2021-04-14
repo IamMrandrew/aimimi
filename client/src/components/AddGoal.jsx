@@ -88,9 +88,10 @@ const AddGoal = ({ setGoals }) => {
             onChange={goalNameHandler}
             value={goalName}
             placeholder="Goal name"
+            data-testid='goalName'
           />
           <Label>In what category?</Label>
-          <Select value={goalCategory} onChange={goalCategoryHandler}>
+          <Select value={goalCategory} onChange={goalCategoryHandler} data-testid='goalCategory'>
             <Option value="Sports">Sports</Option>
             <Option value="Lifestyle">Lifestyle</Option>
           </Select>
@@ -98,12 +99,14 @@ const AddGoal = ({ setGoals }) => {
           <Button
             selected={goalPeriod === "Daily" ? true : false}
             onClick={goalPeriodHandler}
+            data-testid='goalPeriod_daily'
           >
             Daily
           </Button>
           <Button
             selected={goalPeriod === "Weekly" ? true : false}
             onClick={goalPeriodHandler}
+            data-testid='goalPeriod_weekly'
           >
             Weekly
           </Button>
@@ -113,6 +116,7 @@ const AddGoal = ({ setGoals }) => {
             onChange={goalFrequencyHandler}
             value={goalFrequency}
             placeholder="1"
+            data-testid='goalFrequency'
           />
           <Label>Last for how long? (days)</Label>
           <Input
@@ -120,19 +124,21 @@ const AddGoal = ({ setGoals }) => {
             onChange={goalTimespanHandler}
             value={goalTimespan}
             placeholder="21"
+            data-testid='goalTimespan'
           />
           <Field>
             <CheckBox
               type="checkbox"
               onChange={goalPublicityHandler}
               checked={goalPublicity}
+              data-testid='goalPublicity'
             />
             <Label>Shared Goal</Label>
           </Field>
-          <SubmitButton onClick={addGoalHandler}>Done</SubmitButton>
+          <SubmitButton onClick={addGoalHandler} data-testid='addGoalSubmitButton'>Done</SubmitButton>
         </Wrapper>
 
-        <FloatButton showModal={showModal} onClick={showModalHandler}>
+        <FloatButton showModal={showModal} onClick={showModalHandler} data-testid='showModalButton'>
           <FaPlus />
         </FloatButton>
       </CustomContainer>

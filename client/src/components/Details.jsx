@@ -60,7 +60,7 @@ const Details = ({ goals, setGoals }) => {
   };
 
   return (
-    <>
+    <Wrapper>
       <CustomContainer>
         <LeftButtonWrapper onClick={backGoalsHandler}>
           <CustomFaAngleLeft />
@@ -138,11 +138,22 @@ const Details = ({ goals, setGoals }) => {
         </ContentWrapper>
         <QuitButton onClick={onClickDeleteHandler}>Quit goal</QuitButton>
       </CustomContainer>
-    </>
+    </Wrapper>
   );
 };
 
 export default Details;
+const Wrapper = styled.div`
+  padding-top: 32px;
+  flex: 1;
+  display: flex;
+  overflow: scroll;
+  height: calc(100vh - 60px);
+
+  @media (min-width: 992px) {
+    height: calc(100vh - 80px);
+  }
+`;
 const CustomContainer = styled(Container)`
   margin-top: 33px;
 `;

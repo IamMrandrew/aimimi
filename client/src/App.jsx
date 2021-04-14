@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
-
+import Verification from "./views/Verification";
 import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
@@ -33,7 +33,7 @@ const App = () => {
   const [goals, setGoals] = useState([]);
   const [userSharedGoals, setUserSharedGoals] = useState([]);
 
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, setPropic, setAuthLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,13 +41,23 @@ const App = () => {
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
-        setLoading(false);
+        axios
+          .get(`/user/propic/`, { withCredentials: true })
+          .then((response) => {
+            setPropic(response.data);
+            setAuthLoading(false);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setLoading(false);
+          });
       })
       .catch((error) => {
         console.log(error.response.data);
         setLoading(false);
       });
-  }, [setAuth]);
+  }, [setAuth, setPropic, loading]);
 
   useEffect(() => {
     axios
@@ -122,7 +132,7 @@ const App = () => {
           </>
         )}
         {loading && <Loader />}
-        <Route exact path="/">
+        <Route exact path="/" data-testid='ToOnboarding'>
           <Onboarding />
         </Route>
         <Route path="/login">
@@ -133,6 +143,9 @@ const App = () => {
         </Route>
         <Route path="/onboarding">
           <Onboarding />
+        </Route>
+        <Route path="/email-check">
+          <Verification />
         </Route>
       </Switch>
     </>

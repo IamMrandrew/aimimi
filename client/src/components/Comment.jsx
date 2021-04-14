@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-import Profilephoto from "../assets/ImageLarge.png";
 import { FaHeart } from "react-icons/fa";
+import axios from "axios";
+import Loader from "react-spinners/ClipLoader";
 
 const Comment = ({ comment }) => {
+  const [commentPropic, setCommentPropic] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(`/user/propic/${comment.creator._id}`, { withCredentials: true })
+      .then((response) => {
+        setCommentPropic(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [comment]);
+
   return (
     <Wrapper>
-      <Propic>
-        <Img src={Profilephoto} />
-      </Propic>
+      <Avator>
+        {!loading && <AvatorImg src={commentPropic} />}
+        {loading && <Loader />}
+      </Avator>
       <TextWrapper>
         <Item>
           <Name>{comment.creator.username}</Name>
@@ -48,17 +65,23 @@ const Item = styled.div`
   width: 100%;
 `;
 
-const Propic = styled.div`
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
+const Avator = styled.div`
+  width: 45px;
+  height: 45px;
+  border-radius: 24px;
+  margin-right: 18px;
   overflow: hidden;
-  margin-right: 15px;
+
+  & > span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
-const Img = styled.img`
+const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
+  object-position: center center;
 `;
 
 const TextWrapper = styled.div`
