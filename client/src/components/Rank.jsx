@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useHistory } from "react";
 import styled from "styled-components/macro";
 import Loader from "./Loader";
 import axios from "axios";
@@ -6,6 +6,7 @@ import axios from "axios";
 const Rank = ({ rank, index }) => {
   const [loading, setLoading] = useState(true);
   const [rankPropic, setRankPropic] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     axios
@@ -19,8 +20,13 @@ const Rank = ({ rank, index }) => {
       });
   }, [rank]);
 
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    history.push(`/profile/${rank._id}`);
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onClick={onClickHandler}>
       <ItemWrapper>
         <Flag>#{index}</Flag>
         <Avator>
@@ -41,6 +47,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px 10px;
+  cursor: pointer;
 `;
 
 const ItemWrapper = styled.div`
@@ -78,6 +85,7 @@ const Avator = styled.div`
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;

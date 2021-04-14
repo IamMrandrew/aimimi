@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Collapse from "react-bootstrap/Collapse";
 import GoalFromProfile from "../components/GoalFromProfile";
 import CompletedProfile from "../components/CompletedProfile";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   FaCheckCircle,
@@ -14,49 +14,49 @@ import {
 } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "../components/Loader";
+import OtherUserGoal from "../components/OtherUserGoal";
+import OngoingGoal from "../components/OngoingGoal";
 
-const Profile = () => {
+const OtherProfile = () => {
+  let { id } = useParams();
   const history = useHistory();
-  const { auth, propic, setPropic, authLoading, setAuthLoading } = useContext(
-    AuthContext
-  );
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
-  const [goals, setGoals] = useState([]);
+  const { auth, propic, authLoading } = useContext(AuthContext);
+
   const [completed, setCompleted] = useState([]);
-  const [img, setImg] = useState(null);
+  const [userInfo, setUserInfo] = useState([]);
+  const [onGoing, setOnGoing] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [hisPropic, setHisPropic] = useState(null);
+  const [propicLoading, setPropicLoading] = useState(true);
+
   useEffect(() => {
     axios
-      .get("/goal", { withCredentials: true })
-      .then((response) => {
-        setGoals(response.data);
+      .get(`/user/other_user/${id}`, { withCredentials: true })
+      .then((res) => {
+        setUserInfo(res.data);
+        setLoading(false);
+        setOnGoing(res.data.onGoingGoals);
+        setCompleted(res.data.completedGoals);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
   useEffect(() => {
     axios
-      .get("/goal", { withCredentials: true })
+      .get(`/user/propic/${id}`, { withCredentials: true })
       .then((response) => {
-        setGoals(response.data);
+        setHisPropic(response.data);
+        setPropicLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
-    setCompleted(auth.completedGoals);
-    console.log(completed);
   }, []);
-
-  useEffect(() => {
-    setCompleted(auth.completedGoals);
-    console.log(completed);
-  }, [completed]);
-
-  const fileHandler = (e) => {
-    setImg(e.target.files[0]);
-  };
 
   const DeleteHandler = (e) => {
     e.preventDefault();
@@ -72,30 +72,6 @@ const Profile = () => {
         alert("Cannot delete account");
       });
   };
-  const ChangeFile = (e) => {
-    e.preventDefault();
-    let formdata = new FormData();
-    formdata.append("img", img);
-    axios
-      .post("/user/add_propic", formdata, { withCredentials: true })
-      .then((response) => {
-        console.log("success");
-        setAuthLoading(true);
-        axios
-          .get(`/user/propic/`, { withCredentials: true })
-          .then((response) => {
-            setPropic(response.data);
-            setAuthLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            setAuthLoading(false);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <Wrapper>
@@ -104,28 +80,23 @@ const Profile = () => {
         <InformationWrapper>
           <BlockDiv>
             <Avator>
-              {!authLoading && <AvatorImg src={propic} />}
-              {authLoading && <Loader />}
+              {!propicLoading && <AvatorImg src={hisPropic} />}
+              {propicLoading && <Loader />}
             </Avator>
           </BlockDiv>
           <BlockDiv>
-            <Name>{auth.username}</Name>
+            <Name>{userInfo.username}</Name>
             <Joined>Joined</Joined>
             <FlexDiv>
               <Times>
                 {Math.floor(
-                  (Date.now() - Date.parse(auth.joinDate)) / (1000 * 3600 * 24)
+                  (Date.now() - Date.parse(userInfo.joinDate)) /
+                    (1000 * 3600 * 24)
                 )}
               </Times>
               <Times> days ago</Times>
             </FlexDiv>
           </BlockDiv>
-          <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
-            <FileFlexDiv>
-              <FileUpload type="file" onChange={fileHandler} />
-            </FileFlexDiv>
-            <ChangeButton>Change</ChangeButton>
-          </Submitform>
         </InformationWrapper>
 
         <Flex>
@@ -137,7 +108,11 @@ const Profile = () => {
                     <FaCheckCircle />
                   </ItemText>
                 </ItemDiv>
-                <Status>{auth.completedGoals.length}</Status>
+                <Status>
+                  {userInfo.completedGoals
+                    ? userInfo.completedGoals.length
+                    : ""}
+                </Status>
                 <GoalTitle>Compelted</GoalTitle>
               </CustomContainer1>
             </ItemWrapper>
@@ -149,7 +124,9 @@ const Profile = () => {
                     <FaBullseye />
                   </ItemText>
                 </SecondItemDiv>
-                <Status>{auth.onGoingGoals.length}</Status>
+                <Status>
+                  {userInfo.onGoingGoals ? userInfo.onGoingGoals.length : ""}
+                </Status>
                 <GoalTitle>Ongoing</GoalTitle>
               </CustomContainer1>
             </SecondItemWrapper>
@@ -173,9 +150,9 @@ const Profile = () => {
             </GoalsDiv>
             <Collapse in={open}>
               <div>
-                {goals &&
-                  goals.map((goal) => (
-                    <GoalFromProfile id="ongoing" goal={goal} />
+                {onGoing &&
+                  onGoing.map((goal) => (
+                    <OtherUserGoal id="ongoing" goal={goal} type={"onGoing"} />
                   ))}
               </div>
             </Collapse>
@@ -199,7 +176,7 @@ const Profile = () => {
               <div>
                 {completed &&
                   completed.map((goal) => (
-                    <CompletedProfile id="completed" goal={goal} />
+                    <OtherUserGoal id="completed" goal={goal} />
                   ))}
               </div>
             </Collapse>
@@ -212,18 +189,13 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default OtherProfile;
 
 const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
-  overflow: scroll;
-  height: calc(100vh - 60px);
-
-  @media (min-width: 992px) {
-    height: calc(100vh - 80px);
-  }
+  overflow: hidden;
 `;
 
 const Title = styled.h1`
@@ -239,6 +211,7 @@ const Title = styled.h1`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
+  position: relative;
 `;
 
 const InformationWrapper = styled.div`
@@ -455,36 +428,4 @@ const HalfFlexDiv = styled.div`
 const ItemTextDiv = styled.div`
   color: #a3d2e6;
   font-size: 30px;
-`;
-const UploadText = styled.span`
-  font-weight: 700;
-  font-size: 12px;
-  color: #1c4b56;
-`;
-const FileFlexDiv = styled.div`
-  display: flex;
-`;
-
-const FileUpload = styled.input``;
-
-const Submitform = styled.form``;
-
-const ChangeButton = styled.button`
-  margin-top: 46px;
-  width: 100%;
-  border-radius: 20px;
-  background-color: var(--primary);
-  padding: 8px 12px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  display: block;
-  color: white;
-  font-weight: 600;
-
-  @media (max-width: 767.98px) {
-    height: 70px;
-  }
 `;

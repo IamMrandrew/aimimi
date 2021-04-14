@@ -28,7 +28,7 @@ const storage = new GridFsStorage({
 });
 var upload = multer({ storage });
 
-router.post("/signup", UserController.user_signup);
+router.post("/signup", upload.single("img"), UserController.user_signup);
 
 router.get("/verify/:random_string", UserController.verify);
 

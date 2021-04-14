@@ -23,16 +23,20 @@ const Signup = () => {
   const [usernames, setUsernames] = useState({
     username: "",
   });
+  const [img, setImg] = useState(null);
+
   const history = useHistory();
-  const Signup = (emails, passwords, usernames) => {
+  const Signup = (details) => {
+    let formdata = new FormData();
+    formdata.append("email", details.email);
+    formdata.append("password", details.password);
+    formdata.append("username", details.username);
+    formdata.append("img", img);
+
     axios
-      .post(
-        "/user/signup",
-        { email: emails, password: passwords, username: usernames },
-        {
-          withCredentials: true,
-        }
-      )
+      .post("/user/signup", formdata, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log(response);
         history.push("/email-check");
@@ -60,6 +64,10 @@ const Signup = () => {
     console.log(usernames);
     Signup(emails.email, passwords.password, usernames.username);
   };
+
+  const fileHandler = (e) => {
+    setImg(e.target.files[0]);
+  };
   return (
     <>
       <GlobalStyle />
@@ -75,7 +83,11 @@ const Signup = () => {
               <Subtitle>or </Subtitle>
               <LoginLink to="/login"> Log In</LoginLink>
               <Subtitle> (if you already have an account) </Subtitle>
-              <Signupform method="POST" onSubmit={submitHandler}>
+              <Signupform
+                method="POST"
+                onSubmit={submitHandler}
+                encType="multipart/form-data"
+              >
                 <BarWrapper>
                   <IconAndTagWrapper>
                     <CustomFaEnvelope />
@@ -145,6 +157,10 @@ const Signup = () => {
 
                   <CustomFaTimes onClick={clearUsername} />
                 </PasswordBarWrapper>
+                <FlexDiv>
+                  <UploadText>Want to upload profile picture?</UploadText>
+                  <FileUpload type="file" onChange={fileHandler} />
+                </FlexDiv>
 
                 <SignupBar>
                   <SignupTitle>Sign Up</SignupTitle>
@@ -390,4 +406,14 @@ const PasswordInput = styled.input`
   }
 `;
 
+const UploadText = styled.span`
+  font-weight: 700;
+  font-size: 12px;
+  color: #1c4b56;
+`;
+const FlexDiv = styled.div`
+  display: flex;
+`;
+
+const FileUpload = styled.input``;
 export default Signup;
