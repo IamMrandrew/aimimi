@@ -178,6 +178,16 @@ exports.other_user_info = (req, res, next) => {
     });
 };
 
+exports.all_user_info = (req, res, next) => {
+  User.find()
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+};
+
 exports.add_propic = (req, res, next) => {
   User.findOneAndUpdate(
     { _id: req.userData.userId },
