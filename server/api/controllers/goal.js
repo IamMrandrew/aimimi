@@ -22,8 +22,7 @@ function calculate_accuracy() {
                   date_start.setUTCHours(0, 0, 0, 0);
                   personal_goal.accuracy =
                     (personal_goal.progress /
-                      (((date_now - date_start) /
-                        (1000 * 60 * 60 * 24) /
+                      ((((date_now - date_start) / (1000 * 60 * 60 * 24) + 1) /
                         goal.timespan) *
                         100)) *
                     100;
@@ -263,6 +262,9 @@ exports.check_in = (req, res, next) => {
                   parseFloat(element.progress) +
                   ((7 / parseFloat(goal.timespan)) * 100).toFixed(3);
               }
+
+              element.accuracy = calculate_accuracy_for_one(element, goal);
+
               if (element.progress >= 99.99) {
                 user.onGoingGoals.pull({ _id: element._id });
                 user.completedGoals.push(req.body.goal_id);
@@ -272,7 +274,6 @@ exports.check_in = (req, res, next) => {
                 });
               } else {
                 user.save().then(() => {
-                  calculate_accuracy();
                   res.status(200).json({
                     Message: "Enough Checked-in, added to progress",
                   });
@@ -293,6 +294,22 @@ exports.check_in = (req, res, next) => {
         Error: err,
       });
     });
+};
+
+const calculate_accuracy_for_one = (element, goal) => {
+  let date_now = new Date(Date.now());
+  date_now.setUTCHours(0, 0, 0, 0);
+
+  let date_start = new Date(element.join_time);
+  date_start.setUTCHours(0, 0, 0, 0);
+
+  const diffDay = (date_now - date_start) / (1000 * 60 * 60 * 24) + 1;
+  console.log("DATE_NOW", date_now);
+  console.log("DATE_START", date_start);
+  console.log("PROGRESS", element.progress);
+  console.log("DIFFDAY", diffDay);
+  console.log("ACCURACY", element.accuracy);
+  return (element.progress / ((diffDay / goal.timespan) * 100)) * 100;
 };
 
 exports.get_all_public_goal = (req, res, next) => {
