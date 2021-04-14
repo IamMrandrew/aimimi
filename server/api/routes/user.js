@@ -36,7 +36,7 @@ router.post("/login", UserController.user_login);
 
 router.get("/", checkAuth, UserController.user_info);
 
-router.get("/all", checkAdmin, UserController.all_user_info);
+router.get("/all", checkAuth, checkAdmin, UserController.all_user_info);
 
 router.get("/other_user/:user_id", checkAuth, UserController.other_user_info);
 

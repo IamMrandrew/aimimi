@@ -1,21 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
-import { AuthContext } from "../contexts/AuthContext";
 import Loader from "../components/Loader";
 import User from "../components/User";
 
 const Users = () => {
   const [users, setUsers] = useState(null);
-  const { auth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get("", { withCredentials: true })
+      .get("/user/all", { withCredentials: true })
       .then((response) => {
-        setUsers(response.data.data);
+        setUsers(response.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -28,7 +26,6 @@ const Users = () => {
       {!loading && (
         <CustomContainer>
           <Title>Users</Title>
-
           {users &&
             users.map((user) => (
               <User
@@ -72,17 +69,5 @@ const Title = styled.h1`
 
   @media (max-width: 991.98px) {
     display: none;
-  }
-`;
-
-const Subtitle = styled.span`
-  font-size: 20px;
-  font-weight: 700;
-  color: #000000;
-  display: block;
-  margin-top: 38px;
-
-  @media (max-width: 991.98px) {
-    margin-top: 0px;
   }
 `;
