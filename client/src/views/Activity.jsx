@@ -63,7 +63,6 @@ const Wrapper = styled.div`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
-  position: relative;
 `;
 
 const Title = styled.h1`
