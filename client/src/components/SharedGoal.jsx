@@ -7,9 +7,9 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "./Loader";
 
-const SharedGoal = ({ goal, joined }) => {
+const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   const History = useHistory();
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [sharedGoalPropic, setSharedGoalPropic] = useState(null);
 
@@ -47,6 +47,19 @@ const SharedGoal = ({ goal, joined }) => {
       });
   };
 
+  const deleteGoalHandler = () => {
+    axios
+      .delete(`/goal/${goal._id}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setPublicGoal(publicGoal.filter((item) => item._id !== goal._id));
+  };
+
   return (
     <Wrapper>
       <Container>
@@ -77,14 +90,18 @@ const SharedGoal = ({ goal, joined }) => {
             </ItemIcon>
             <Stat>{goal ? goal.timespan : ""} days left</Stat>
           </SubtitleDiv>
-
-          <JoinButton
-            disabled={joined}
-            onClick={joined ? undefined : joinGoal}
-            joined={joined}
-          >
-            {joined ? "Joined" : "Join"}
-          </JoinButton>
+          <Buttons>
+            <JoinButton
+              disabled={joined}
+              onClick={joined ? undefined : joinGoal}
+              joined={joined}
+            >
+              {joined ? "Joined" : "Join"}
+            </JoinButton>
+            {auth.role === "Admin" && (
+              <DeleteButton onClick={deleteGoalHandler}>Delete</DeleteButton>
+            )}
+          </Buttons>
         </FlexDiv>
       </Container>
     </Wrapper>
@@ -94,6 +111,7 @@ const SharedGoal = ({ goal, joined }) => {
 export default SharedGoal;
 
 const Wrapper = styled.div`
+  position: relative;
   background-color: #ffffff;
   height: 160px;
   width: 100%;
@@ -174,6 +192,10 @@ const Stat = styled.span`
   margin-right: 11px;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+`;
+
 const JoinButton = styled.button`
   display: block;
   align-items: center;
@@ -187,4 +209,18 @@ const JoinButton = styled.button`
   font-size: 16px;
   width: 92px;
   height: 32px;
+`;
+
+const DeleteButton = styled.button`
+  margin-left: 12px;
+  padding: 4px 20px;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  border-radius: 14px;
+  background-color: #f28f8f;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
 `;

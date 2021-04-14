@@ -6,6 +6,7 @@ import {
   FaUsers,
   FaTrophy,
   FaSignOutAlt,
+  FaUserCog,
 } from "react-icons/fa";
 import Logo from "../assets/Logo.svg";
 import axios from "axios";
@@ -92,6 +93,17 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       >
         <FaTrophy />
       </NavItem>
+      {auth.role === "Admin" && (
+        <NavItem
+          path="/users"
+          exact={false}
+          showSidebarHandler={showSidebarHandler}
+          text="Users"
+        >
+          <FaUserCog />
+        </NavItem>
+      )}
+
       <Hr />
       <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>

@@ -24,6 +24,7 @@ import Activity from "./views/Activity";
 import Leaderboard from "./views/Leaderboard";
 import Loader from "./components/Loader";
 import SingleFeed from "./views/SingleFeed";
+import Users from "./views/Users";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -121,6 +122,11 @@ const App = () => {
                 <Route path="/leaderboard/:id">
                   <Leaderboard userSharedGoals={userSharedGoals} />
                 </Route>
+                {auth.role === "Admin" && (
+                  <Route path="/users">
+                    <Users />
+                  </Route>
+                )}
               </Main>
             </Wrapper>
           </>

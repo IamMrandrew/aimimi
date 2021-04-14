@@ -98,9 +98,8 @@ exports.remove_goal = (req, res, next) => {
     { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } },
     { multi: true }
   )
-    .exec()
     .then(() => {
-      Goal.findByIdAndDelete(req.params.goal_id).exec();
+      Goal.findByIdAndDelete(req.params.goal_id);
     })
     .then(() => {
       FeedController.remove_feed(req.params.goal_id);
