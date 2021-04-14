@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
-
+import Verification from "./views/Verification";
 import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
@@ -23,6 +23,7 @@ import Profile from "./views/Profile";
 import Activity from "./views/Activity";
 import Leaderboard from "./views/Leaderboard";
 import Loader from "./components/Loader";
+import SingleFeed from "./views/SingleFeed";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -31,7 +32,7 @@ const App = () => {
   const [goals, setGoals] = useState([]);
   const [userSharedGoals, setUserSharedGoals] = useState([]);
 
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, setPropic, setAuthLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,13 +40,23 @@ const App = () => {
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
-        setLoading(false);
+        axios
+          .get(`/user/propic/`, { withCredentials: true })
+          .then((response) => {
+            setPropic(response.data);
+            setAuthLoading(false);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setLoading(false);
+          });
       })
       .catch((error) => {
         console.log(error.response.data);
         setLoading(false);
       });
-  }, [setAuth]);
+  }, [setAuth, setPropic, loading]);
 
   useEffect(() => {
     axios
@@ -104,6 +115,9 @@ const App = () => {
                 <Route path="/activity">
                   <Activity />
                 </Route>
+                <Route path="/feed/:id">
+                  <SingleFeed />
+                </Route>
                 <Route path="/leaderboard/:id">
                   <Leaderboard userSharedGoals={userSharedGoals} />
                 </Route>
@@ -112,7 +126,7 @@ const App = () => {
           </>
         )}
         {loading && <Loader />}
-        <Route exact path="/">
+        <Route exact path="/" data-testid='ToOnboarding'>
           <Onboarding />
         </Route>
         <Route path="/login">
@@ -123,6 +137,9 @@ const App = () => {
         </Route>
         <Route path="/onboarding">
           <Onboarding />
+        </Route>
+        <Route path="/email-check">
+          <Verification />
         </Route>
       </Switch>
     </>

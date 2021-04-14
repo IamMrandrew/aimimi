@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 const goalSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  createdBy: { type: String },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User", require: true },
   title: { type: String, required: true },
   category: String,
   startTime: { type: Date, required: true },
   frequency: { type: Number, require: true },
-  period: { type: String, required: true },
+  period: { type: String, required: true, enum: ["Daily", "Weekly"] },
   timespan: { type: Number, required: true },
   publicity: { type: Boolean, requied: true },
 });

@@ -12,7 +12,7 @@ exports.add_goal = (req, res, next) => {
     .then((user) => {
       const goal = new Goal({
         _id: new mongoose.Types.ObjectId(),
-        createdBy: user.username,
+        createdBy: user._id,
         title: req.body.title,
         startTime: Date.now(),
         category: req.body.category,
@@ -21,15 +21,16 @@ exports.add_goal = (req, res, next) => {
         publicity: req.body.publicity,
         timespan: req.body.timespan,
       });
-      goal.save(function (err) {
+      goal.save((err) => {
         if (err) {
-          return res.status(400).json({
-            Error: err,
-          });
+          console.log(err);
         }
       });
-
-      FeedController.add_feed(goal._id, req.userData.userId, req.body.content);
+      FeedController.add_feed(
+        goal._id,
+        req.userData.userId,
+        user.username + ' has created "' + goal.title + '" goal!'
+      );
       user
         .updateOne({
           $push: {
@@ -43,16 +44,15 @@ exports.add_goal = (req, res, next) => {
             },
           },
         })
-        .exec()
         .then(() => {
-          res.status(200).json({
+          return res.status(200).json({
             message: "Goal added",
           });
         });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({
+      return res.status(500).json({
         error: err,
       });
     });
@@ -116,17 +116,22 @@ exports.remove_goal = (req, res, next) => {
 };
 
 exports.quit_goal = (req, res, next) => {
-  console.log(req.params.goal_id);
-  User.updateOne(
+  User.findOneAndUpdate(
     {
       _id: req.userData.userId,
     },
     { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } }
   )
-    .then((result) => {
-      FeedController.quit_feed(req.params.goal_id, req.userData.userId);
-      res.status(200).json({
-        message: "Goal quited",
+    .then((user) => {
+      Goal.findById(req.params.goal_id).then((goal) => {
+        FeedController.add_feed(
+          req.params.goal_id,
+          req.userData.userId,
+          user.username + ' has quitted "' + goal.title + '" goal.'
+        );
+        res.status(200).json({
+          message: "Goal quited",
+        });
       });
     })
     .catch((err) => {
@@ -180,6 +185,14 @@ exports.check_in = (req, res, next) => {
           Goal.findById(element.goal_id).then((goal) => {
             if (element.check_in == goal.frequency) {
               element.check_in_successful_time += 1;
+              FeedController.add_feed(
+                element.goal_id,
+                req.userData.userId,
+                user.username +
+                  ' has successfully checked in "' +
+                  goal.title +
+                  '" goal.'
+              );
               if (goal.period == "Daily") {
                 element.progress = element.progress + (1 / goal.timespan) * 100;
                 parseFloat(element.progress) +
@@ -221,6 +234,7 @@ exports.check_in = (req, res, next) => {
 
 exports.get_all_public_goal = (req, res, next) => {
   Goal.find({ publicity: true })
+    .populate("createdBy")
     .then((result) => {
       result.sort((a, b) => {
         return a - b;
@@ -237,9 +251,9 @@ exports.get_all_public_goal = (req, res, next) => {
 };
 
 exports.join_goal = (req, res, next) => {
-  Goal.findById(req.body.goal_id).then((result) => {
-    if (result.publicity == true) {
-      User.updateOne(
+  Goal.findById(req.body.goal_id).then((goal) => {
+    if (goal.publicity == true) {
+      User.findOneAndUpdate(
         { _id: req.userData.userId },
         {
           $push: {
@@ -254,8 +268,12 @@ exports.join_goal = (req, res, next) => {
           },
         }
       )
-        .then(() => {
-          FeedController.join_feed(req.body.goal_id, req.userData.userId);
+        .then((user) => {
+          FeedController.add_feed(
+            goal._id,
+            req.userData.userId,
+            user.username + ' has joined "' + goal.title + '" goal!'
+          );
           res.status(200).json({
             Message: "join successful",
           });
@@ -312,15 +330,17 @@ exports.get_today_view = (req, res, next) => {
 };
 
 exports.leaderboard = (req, res, next) => {
-  console.log(req.params.goal_id);
   User.find({ "onGoingGoals.goal_id": req.params.goal_id })
     .then((result) => {
-      console.log(result);
       let data = [];
       result.forEach((element) => {
         element.onGoingGoals.forEach((goal) => {
           if (goal.goal_id == req.params.goal_id) {
-            data.push({ username: element.username, accuracy: goal.accuracy });
+            data.push({
+              _id: element._id,
+              username: element.username,
+              accuracy: goal.accuracy,
+            });
           }
         });
       });

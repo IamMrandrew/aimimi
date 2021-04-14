@@ -1,12 +1,29 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/macro";
-import Profilephoto from "../assets/ImageLarge.png";
 import ClimbingPVG from "../assets/Feed_climbing.png";
 import { FaHeart, FaComments } from "react-icons/fa";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
+import { useHistory } from "react-router";
+import Loader from "./Loader";
+
 const Feed = ({ feed, liked, feeds, setFeeds }) => {
   const { auth } = useContext(AuthContext);
+  const [feedPropic, setFeedPropic] = useState(null);
+  const history = useHistory();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(`/user/propic/${feed.creator._id}`, { withCredentials: true })
+      .then((response) => {
+        setFeedPropic(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [feed]);
 
   const Like = (e) => {
     e.preventDefault();
@@ -54,7 +71,10 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
     <Wrapper>
       <LeftDiv>
         <FlexWrapper>
-          <ProfileImage src={Profilephoto} />
+          <Avator>
+            {!loading && <AvatorImg src={feedPropic} />}
+            {loading && <Loader />}
+          </Avator>
           <BlockDiv>
             <Name>{feed.creator.username}</Name>
             <Time>
@@ -69,7 +89,11 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
             <FaHeart />
             <Number>{feed.like.length} likes</Number>
           </UnClickButton>
-          <UnClickButton>
+          <UnClickButton
+            onClick={() => {
+              history.push(`/feed/${feed._id}`);
+            }}
+          >
             <FaComments />
             <Number>{feed.comment.length} comments</Number>
           </UnClickButton>
@@ -104,10 +128,29 @@ const FlexWrapper = styled.div`
   align-items: center;
 `;
 
-const ProfileImage = styled.img`
-  width: 50px;
-  height: 50px;
+const Avator = styled.div`
+  width: 45px;
+  height: 45px;
+  border-radius: 24px;
+  margin-right: 18px;
+  overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
+
+const AvatorImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+`;
+
 const Name = styled.span`
   display: block;
   position: relative;

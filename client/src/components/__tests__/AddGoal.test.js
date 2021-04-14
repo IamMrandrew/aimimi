@@ -23,7 +23,7 @@ afterEach(() => {
 })
 
 it('element rendered without crashing', () => {
-    act(() => {
+    // act(() => {
         render(
             <AuthContextProvider>
                 <MemoryRouter>
@@ -32,7 +32,7 @@ it('element rendered without crashing', () => {
             </AuthContextProvider>
             , container
         )
-    })
+    // })
 })
 
 
