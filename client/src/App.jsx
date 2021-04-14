@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
-
+import Verification from "./views/Verification";
 import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
@@ -127,6 +127,9 @@ const App = () => {
         </Route>
         <Route path="/onboarding">
           <Onboarding />
+        </Route>
+        <Route path="/email-check">
+          <Verification />
         </Route>
       </Switch>
     </>
