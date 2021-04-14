@@ -8,7 +8,6 @@ exports.add_feed = (goal_id, creator, content) => {
     _id: new mongoose.Types.ObjectId(),
     goal_id: goal_id,
     creator: creator,
-    participant: creator,
     created_time: Date.now(),
     content: content,
   });
@@ -19,28 +18,12 @@ exports.add_feed = (goal_id, creator, content) => {
   });
 };
 
-exports.join_feed = (goal_id, user_id) => {
-  Feed.findOneAndUpdate(
-    { goal_id: goal_id },
-    { $push: { participant: user_id } }
-  ).then((result) => {
-    console.log(result);
-  });
-};
-
-exports.quit_feed = (goal_id, user_id) => {
-  Feed.findOneAndUpdate(
-    { goal_id: goal_id },
-    { $pull: { participant: user_id } }
-  ).then((result) => {
-    console.log(result);
-  });
-};
-
 exports.remove_feed = (goal_id) => {
-  Feed.findByIdAndDelete({ goal_id: goal_id }).then((result) => {
-    console.log(result);
-  });
+  Feed.deleteMany({ goal_id: goal_id });
+};
+
+exports.remove_user_feed = (user_id) => {
+  Feed.deleteMany({ creator: user_id });
 };
 
 exports.like_feed = (req, res, next) => {

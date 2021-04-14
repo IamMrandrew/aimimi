@@ -14,9 +14,13 @@ import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
 
 const Signup = () => {
-  const [details, setDetails] = useState({
+  const [emails, setEmails] = useState({
     email: "",
+  });
+  const [passwords, setPasswords] = useState({
     password: "",
+  });
+  const [usernames, setUsernames] = useState({
     username: "",
   });
   const [img, setImg] = useState(null);
@@ -35,17 +39,30 @@ const Signup = () => {
       })
       .then((response) => {
         console.log(response);
-        history.push("/login");
-        alert("Signup successfully. Welcome!");
+        history.push("/email-check");
       })
       .catch((error) => {
         alert("Signup Failed. Try Again.");
       });
   };
-
+  const clearEmail = (e) => {
+    e.preventDefault();
+    setEmails({ email: "" });
+  };
+  const clearPassword = (e) => {
+    e.preventDefault();
+    setPasswords({ password: "" });
+  };
+  const clearUsername = (e) => {
+    e.preventDefault();
+    setUsernames({ username: "" });
+  };
   const submitHandler = (e) => {
     e.preventDefault();
-    Signup(details);
+    console.log(emails);
+    console.log(passwords);
+    console.log(usernames);
+    Signup(emails.email, passwords.password, usernames.username);
   };
 
   const fileHandler = (e) => {
@@ -82,15 +99,15 @@ const Signup = () => {
                         name="email"
                         placeholder="name@domain.com"
                         onChange={(e) =>
-                          setDetails({ ...details, email: e.target.value })
+                          setEmails({ ...emails, email: e.target.value })
                         }
-                        value={details.email}
+                        value={emails.email}
                         required
                       ></SigninInput>
                     </TagWrapper>
                   </IconAndTagWrapper>
 
-                  <CustomFaTimes />
+                  <CustomFaTimes onClick={clearEmail} />
                 </BarWrapper>
 
                 <PasswordBarWrapper>
@@ -103,15 +120,18 @@ const Signup = () => {
                         type="password"
                         placeholder="Must have at least 6 characters"
                         onChange={(e) =>
-                          setDetails({ ...details, password: e.target.value })
+                          setPasswords({
+                            ...passwords,
+                            password: e.target.value,
+                          })
                         }
-                        value={details.password}
+                        value={passwords.password}
                         required
                       />
                     </TagWrapper>
                   </IconAndTagWrapper>
 
-                  <CustomFaTimes />
+                  <CustomFaTimes onClick={clearPassword} />
                 </PasswordBarWrapper>
 
                 <PasswordBarWrapper>
@@ -124,15 +144,18 @@ const Signup = () => {
                         type="username"
                         placeholder="Enter your username"
                         onChange={(e) =>
-                          setDetails({ ...details, username: e.target.value })
+                          setUsernames({
+                            ...usernames,
+                            username: e.target.value,
+                          })
                         }
-                        value={details.username}
+                        value={usernames.username}
                         required
                       />
                     </TagWrapper>
                   </IconAndTagWrapper>
 
-                  <CustomFaTimes />
+                  <CustomFaTimes onClick={clearUsername} />
                 </PasswordBarWrapper>
                 <FlexDiv>
                   <UploadText>Want to upload profile picture?</UploadText>

@@ -4,9 +4,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
-var Store = require("express-session").Store;
-var MongooseStore = require("mongoose-express-session")(Store);
-
 require("dotenv").config();
 
 const userRoutes = require("./api/routes/user");
@@ -25,17 +22,6 @@ db.once("open", function () {
 });
 
 const app = express();
-
-app.use(
-  require("express-session")({
-    secret: process.env.SESSION_SECRET,
-    store: new MongooseStore({
-      connection: mongoose,
-    }),
-    saveUninitialized: true,
-    cookie: { maxAge: 6000 * 1000 },
-  })
-);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -58,4 +44,5 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+module.exports = app;
 const server = app.listen(process.env.PORT);

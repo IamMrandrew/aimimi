@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 import Sidebar from "./components/Sidebar";
 import Login from "./views/Login";
 import Today from "./views/Today";
-
+import Verification from "./views/Verification";
 import Goals from "./views/Goals";
 import Signup from "./views/Signup";
 import Onboarding from "./views/Onboarding";
@@ -25,6 +25,7 @@ import Leaderboard from "./views/Leaderboard";
 import Loader from "./components/Loader";
 import SingleFeed from "./views/SingleFeed";
 import OtherProfile from "./views/OtherProfile";
+import Users from "./views/Users";
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -125,12 +126,17 @@ const App = () => {
                 <Route path="/leaderboard/:id">
                   <Leaderboard userSharedGoals={userSharedGoals} />
                 </Route>
+                {auth.role === "Admin" && (
+                  <Route path="/users">
+                    <Users />
+                  </Route>
+                )}
               </Main>
             </Wrapper>
           </>
         )}
         {loading && <Loader />}
-        <Route exact path="/">
+        <Route exact path="/" data-testid='ToOnboarding'>
           <Onboarding />
         </Route>
         <Route path="/login">
@@ -141,6 +147,9 @@ const App = () => {
         </Route>
         <Route path="/onboarding">
           <Onboarding />
+        </Route>
+        <Route path="/email-check">
+          <Verification />
         </Route>
       </Switch>
     </>

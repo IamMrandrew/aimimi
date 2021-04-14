@@ -43,6 +43,8 @@ const Shares = () => {
                 key={goal._id}
                 goal={goal}
                 joined={checkIfJoined(goal)}
+                publicGoal={publicGoal}
+                setPublicGoal={setPublicGoal}
               />
             ))}
         </CustomContainer>
@@ -67,7 +69,6 @@ const Wrapper = styled.div`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
-  position: relative;
 `;
 
 const Title = styled.h1`

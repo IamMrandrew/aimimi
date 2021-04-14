@@ -6,7 +6,7 @@ import ClimbingPVG from "../assets/Feed_climbing.png";
 import { FaAngleLeft, FaHeart, FaComments } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import { AuthContext } from "../contexts/AuthContext";
-import Container from "react-bootstrap/esm/Container";
+import Container from "react-bootstrap/Container";
 import Loader from "../components/Loader";
 import Comment from "../components/Comment";
 
