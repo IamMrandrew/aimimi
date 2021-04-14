@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const FeedController = require("../controllers/feed");
 const Grid = require("gridfs-stream");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -313,11 +314,11 @@ exports.user_logout = (req, res, next) => {
 
 exports.user_delete = (req, res, next) => {
   User.remove({ _id: req.params.user_id })
-    .exec()
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: "User deleted",
+    .then(() => {
+      FeedController.remove_user_feed(req.params.user_id).then(() => {
+        res.status(200).json({
+          message: "User deleted",
+        });
       });
     })
     .catch((err) => {
