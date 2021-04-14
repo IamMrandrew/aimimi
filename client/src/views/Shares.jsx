@@ -43,6 +43,8 @@ const Shares = () => {
                 key={goal._id}
                 goal={goal}
                 joined={checkIfJoined(goal)}
+                publicGoal={publicGoal}
+                setPublicGoal={setPublicGoal}
               />
             ))}
         </CustomContainer>
