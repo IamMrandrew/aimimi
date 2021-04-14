@@ -22,6 +22,7 @@ const Profile = () => {
   const [secondOpen, setSecondOpen] = useState(false);
   const [goals, setGoals] = useState([]);
   const [completed, setCompleted] = useState([]);
+  const [img, setImg] = useState(null);
   useEffect(() => {
     axios
       .get("/goal", { withCredentials: true })
@@ -51,6 +52,10 @@ const Profile = () => {
     console.log(completed);
   }, [completed]);
 
+  const fileHandler = (e) => {
+    setImg(e.target.files[0]);
+  };
+
   const DeleteHandler = (e) => {
     e.preventDefault();
     axios
@@ -63,6 +68,19 @@ const Profile = () => {
       })
       .catch((err) => {
         alert("Cannot delete account");
+      });
+  };
+  const ChangeFile = (e) => {
+    e.preventDefault();
+    let formdata = new FormData();
+    formdata.append("img", img);
+    axios
+      .post("/user/add_propic", formdata, { withCredentials: true })
+      .then((response) => {
+        console.log("success");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -170,6 +188,15 @@ const Profile = () => {
         </Flex>
 
         <QuitButton onClick={DeleteHandler}>Delete Account</QuitButton>
+        <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
+          <FileFlexDiv>
+            <UploadText>Want to upload profile picture?</UploadText>
+            <FileUpload type="file" onChange={fileHandler} />
+          </FileFlexDiv>
+          <SignupBar>
+            <SignupTitle>Sign Up</SignupTitle>
+          </SignupBar>
+        </Submitform>
       </CustomContainer>
     </Wrapper>
   );
@@ -414,4 +441,44 @@ const HalfFlexDiv = styled.div`
 const ItemTextDiv = styled.div`
   color: #a3d2e6;
   font-size: 30px;
+`;
+const UploadText = styled.span`
+  font-weight: 700;
+  font-size: 12px;
+  color: #1c4b56;
+`;
+const FileFlexDiv = styled.div`
+  display: flex;
+`;
+
+const FileUpload = styled.input``;
+
+const Submitform = styled.form``;
+
+const SignupBar = styled.button`
+  margin-top: 46px;
+  width: 100%;
+  border-radius: 20px;
+  background-color: var(--primary);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  display: block;
+
+  @media (max-width: 767.98px) {
+    height: 70px;
+  }
+`;
+
+const SignupTitle = styled.h1`
+  font-family: "Roboto";
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+
+  @media (max-width: 767.98px) {
+    font-size: 16px;
+  }
 `;
