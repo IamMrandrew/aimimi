@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Collapse from "react-bootstrap/Collapse";
-import Profilephoto from "../assets/ImageLarge.png";
 import GoalFromProfile from "../components/GoalFromProfile";
 import CompletedProfile from "../components/CompletedProfile";
 import { useHistory } from "react-router-dom";
@@ -14,10 +13,11 @@ import {
   FaRegCheckSquare,
 } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext";
+import Loader from "../components/Loader";
 
 const Profile = () => {
   const history = useHistory();
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, propic, authLoading } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [goals, setGoals] = useState([]);
@@ -72,7 +72,10 @@ const Profile = () => {
         <Title>Profile</Title>
         <InformationWrapper>
           <BlockDiv>
-            <ProfileImage src={Profilephoto} />
+            <Avator>
+              {!authLoading && <AvatorImg src={propic} />}
+              {authLoading && <Loader />}
+            </Avator>
           </BlockDiv>
           <BlockDiv>
             <Name>{auth.username}</Name>
@@ -218,12 +221,29 @@ const InformationWrapper = styled.div`
 
 const BlockDiv = styled.div``;
 
-const ProfileImage = styled.img`
+const Avator = styled.div`
   margin-right: 62px;
   border-radius: 18px;
   width: 100px;
   height: 100px;
+  overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
+
+const AvatorImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+`;
+
 const Name = styled.h1`
   font-size: 20px;
   font-weight: 700;

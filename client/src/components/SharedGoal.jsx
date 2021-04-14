@@ -1,15 +1,29 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
-import Profilephoto from "../assets/ProfilePhoto.png";
 import { FaUsers, FaCalendarAlt } from "react-icons/fa";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import Loader from "./Loader";
 
 const SharedGoal = ({ goal, joined }) => {
   const History = useHistory();
   const { setAuth } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [sharedGoalPropic, setSharedGoalPropic] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`/user/propic/${goal.createdBy._id}`, { withCredentials: true })
+      .then((response) => {
+        setSharedGoalPropic(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [goal]);
 
   const joinGoal = (e) => {
     e.preventDefault();
@@ -39,8 +53,11 @@ const SharedGoal = ({ goal, joined }) => {
         <FlexDiv>
           <Title>{goal ? goal.title : ""}</Title>
           <FlexDiv>
-            <Profile src={Profilephoto} />
-            <UserName>Jane Doe</UserName>
+            <Avator>
+              {!loading && <AvatorImg src={sharedGoalPropic} />}
+              {loading && <Loader />}
+            </Avator>
+            <UserName>{goal ? goal.createdBy.username : ""}</UserName>
           </FlexDiv>
         </FlexDiv>
 
@@ -107,13 +124,30 @@ const Subtitle = styled.span`
   margin-bottom: 25px;
 `;
 
-const Profile = styled.img`
-  margin-right: 13px;
-  width: 36px;
+const Avator = styled.div`
+  width: 35px;
   height: 35px;
+  border-radius: 24px;
+  margin-right: 13px;
+  overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
+
   @media (max-width: 991.98px) {
     display: none;
   }
+`;
+
+const AvatorImg = styled.img`
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
 `;
 
 const UserName = styled.span`

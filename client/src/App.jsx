@@ -32,7 +32,7 @@ const App = () => {
   const [goals, setGoals] = useState([]);
   const [userSharedGoals, setUserSharedGoals] = useState([]);
 
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, setPropic, setAuthLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,13 +40,23 @@ const App = () => {
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
-        setLoading(false);
+        axios
+          .get(`/user/propic/`, { withCredentials: true })
+          .then((response) => {
+            setPropic(response.data);
+            setAuthLoading(false);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setLoading(false);
+          });
       })
       .catch((error) => {
         console.log(error.response.data);
         setLoading(false);
       });
-  }, [setAuth]);
+  }, [setAuth, setPropic, loading]);
 
   useEffect(() => {
     axios

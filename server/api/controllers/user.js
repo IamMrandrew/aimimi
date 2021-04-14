@@ -208,7 +208,67 @@ exports.user_propic = (req, res, next) => {
           file.contentType === "image/png"
         ) {
           const readstream = gridfs.createReadStream(file.filename);
-          readstream.pipe(res);
+          let data = [];
+
+          readstream.on("data", (chunk) => {
+            data.push(chunk);
+          });
+          readstream.on("end", () => {
+            data = Buffer.concat(data);
+            let img =
+              "data:image/png;base64," + Buffer(data).toString("base64");
+            res.end(img);
+          });
+          readstream.on("error", (err) => {
+            res.status(500).send(err);
+            console.log("An error occurred!", err);
+          });
+        } else {
+          res.status(404).json({
+            err: "Not an image",
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.other_user_propic = (req, res, next) => {
+  User.findOne({ _id: req.params.user_id })
+    .then((user) => {
+      const db = mongoose.connection;
+      let gridfs = Grid(db.db, mongoose.mongo);
+      gridfs.collection("propics");
+      gridfs.files.findOne({ filename: user.propic }, (err, file) => {
+        if (!file || file.length === 0) {
+          return res.status(404).json({
+            err: "No file exists",
+          });
+        }
+        if (
+          file.contentType === "image/jpeg" ||
+          file.contentType === "image/png"
+        ) {
+          const readstream = gridfs.createReadStream(file.filename);
+          let data = [];
+
+          readstream.on("data", (chunk) => {
+            data.push(chunk);
+          });
+          readstream.on("end", () => {
+            data = Buffer.concat(data);
+            let img =
+              "data:image/png;base64," + Buffer(data).toString("base64");
+            res.end(img);
+          });
+          readstream.on("error", (err) => {
+            res.status(500).send(err);
+            console.log("An error occurred!", err);
+          });
         } else {
           res.status(404).json({
             err: "Not an image",

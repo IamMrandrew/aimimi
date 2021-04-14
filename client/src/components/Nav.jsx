@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import Container from "react-bootstrap/Container";
 import styled, { css } from "styled-components/macro";
 import { FaBell } from "react-icons/fa";
-import Profilephoto from "../assets/ProfilePhoto.png";
 import { FaBars } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
@@ -10,12 +9,15 @@ import { FaSignOutAlt } from "react-icons/fa";
 import axios from "axios";
 import { useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import Loader from "./Loader";
 
 const Nav = ({ showSidebar, setShowSidebar }) => {
   const IsMatch = useLocation();
   const [title, setTitle] = useState();
   const [showDropDown, setShowDropDown] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, propic, setPropic, authLoading } = useContext(
+    AuthContext
+  );
   const history = useHistory();
   const SideBarHandler = (showSidebar) => {
     setShowSidebar(!showSidebar);
@@ -51,6 +53,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
       .then((response) => {
         history.push("/login");
         setAuth(null);
+        setPropic(null);
       })
       .catch((error) => {
         alert("Logout Failed. Try Again.");
@@ -75,7 +78,10 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     <Wrapper>
       <NavContainer>
         <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
-        <Profile src={Profilephoto} />
+        <Avator>
+          {!authLoading && <AvatorImg src={propic} />}
+          {authLoading && <Loader />}
+        </Avator>
         <Today>{title}</Today>
         <OutDropDown>
           <WrapDropDownWrapper>
@@ -135,8 +141,8 @@ const BellWapper = styled.div`
   cursor: pointer;
 `;
 const CustomFaBell = styled(FaBell)`
-  width: 24px;
-  height: 33px;
+  width: 20px;
+  height: 30px;
 
   @media (max-width: 991.98px) {
     /* 767.99*/
@@ -145,12 +151,31 @@ const CustomFaBell = styled(FaBell)`
   }
 `;
 
-const Profile = styled.img`
+const Avator = styled.div`
+  width: 45px;
+  height: 45px;
+  border-radius: 24px;
   margin-right: 10px;
+  overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 
   @media (max-width: 991.98px) {
     display: none;
   }
+`;
+
+const AvatorImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 `;
 
 const Today = styled.span`
@@ -177,7 +202,7 @@ const CustomFaBars = styled(FaBars)`
 `;
 
 const DropDownWrapper = styled.div`
-  background-color: #f2f4f6;
+  background-color: var(--background);
   border-radius: 32px;
   display: flex;
   justify-content: space-between;
@@ -185,6 +210,10 @@ const DropDownWrapper = styled.div`
   height: 40px;
   cursor: pointer;
 
+  :hover {
+    background-color: var(--primaryTrans);
+  }
+  transition: background 300ms cubic-bezier(0.18, 0.89, 0.43, 1.19);
   @media (max-width: 991.98px) {
     display: none;
   }
@@ -193,25 +222,27 @@ const DropDownWrapper = styled.div`
 const UserName = styled.span`
   font-size: 16px;
   font-family: "Roboto";
-  font-weight: 800;
+  font-weight: 600;
   color: var(--primaryShaded);
   margin-left: 18px;
-  margin-right: 43px;
+  margin-right: 30px;
 `;
 
 const CustomFaChevronDown = styled(FaChevronDown)`
   color: var(--primaryShaded);
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   margin-right: 14px;
   cursor: pointer;
 `;
 
 const DownWrapper = styled.div`
-  background-color: #f2f4f6;
+  background-color: white;
+  box-shadow: 0px 2px 50px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   position: absolute;
   right: 0;
+  z-index: 9999;
   display: flex;
   align-items: center;
   width: 145px;
@@ -242,7 +273,6 @@ const DropDownText = styled.span`
   color: var(--primaryShaded);
   font-size: 16px;
   font-weight: 500;
-  cursor: pointer;
 
   :hover {
     text-decoration: none;
@@ -271,7 +301,10 @@ const CustomFaSignOutAlt = styled(FaSignOutAlt)`
   position: relative;
   z-index: 100;
 `;
-const BlockWrapper = styled.div``;
+const BlockWrapper = styled.div`
+  cursor: pointer;
+  user-select: none;
+`;
 
 const WrapDropDownWrapper = styled.div`
   position: relative;
