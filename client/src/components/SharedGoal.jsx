@@ -9,7 +9,7 @@ import Loader from "./Loader";
 
 const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   const History = useHistory();
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [sharedGoalPropic, setSharedGoalPropic] = useState(null);
 
