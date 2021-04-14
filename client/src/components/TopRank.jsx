@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Loader from "./Loader";
 import axios from "axios";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 const TopRank = ({ rank, index }) => {
   const [loading, setLoading] = useState(true);
   const [rankPropic, setRankPropic] = useState(null);
@@ -18,15 +18,17 @@ const TopRank = ({ rank, index }) => {
         console.log(error);
       });
   }, [rank]);
+
   const onClickHandler = (e) => {
     e.preventDefault();
     history.push(`/profile/${rank._id}`);
   };
+
   return (
     <Wrapper index={index}>
-      <Content index={index}>
+      <Content index={index} onClick={onClickHandler}>
         <Flag index={index}>#{index}</Flag>
-        <Avator onClick={onClickHandler}>
+        <Avator>
           {!loading && <AvatorImg src={rankPropic} />}
           {loading && <Loader />}
         </Avator>
@@ -62,6 +64,7 @@ const Content = styled.div`
       : props.index === 3
       ? "172px"
       : "215px"};
+  cursor: pointer;
 
   justify-content: space-between;
   background-color: white;
@@ -122,6 +125,7 @@ const Avator = styled.div`
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;

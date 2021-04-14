@@ -29,6 +29,9 @@ const OtherProfile = () => {
   const [onGoing, setOnGoing] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [hisPropic, setHisPropic] = useState(null);
+  const [propicLoading, setPropicLoading] = useState(true);
+
   useEffect(() => {
     axios
       .get(`/user/other_user/${id}`, { withCredentials: true })
@@ -40,6 +43,18 @@ const OtherProfile = () => {
       })
       .catch((err) => {
         console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`/user/propic/${id}`, { withCredentials: true })
+      .then((response) => {
+        setHisPropic(response.data);
+        setPropicLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
 
@@ -65,8 +80,8 @@ const OtherProfile = () => {
         <InformationWrapper>
           <BlockDiv>
             <Avator>
-              {!authLoading && <AvatorImg src={propic} />}
-              {authLoading && <Loader />}
+              {!propicLoading && <AvatorImg src={hisPropic} />}
+              {propicLoading && <Loader />}
             </Avator>
           </BlockDiv>
           <BlockDiv>
