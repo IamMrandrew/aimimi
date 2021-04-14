@@ -18,7 +18,7 @@ const Comment = ({ comment }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [comment]);
+  }, [comment.creator._id]);
 
   return (
     <Wrapper>
@@ -37,7 +37,7 @@ const Comment = ({ comment }) => {
           </Timestamp>
         </Item>
         <Content>{comment.content}</Content>
-        <Button data-testid='commentLikeButton'>
+        <Button data-testid="commentLikeButton">
           <FaHeart />
           <Number>{comment ? comment.like.length : ""} likes</Number>
         </Button>

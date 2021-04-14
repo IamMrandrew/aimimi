@@ -12,6 +12,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   const { auth, setAuth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [sharedGoalPropic, setSharedGoalPropic] = useState(null);
+  const [stat, setStat] = useState(0);
 
   useEffect(() => {
     axios
@@ -23,7 +24,18 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [goal]);
+  }, [goal.createdBy._id]);
+
+  useEffect(() => {
+    axios
+      .get(`/goal/leaderboard/${goal._id}`, { withCredentials: true })
+      .then((response) => {
+        setStat(response.data.data.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [goal._id]);
 
   const joinGoal = (e) => {
     e.preventDefault();
@@ -84,7 +96,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
             <ItemIcon>
               <FaUsers />
             </ItemIcon>
-            <Stat>1223</Stat>
+            <Stat>{stat}</Stat>
             <ItemIcon>
               <FaCalendarAlt />
             </ItemIcon>
