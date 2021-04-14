@@ -40,6 +40,8 @@ router.get("/other_user/:user_id", checkAuth, UserController.other_user_info);
 
 router.get("/propic", checkAuth, UserController.user_propic);
 
+router.get("/propic/:user_id", checkAuth, UserController.other_user_propic);
+
 router.post(
   "/add_propic",
   checkAuth,

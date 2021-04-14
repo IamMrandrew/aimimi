@@ -40,7 +40,7 @@ const App = () => {
       .then((response) => {
         setAuth(response.data);
         axios
-          .get("/user/propic", { withCredentials: true })
+          .get(`/user/propic/`, { withCredentials: true })
           .then((response) => {
             setPropic(response.data);
             setLoading(false);

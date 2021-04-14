@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import Profilephoto from "../assets/ImageLarge.png";
 import ClimbingPVG from "../assets/Feed_climbing.png";
@@ -6,7 +6,18 @@ import { FaHeart, FaComments } from "react-icons/fa";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 const Feed = ({ feed, liked, feeds, setFeeds }) => {
-  const { auth } = useContext(AuthContext);
+  const { auth, propic, setPropic } = useContext(AuthContext);
+
+  useEffect(() => {
+    axios
+      .get(`/user/propic/${feed.creator._id}`, { withCredentials: true })
+      .then((response) => {
+        setPropic(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [feed]);
 
   const Like = (e) => {
     e.preventDefault();
@@ -54,7 +65,7 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
     <Wrapper>
       <LeftDiv>
         <FlexWrapper>
-          <ProfileImage src={Profilephoto} />
+          <ProfileImage src={propic} />
           <BlockDiv>
             <Name>{feed.creator.username}</Name>
             <Time>
