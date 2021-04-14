@@ -13,13 +13,23 @@ import { AuthContext } from "../contexts/AuthContext";
 
 const Login = ({ setLoading }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
+  const [emails, setEmails] = useState({
+    email: "",
+  });
+  const [passwords, setPasswords] = useState({
+    password: "",
+  });
   const { setAuth } = useContext(AuthContext);
   const history = useHistory();
-  const Login = (details) => {
+  const Login = (emails, passwords) => {
     axios
-      .post("/user/login", details, {
-        withCredentials: true,
-      })
+      .post(
+        "/user/login",
+        { password: passwords, email: emails },
+        {
+          withCredentials: true,
+        }
+      )
       .then((response) => {
         setAuth(response.data);
         history.push("/");
@@ -32,11 +42,15 @@ const Login = ({ setLoading }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    Login(details);
+    Login(emails.email, passwords.password);
   };
-  const clearInput = (e) => {
+  const clearEmail = (e) => {
     e.preventDefault();
-    setDetails({ email: "", password: "" });
+    setEmails({ email: "" });
+  };
+  const clearPassword = (e) => {
+    e.preventDefault();
+    setPasswords({ password: "" });
   };
   return (
     <Wrapper>
@@ -64,14 +78,14 @@ const Login = ({ setLoading }) => {
                       name="name"
                       placeholder="name@domain.com"
                       onChange={(e) =>
-                        setDetails({ ...details, email: e.target.value })
+                        setEmails({ ...emails, email: e.target.value })
                       }
-                      value={details.email}
+                      value={emails.email}
                       required
                     ></EmailInput>
                   </TagWrapper>
                 </IconAndTagWrapper>
-                <CustomFaTimes onClick={clearInput} />
+                <CustomFaTimes onClick={clearEmail} />
               </BarWrapper>
               <PasswordBarWrapper>
                 <CustomFiLock />
@@ -82,13 +96,13 @@ const Login = ({ setLoading }) => {
                     type="password"
                     placeholder="Must have at least 8 characters"
                     onChange={(e) =>
-                      setDetails({ ...details, password: e.target.value })
+                      setPasswords({ ...passwords, password: e.target.value })
                     }
-                    value={details.password}
+                    value={passwords.password}
                     required
                   />
                 </TagWrapper>
-                <CustomFaTimes onClick={clearInput} />
+                <CustomFaTimes onClick={clearPassword} />
               </PasswordBarWrapper>
               <LoginBar>
                 <LoginTitle>Login</LoginTitle>

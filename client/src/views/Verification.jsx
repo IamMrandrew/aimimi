@@ -16,11 +16,16 @@ const Verification = () => {
     e.preventDefault();
     history.push("/login");
   };
+
+  const onClickLogo = (e) => {
+    e.preventDefault();
+    history.push("/onboarding");
+  };
   return (
     <Wrapper>
       <CustomContainer>
         <CustomNavbar>
-          <Navbar.Brand>
+          <Navbar.Brand onClick={onClickLogo}>
             <Logo src={logo} />
             <Brand>aimimi</Brand>
           </Navbar.Brand>
@@ -29,7 +34,7 @@ const Verification = () => {
           <BlockDiv>
             <ImgDiv src={Verify} />
             <Title>Verify your email </Title>
-            <Subtitle>Hi Jane Doe! We have sent a verification email</Subtitle>
+            <Subtitle>Hi! We have sent a verification email</Subtitle>
             <Subtitle> and start enjoying Aimimi.</Subtitle>
             <LoginBar onClick={onClickHandler}>
               <LoginTitle>Login</LoginTitle>
