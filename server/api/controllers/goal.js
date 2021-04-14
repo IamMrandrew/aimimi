@@ -93,14 +93,14 @@ exports.update_goal = (req, res, next) => {
 };
 
 exports.remove_goal = (req, res, next) => {
+  Goal.findOne({ _id: req.params.goal_id }).then((result) => {
+    result.remove();
+  });
   User.updateMany(
     {},
     { $pull: { onGoingGoals: { goal_id: req.params.goal_id } } },
     { multi: true }
   )
-    .then(() => {
-      Goal.findByIdAndDelete(req.params.goal_id);
-    })
     .then(() => {
       FeedController.remove_feed(req.params.goal_id);
       res.status(200).json({

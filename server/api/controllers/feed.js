@@ -19,9 +19,7 @@ exports.add_feed = (goal_id, creator, content) => {
 };
 
 exports.remove_feed = (goal_id) => {
-  Feed.deleteMany({ goal_id: goal_id }).then((result) => {
-    console.log(result);
-  });
+  Feed.deleteMany({ goal_id: goal_id });
 };
 
 exports.remove_user_feed = (user_id) => {
