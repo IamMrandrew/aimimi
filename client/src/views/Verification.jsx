@@ -1,10 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import logo from "../assets/Logo.svg";
 import Verify from "../assets/verification.png";
-import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import { useHistory, Link } from "react-router-dom";
@@ -34,8 +32,8 @@ const Verification = () => {
           <BlockDiv>
             <ImgDiv src={Verify} />
             <Title>Verify your email </Title>
-            <Subtitle>Hi! We have sent a verification email</Subtitle>
-            <Subtitle> and start enjoying Aimimi.</Subtitle>
+            <Subtitle>Hi! We have sent a verification email and start</Subtitle>
+            <Subtitle> enjoying Aimimi.</Subtitle>
             <LoginBar onClick={onClickHandler}>
               <LoginTitle>Login</LoginTitle>
             </LoginBar>
@@ -107,7 +105,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.h2`
   font-family: "Roboto";
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 400;
   color: #6e7191;
   margin-bottom: 11px;
