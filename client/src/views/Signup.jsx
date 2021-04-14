@@ -14,23 +14,17 @@ import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
 
 const Signup = () => {
-  const [emails, setEmails] = useState({
-    email: "",
-  });
-  const [passwords, setPasswords] = useState({
-    password: "",
-  });
-  const [usernames, setUsernames] = useState({
-    username: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [img, setImg] = useState(null);
 
   const history = useHistory();
-  const Signup = (details) => {
+  const Signup = () => {
     let formdata = new FormData();
-    formdata.append("email", details.email);
-    formdata.append("password", details.password);
-    formdata.append("username", details.username);
+    formdata.append("email", email);
+    formdata.append("password", password);
+    formdata.append("username", username);
     formdata.append("img", img);
 
     axios
@@ -47,22 +41,19 @@ const Signup = () => {
   };
   const clearEmail = (e) => {
     e.preventDefault();
-    setEmails({ email: "" });
+    setEmail("");
   };
   const clearPassword = (e) => {
     e.preventDefault();
-    setPasswords({ password: "" });
+    setPassword("");
   };
   const clearUsername = (e) => {
     e.preventDefault();
-    setUsernames({ username: "" });
+    setUsername("");
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(emails);
-    console.log(passwords);
-    console.log(usernames);
-    Signup(emails.email, passwords.password, usernames.username);
+    Signup();
   };
 
   const fileHandler = (e) => {
@@ -98,10 +89,8 @@ const Signup = () => {
                         type="email"
                         name="email"
                         placeholder="name@domain.com"
-                        onChange={(e) =>
-                          setEmails({ ...emails, email: e.target.value })
-                        }
-                        value={emails.email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                         required
                       ></SigninInput>
                     </TagWrapper>
@@ -119,13 +108,8 @@ const Signup = () => {
                         id="password"
                         type="password"
                         placeholder="Must have at least 6 characters"
-                        onChange={(e) =>
-                          setPasswords({
-                            ...passwords,
-                            password: e.target.value,
-                          })
-                        }
-                        value={passwords.password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
                         required
                       />
                     </TagWrapper>
@@ -143,13 +127,8 @@ const Signup = () => {
                         id="confirm_password"
                         type="username"
                         placeholder="Enter your username"
-                        onChange={(e) =>
-                          setUsernames({
-                            ...usernames,
-                            username: e.target.value,
-                          })
-                        }
-                        value={usernames.username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
                         required
                       />
                     </TagWrapper>
