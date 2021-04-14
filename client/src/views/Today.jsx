@@ -13,7 +13,7 @@ const Today = ({ showModal, setShowModal, goals, setGoals }) => {
   const [tasksLeft, setTaskLeft] = useState(0);
 
   useEffect(() => {
-    if (goals.length > 0) {
+    if (goals.length > 0 && auth.onGoingGoals) {
       setTaskLeft(
         auth.onGoingGoals.filter(
           (goal) =>
