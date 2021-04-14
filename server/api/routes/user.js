@@ -22,7 +22,6 @@ const storage = new GridFsStorage({
           bucketName: "propics",
         };
         resolve(fileInfo);
-        console.log(fileInfo);
       });
     });
   },

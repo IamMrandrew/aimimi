@@ -56,7 +56,7 @@ exports.user_signup = (req, res, next) => {
               message: "Hashing failed",
             });
           } else {
-            console.log(req.file);
+            console.log(req);
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
               randomString: crypto.randomBytes(16).toString("hex"),

@@ -18,13 +18,19 @@ const Signup = () => {
     email: "",
     password: "",
     username: "",
-    img: null,
   });
+  const [img, setImg] = useState(null);
 
   const history = useHistory();
   const Signup = (details) => {
+    let formdata = new FormData();
+    formdata.append("email", details.email);
+    formdata.append("password", details.password);
+    formdata.append("username", details.username);
+    formdata.append("img", img);
+
     axios
-      .post("/user/signup", details, {
+      .post("/user/signup", formdata, {
         withCredentials: true,
       })
       .then((response) => {
@@ -40,6 +46,10 @@ const Signup = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     Signup(details);
+  };
+
+  const fileHandler = (e) => {
+    setImg(e.target.files[0]);
   };
   return (
     <>
@@ -126,12 +136,7 @@ const Signup = () => {
                 </PasswordBarWrapper>
                 <FlexDiv>
                   <UploadText>Want to upload profile picture?</UploadText>
-                  <FileUpload
-                    type="file"
-                    onChange={(e) =>
-                      setDetails({ ...details, img: e.target.files[0] })
-                    }
-                  />
+                  <FileUpload type="file" onChange={fileHandler} />
                 </FlexDiv>
 
                 <SignupBar>
