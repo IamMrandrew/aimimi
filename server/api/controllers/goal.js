@@ -21,11 +21,12 @@ function calculate_accuracy() {
                   let date_start = new Date(personal_goal.join_time);
                   date_start.setUTCHours(0, 0, 0, 0);
                   personal_goal.accuracy =
-                    personal_goal.progress /
-                    (((date_now - date_start) /
-                      (1000 * 60 * 60 * 24) /
-                      goal.timespan) *
-                      100);
+                    (personal_goal.progress /
+                      (((date_now - date_start) /
+                        (1000 * 60 * 60 * 24) /
+                        goal.timespan) *
+                        100)) *
+                    100;
                   data.push(personal_goal);
                   return;
                 } else if (goal.period == "Weekly") {
@@ -36,11 +37,12 @@ function calculate_accuracy() {
                     0
                   ) {
                     personal_goal.accuracy =
-                      personal_goal.progress /
-                      (((date_now - date_start) /
-                        (1000 * 60 * 60 * 24) /
-                        goal.timespan) *
-                        100);
+                      (personal_goal.progress /
+                        (((date_now - date_start) /
+                          (1000 * 60 * 60 * 24) /
+                          goal.timespan) *
+                          100)) *
+                      100;
                     data.push(personal_goal);
                     return;
                   }
@@ -483,5 +485,5 @@ const delete_check_in = schedule.scheduleJob("00 00 * * *", function () {
 
 const daily_calculate_accuracy = schedule.scheduleJob(
   "00 00 * * *",
-  calculate_accuracy()
+  calculate_accuracy
 );
