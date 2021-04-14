@@ -37,7 +37,7 @@ const Comment = ({ comment }) => {
           </Timestamp>
         </Item>
         <Content>{comment.content}</Content>
-        <Button>
+        <Button data-testid='commentLikeButton'>
           <FaHeart />
           <Number>{comment ? comment.like.length : ""} likes</Number>
         </Button>

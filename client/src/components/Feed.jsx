@@ -85,7 +85,7 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
         </FlexWrapper>
         <Status>{feed.content}</Status>
         <ButtonDiv>
-          <UnClickButton onClick={liked ? UnLike : Like} liked={liked}>
+          <UnClickButton onClick={liked ? UnLike : Like} liked={liked} data-testid='feedLikeButton'>
             <FaHeart />
             <Number>{feed.like.length} likes</Number>
           </UnClickButton>
@@ -93,6 +93,7 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
             onClick={() => {
               history.push(`/feed/${feed._id}`);
             }}
+            data-testid='feedCommentButton'
           >
             <FaComments />
             <Number>{feed.comment.length} comments</Number>

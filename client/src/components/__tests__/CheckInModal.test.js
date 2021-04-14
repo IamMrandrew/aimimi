@@ -2,10 +2,11 @@ import React from 'react'
 import { unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router-dom'
-import { render, fireEvent, getByTestId } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 
 import axios from 'axios'
 
+import { AuthContextProvider } from "../../contexts/AuthContext"
 import CheckInModal from '../CheckInModal'
 
 let container, testingElement
@@ -21,70 +22,72 @@ afterEach(() => {
     container = null
 })
 
+const fakeSelectedGoal = {
+    "_id": "fake id",
+    "createdBy": "fake user id",
+    "title": "fake title",
+    "startTime": "2021-04-13T17:47:44.738Z",
+    "category": "fake category",
+    "frequency": 13,
+    "period": "Daily",
+    "publicity": true,
+    "timespan": 90,
+    "__v": 0
+}
+
 it('element rendered without crashing', () => {
-        render(<CheckInModal />, container)
+    render(
+        <AuthContextProvider>
+            <MemoryRouter>
+                <CheckInModal selectedGoal={ fakeSelectedGoal } />
+            </MemoryRouter>
+        </AuthContextProvider>
+        , container
+    )
 })
 
 
-// it('axios being called with correct data if user submit add goal form', () => {
+it('axios being called with correct data if user checked in', () => {
+    const spyAxiosPut = jest.spyOn(axios, 'put')
 
-//     const spyAxiosPost = jest.spyOn(axios, 'post')
+    testingElement = render(
+        <AuthContextProvider>
+            <MemoryRouter>
+                <CheckInModal selectedGoal={ fakeSelectedGoal } />
+            </MemoryRouter>
+        </AuthContextProvider>
+        , container
+    )
 
-//     testingElement = render(
-//         <AuthContextProvider>
-//             <MemoryRouter>
-//                 <AddGoal />
-//             </MemoryRouter>
-//         </AuthContextProvider>
-//         , container
-//     )
+    expect(spyAxiosPut).not.toHaveBeenCalled()
 
-//     expect(spyAxiosPost).not.toHaveBeenCalled()
-    
-//     const name = testingElement.queryByTestId('goalName')
-//     const category = testingElement.queryByTestId('goalCategory')
-//     const periodDaily = testingElement.queryByTestId('goalPeriod_daily')
-//     const periodWeekly = testingElement.queryByTestId('goalPeriod_weekly')
-//     const frequency = testingElement.queryByTestId('goalFrequency')
-//     const timespan = testingElement.queryByTestId('goalTimespan')
-//     const publicity = testingElement.queryByTestId('goalPublicity')
-    
-//     const showModalButton = testingElement.queryByTestId('showModalButton')
-//     const submitButton = testingElement.queryByTestId('addGoalSubmitButton')
+    const progress = testingElement.queryByTestId('checkInProgress')
+    const checkInButton = testingElement.queryByTestId('checkInButton')
 
-//     const newName = 'mock name'
-//     const newCategory = 'Lifestyle'
-//     const newFrequency = '5'
-//     const newTimespan = '13'
-    
-//     fireEvent.click(showModalButton)
+    const newProgress = '5'
 
-//     fireEvent.change(name, { target: {value: newName} })
-//     fireEvent.change(category, { target: {value: newCategory} })
-//     fireEvent.click(periodDaily)
-//     fireEvent.click(periodWeekly)
-//     fireEvent.change(frequency, { target: {value: newFrequency} })
-//     fireEvent.change(timespan, { target: {value: newTimespan} })
-//     fireEvent.click(publicity)
-    
-//     Date.now = jest.fn(() => 1618305578906)
+    fireEvent.change(progress, { target: {value: newProgress} })
+    fireEvent.click(checkInButton)
 
-//     fireEvent.click(submitButton)
+    expect(spyAxiosPut).toHaveBeenCalled()
+    expect(spyAxiosPut).toHaveBeenCalledWith(
+        "/goal/check_in",
+        { goal_id: fakeSelectedGoal._id, check_in_time: newProgress },
+        { withCredentials: true }
+    )
 
-//     expect(spyAxiosPost).toHaveBeenCalled()
-//     expect(spyAxiosPost).toHaveBeenCalledWith(
-//         "/goal",
-//         {
-//           title: newName,
-//           startTime: 1618305578906,
-//           category: newCategory,
-//           frequency: newFrequency,
-//           period: 'Weekly',
-//           publicity: true,
-//           timespan: newTimespan,
-//         },
-//         { withCredentials: true }
-//     )
+    spyAxiosPut.mockRestore()
+})
 
-//     spyAxiosPost.mockRestore()
-// })
+const realSelectedGoal = {
+    "_id": "6075d94066bafc0b8819ccc5",
+    "createdBy": "6075d82066bafc0b8819ccc1",
+    "title": "Wake up earlier",
+    "startTime": "2021-04-13T17:47:44.738Z",
+    "category": "Lifestyle",
+    "frequency": 1,
+    "period": "Daily",
+    "publicity": true,
+    "timespan": 90,
+    "__v": 0
+}

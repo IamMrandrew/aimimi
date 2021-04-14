@@ -72,11 +72,12 @@ const CheckInModal = ({
               max={selectedGoal.frequency}
               selectedGoal={selectedGoal}
               progress={progress}
+              data-testid='checkInProgress'
             />
           </SliderWrapper>
           <Number>{selectedGoal.frequency}</Number>
         </SliderField>
-        <Button onClick={checkInHandler}>Check in</Button>
+        <Button onClick={checkInHandler} data-testid='checkInButton'>Check in</Button>
       </Card>
     </Wrapper>
   );
