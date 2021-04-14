@@ -81,6 +81,25 @@ const Signup = () => {
               >
                 <BarWrapper>
                   <IconAndTagWrapper>
+                    <CustomAiOutlineEye />
+                    <TagWrapper>
+                      <Tag>Username</Tag>
+                      <PasswordInput
+                        id="confirm_password"
+                        type="username"
+                        placeholder="Enter your username"
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
+                        required
+                      />
+                    </TagWrapper>
+                  </IconAndTagWrapper>
+
+                  <CustomFaTimes onClick={clearUsername} />
+                </BarWrapper>
+
+                <PasswordBarWrapper>
+                  <IconAndTagWrapper>
                     <CustomFaEnvelope />
                     <TagWrapper>
                       <Tag>Email</Tag>
@@ -97,7 +116,7 @@ const Signup = () => {
                   </IconAndTagWrapper>
 
                   <CustomFaTimes onClick={clearEmail} />
-                </BarWrapper>
+                </PasswordBarWrapper>
 
                 <PasswordBarWrapper>
                   <IconAndTagWrapper>
@@ -118,28 +137,10 @@ const Signup = () => {
                   <CustomFaTimes onClick={clearPassword} />
                 </PasswordBarWrapper>
 
-                <PasswordBarWrapper>
-                  <IconAndTagWrapper>
-                    <CustomAiOutlineEye />
-                    <TagWrapper>
-                      <Tag>Username</Tag>
-                      <PasswordInput
-                        id="confirm_password"
-                        type="username"
-                        placeholder="Enter your username"
-                        onChange={(e) => setUsername(e.target.value)}
-                        value={username}
-                        required
-                      />
-                    </TagWrapper>
-                  </IconAndTagWrapper>
-
-                  <CustomFaTimes onClick={clearUsername} />
-                </PasswordBarWrapper>
-                <FlexDiv>
-                  <UploadText>Want to upload profile picture?</UploadText>
+                <ChooseFileText>Put your propic here</ChooseFileText>
+                <ChooseFileWrapper>
                   <FileUpload type="file" onChange={fileHandler} />
-                </FlexDiv>
+                </ChooseFileWrapper>
 
                 <SignupBar>
                   <SignupTitle>Sign Up</SignupTitle>
@@ -385,14 +386,25 @@ const PasswordInput = styled.input`
   }
 `;
 
-const UploadText = styled.span`
-  font-weight: 700;
-  font-size: 12px;
-  color: #1c4b56;
-`;
-const FlexDiv = styled.div`
-  display: flex;
+const ChooseFileWrapper = styled.label`
+  display: block;
+  border: 2px dashed #777777;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
 `;
 
-const FileUpload = styled.input``;
+const ChooseFileText = styled.div`
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--primaryMild);
+  margin-top: 15px;
+  margin-bottom: 10px;
+`;
+
+const FileUpload = styled.input`
+  outline: none;
+`;
+
 export default Signup;

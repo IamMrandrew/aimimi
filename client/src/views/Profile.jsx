@@ -102,29 +102,32 @@ const Profile = () => {
       <CustomContainer>
         <Title>Profile</Title>
         <InformationWrapper>
-          <BlockDiv>
-            <Avator>
-              {!authLoading && <AvatorImg src={propic} />}
-              {authLoading && <Loader />}
-            </Avator>
-          </BlockDiv>
-          <BlockDiv>
-            <Name>{auth.username}</Name>
-            <Joined>Joined</Joined>
-            <FlexDiv>
-              <Times>
-                {Math.floor(
-                  (Date.now() - Date.parse(auth.joinDate)) / (1000 * 3600 * 24)
-                )}
-              </Times>
-              <Times> days ago</Times>
-            </FlexDiv>
-          </BlockDiv>
+          <FlexDiv>
+            <BlockDiv>
+              <Avator>
+                {!authLoading && <AvatorImg src={propic} />}
+                {authLoading && <Loader />}
+              </Avator>
+            </BlockDiv>
+            <BlockDiv>
+              <Name>{auth.username}</Name>
+              <Joined>Joined</Joined>
+              <FlexDiv>
+                <Times>
+                  {Math.floor(
+                    (Date.now() - Date.parse(auth.joinDate)) /
+                      (1000 * 3600 * 24)
+                  )}
+                </Times>
+                <Times> days ago</Times>
+              </FlexDiv>
+            </BlockDiv>
+          </FlexDiv>
           <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
-            <FileFlexDiv>
+            <ChooseFileWrapper>
               <FileUpload type="file" onChange={fileHandler} />
-            </FileFlexDiv>
-            <ChangeButton>Change</ChangeButton>
+            </ChooseFileWrapper>
+            <ChangeButton>Change propic</ChangeButton>
           </Submitform>
         </InformationWrapper>
 
@@ -247,9 +250,11 @@ const InformationWrapper = styled.div`
   background-color: #ffffff;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 32px;
   border-radius: 20px;
   padding: 25px 28px;
+
   @media (max-width: 768px) {
     height: 130px;
     margin-top: 15px;
@@ -456,23 +461,26 @@ const ItemTextDiv = styled.div`
   color: #a3d2e6;
   font-size: 30px;
 `;
-const UploadText = styled.span`
-  font-weight: 700;
-  font-size: 12px;
-  color: #1c4b56;
-`;
-const FileFlexDiv = styled.div`
-  display: flex;
+
+const ChooseFileWrapper = styled.label`
+  display: block;
+  border: 2px dashed #777777;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
 `;
 
-const FileUpload = styled.input``;
+const FileUpload = styled.input`
+  outline: none;
+`;
 
 const Submitform = styled.form``;
 
 const ChangeButton = styled.button`
-  margin-top: 46px;
+  margin-top: 10px;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 14px;
   background-color: var(--primary);
   padding: 8px 12px;
   font-size: 16px;
