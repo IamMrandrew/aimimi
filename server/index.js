@@ -44,4 +44,5 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+module.exports = app;
 const server = app.listen(process.env.PORT);
