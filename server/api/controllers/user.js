@@ -121,6 +121,16 @@ exports.user_logout = (req, res, next) => {
     });
 };
 
+exports.all_user_info = (req, res, next) => {
+  User.find()
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+};
+
 exports.user_delete = (req, res, next) => {
   const ObjectId = require("mongoose").Types.ObjectId;
   User.remove({ _id: new ObjectId(req.body.userID) })
