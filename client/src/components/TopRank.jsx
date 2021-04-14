@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Loader from "./Loader";
 import axios from "axios";
-
+import { useHistory, useLocation } from "react-router-dom";
 const TopRank = ({ rank, index }) => {
   const [loading, setLoading] = useState(true);
   const [rankPropic, setRankPropic] = useState(null);
-
+  const history = useHistory();
   useEffect(() => {
     axios
       .get(`/user/propic/${rank._id}`, { withCredentials: true })
@@ -18,12 +18,15 @@ const TopRank = ({ rank, index }) => {
         console.log(error);
       });
   }, [rank]);
-
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    history.push(`/profile/${rank._id}`);
+  };
   return (
     <Wrapper index={index}>
       <Content index={index}>
         <Flag index={index}>#{index}</Flag>
-        <Avator>
+        <Avator onClick={onClickHandler}>
           {!loading && <AvatorImg src={rankPropic} />}
           {loading && <Loader />}
         </Avator>

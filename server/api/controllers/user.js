@@ -171,7 +171,7 @@ exports.user_info = (req, res, next) => {
 exports.other_user_info = (req, res, next) => {
   User.findById(req.params.user_id)
     .then((user) => {
-      res.status.end(user);
+      res.status(200).json(user);
     })
     .catch((err) => {
       res.status(500).end(err);

@@ -34,7 +34,9 @@ const Signup = () => {
         alert("Signup Failed. Try Again.");
       });
   };
-
+  const fileSelectedHandler = (event) => {
+    console.log(event);
+  };
   const submitHandler = (e) => {
     e.preventDefault();
     Signup(details);
@@ -118,6 +120,10 @@ const Signup = () => {
 
                   <CustomFaTimes />
                 </PasswordBarWrapper>
+                <FlexDiv>
+                  <UploadText>Want to upload profile picture?</UploadText>
+                  <FileUpload type="file" onChange={fileSelectedHandler} />
+                </FlexDiv>
 
                 <SignupBar>
                   <SignupTitle>Sign Up</SignupTitle>
@@ -363,4 +369,14 @@ const PasswordInput = styled.input`
   }
 `;
 
+const UploadText = styled.span`
+  font-weight: 700;
+  font-size: 12px;
+  color: #1c4b56;
+`;
+const FlexDiv = styled.div`
+  display: flex;
+`;
+
+const FileUpload = styled.input``;
 export default Signup;
