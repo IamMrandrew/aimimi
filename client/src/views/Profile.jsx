@@ -17,7 +17,9 @@ import Loader from "../components/Loader";
 
 const Profile = () => {
   const history = useHistory();
-  const { auth, propic, setPropic, authLoading, setAuthLoading } = useContext(AuthContext);
+  const { auth, propic, setPropic, authLoading, setAuthLoading } = useContext(
+    AuthContext
+  );
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [goals, setGoals] = useState([]);
@@ -80,15 +82,15 @@ const Profile = () => {
         console.log("success");
         setAuthLoading(true);
         axios
-        .get(`/user/propic/`, { withCredentials: true })
-        .then((response) => {
-          setPropic(response.data);          
-          setAuthLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setAuthLoading(false);
-        });
+          .get(`/user/propic/`, { withCredentials: true })
+          .then((response) => {
+            setPropic(response.data);
+            setAuthLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setAuthLoading(false);
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -118,6 +120,12 @@ const Profile = () => {
               <Times> days ago</Times>
             </FlexDiv>
           </BlockDiv>
+          <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
+            <FileFlexDiv>
+              <FileUpload type="file" onChange={fileHandler} />
+            </FileFlexDiv>
+            <ChangeButton>Change</ChangeButton>
+          </Submitform>
         </InformationWrapper>
 
         <Flex>
@@ -199,15 +207,6 @@ const Profile = () => {
         </Flex>
 
         <QuitButton onClick={DeleteHandler}>Delete Account</QuitButton>
-        <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
-          <FileFlexDiv>
-            <UploadText>Want to upload profile picture?</UploadText>
-            <FileUpload type="file" onChange={fileHandler} />
-          </FileFlexDiv>
-          <SignupBar>
-            <SignupTitle>Sign Up</SignupTitle>
-          </SignupBar>
-        </Submitform>
       </CustomContainer>
     </Wrapper>
   );
@@ -466,30 +465,22 @@ const FileUpload = styled.input``;
 
 const Submitform = styled.form``;
 
-const SignupBar = styled.button`
+const ChangeButton = styled.button`
   margin-top: 46px;
   width: 100%;
   border-radius: 20px;
   background-color: var(--primary);
-  height: 80px;
+  padding: 8px 12px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   display: block;
+  color: white;
+  font-weight: 600;
 
   @media (max-width: 767.98px) {
     height: 70px;
-  }
-`;
-
-const SignupTitle = styled.h1`
-  font-family: "Roboto";
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-
-  @media (max-width: 767.98px) {
-    font-size: 16px;
   }
 `;
