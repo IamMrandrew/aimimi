@@ -5,16 +5,19 @@ import { FaHeart, FaComments } from "react-icons/fa";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory } from "react-router";
+import Loader from "./Loader";
 const Feed = ({ feed, liked, feeds, setFeeds }) => {
   const { auth } = useContext(AuthContext);
   const [feedPropic, setFeedPropic] = useState(null);
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get(`/user/propic/${feed.creator._id}`, { withCredentials: true })
       .then((response) => {
         setFeedPropic(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -68,7 +71,8 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
       <LeftDiv>
         <FlexWrapper>
           <Avator>
-            <AvatorImg src={feedPropic} />
+            {!loading && <AvatorImg src={feedPropic} />}
+            {loading && <Loader />}
           </Avator>
           <BlockDiv>
             <Name>{feed.creator.username}</Name>
@@ -129,6 +133,14 @@ const Avator = styled.div`
   border-radius: 24px;
   margin-right: 18px;
   overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
 const AvatorImg = styled.img`

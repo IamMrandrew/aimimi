@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import Loader from "react-spinners/ClipLoader";
 
 const Comment = ({ comment }) => {
   const [commentPropic, setCommentPropic] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get(`/user/propic/${comment.creator._id}`, { withCredentials: true })
       .then((response) => {
         setCommentPropic(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -20,7 +23,8 @@ const Comment = ({ comment }) => {
   return (
     <Wrapper>
       <Avator>
-        <AvatorImg src={commentPropic} />
+        {!loading && <AvatorImg src={commentPropic} />}
+        {loading && <Loader />}
       </Avator>
       <TextWrapper>
         <Item>
@@ -67,6 +71,10 @@ const Avator = styled.div`
   border-radius: 24px;
   margin-right: 18px;
   overflow: hidden;
+
+  & > span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
 const AvatorImg = styled.img`

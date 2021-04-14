@@ -6,16 +6,18 @@ import { FaBars } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
-import placeholder from "../assets/image.jpg";
 import axios from "axios";
 import { useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import Loader from "./Loader";
 
 const Nav = ({ showSidebar, setShowSidebar }) => {
   const IsMatch = useLocation();
   const [title, setTitle] = useState();
   const [showDropDown, setShowDropDown] = useState(false);
-  const { auth, setAuth, propic, setPropic } = useContext(AuthContext);
+  const { auth, setAuth, propic, setPropic, authLoading } = useContext(
+    AuthContext
+  );
   const history = useHistory();
   const SideBarHandler = (showSidebar) => {
     setShowSidebar(!showSidebar);
@@ -77,7 +79,8 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
       <NavContainer>
         <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
         <Avator>
-          <AvatorImg src={propic ? propic : placeholder} />
+          {!authLoading && <AvatorImg src={propic} />}
+          {authLoading && <Loader />}
         </Avator>
         <Today>{title}</Today>
         <OutDropDown>
@@ -154,6 +157,14 @@ const Avator = styled.div`
   border-radius: 24px;
   margin-right: 10px;
   overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 
   @media (max-width: 991.98px) {
     display: none;

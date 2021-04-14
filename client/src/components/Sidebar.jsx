@@ -8,15 +8,18 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import Logo from "../assets/Logo.svg";
-import placeholder from "../assets/image.jpg";
 import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory, Link } from "react-router-dom";
+import Loader from "./Loader";
 
 const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
-  const { auth, setAuth, propic, setPropic } = useContext(AuthContext);
+  const { auth, setAuth, propic, setPropic, authLoading } = useContext(
+    AuthContext
+  );
   const history = useHistory();
+
   const Logout = () => {
     axios
       .delete("/user/logout", {
@@ -92,7 +95,8 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       <Hr />
       <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>
-          <AvatorImg src={propic ? propic : placeholder} />
+          {!authLoading && <AvatorImg src={propic} />}
+          {authLoading && <Loader />}
         </Avator>
         <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
@@ -213,6 +217,14 @@ const Avator = styled.div`
   border-radius: 24px;
   margin-right: 18px;
   overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
 const AvatorImg = styled.img`

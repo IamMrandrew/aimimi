@@ -17,6 +17,7 @@ const SingleFeed = () => {
   const { auth } = useContext(AuthContext);
   const [input, setInput] = useState("");
   const [feedPropic, setFeedPropic] = useState(null);
+  const [propicloading, setPropicLoading] = useState(true);
 
   const inputHandler = (e) => {
     setInput(e.target.value);
@@ -84,6 +85,7 @@ const SingleFeed = () => {
           })
           .then((response) => {
             setFeedPropic(response.data);
+            setPropicLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -107,7 +109,8 @@ const SingleFeed = () => {
               <Content>
                 <User>
                   <Avator>
-                    <AvatorImg src={feedPropic} />
+                    {!propicloading && <AvatorImg src={feedPropic} />}
+                    {propicloading && <Loader />}
                   </Avator>
                   <Meta>
                     <Name>{feed ? feed.creator.username : ""}</Name>
@@ -150,7 +153,7 @@ const SingleFeed = () => {
             </InputField>
           </FeedWrapper>
           {feed.comment.map((item) => (
-            <Comment comment={item} />
+            <Comment key={item._id} comment={item} />
           ))}
         </CustomContainer>
       )}
@@ -205,6 +208,14 @@ const Avator = styled.div`
   border-radius: 24px;
   margin-right: 18px;
   overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
 const AvatorImg = styled.img`
