@@ -67,7 +67,7 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
-              propic: req.file.originalname,
+              propic: req.file ? req.file.originalname : "image.jpg",
             });
             sendEmail(req.body.email, user.randomString);
             user
