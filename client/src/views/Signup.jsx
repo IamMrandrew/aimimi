@@ -18,7 +18,9 @@ const Signup = () => {
     email: "",
     password: "",
     username: "",
+    img: null,
   });
+
   const history = useHistory();
   const Signup = (details) => {
     axios
@@ -34,9 +36,7 @@ const Signup = () => {
         alert("Signup Failed. Try Again.");
       });
   };
-  const fileSelectedHandler = (event) => {
-    console.log(event);
-  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     Signup(details);
@@ -56,7 +56,11 @@ const Signup = () => {
               <Subtitle>or </Subtitle>
               <LoginLink to="/login"> Log In</LoginLink>
               <Subtitle> (if you already have an account) </Subtitle>
-              <Signupform method="POST" onSubmit={submitHandler}>
+              <Signupform
+                method="POST"
+                onSubmit={submitHandler}
+                encType="multipart/form-data"
+              >
                 <BarWrapper>
                   <IconAndTagWrapper>
                     <CustomFaEnvelope />
@@ -122,7 +126,12 @@ const Signup = () => {
                 </PasswordBarWrapper>
                 <FlexDiv>
                   <UploadText>Want to upload profile picture?</UploadText>
-                  <FileUpload type="file" onChange={fileSelectedHandler} />
+                  <FileUpload
+                    type="file"
+                    onChange={(e) =>
+                      setDetails({ ...details, img: e.target.files[0] })
+                    }
+                  />
                 </FlexDiv>
 
                 <SignupBar>
