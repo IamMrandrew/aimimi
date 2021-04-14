@@ -58,21 +58,6 @@ const OtherProfile = () => {
       });
   }, []);
 
-  const DeleteHandler = (e) => {
-    e.preventDefault();
-    axios
-      .delete("/user", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        alert("Account deleted");
-        history.push("/onboarding");
-      })
-      .catch((err) => {
-        alert("Cannot delete account");
-      });
-  };
-
   return (
     <Wrapper>
       <CustomContainer>
@@ -182,8 +167,6 @@ const OtherProfile = () => {
             </Collapse>
           </HalfBlockDiv>
         </Flex>
-
-        <QuitButton onClick={DeleteHandler}>Delete Account</QuitButton>
       </CustomContainer>
     </Wrapper>
   );
