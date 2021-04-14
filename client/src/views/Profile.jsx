@@ -17,7 +17,7 @@ import Loader from "../components/Loader";
 
 const Profile = () => {
   const history = useHistory();
-  const { auth, propic, authLoading } = useContext(AuthContext);
+  const { auth, propic, setPropic, authLoading, setAuthLoading } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [goals, setGoals] = useState([]);
@@ -78,6 +78,17 @@ const Profile = () => {
       .post("/user/add_propic", formdata, { withCredentials: true })
       .then((response) => {
         console.log("success");
+        setAuthLoading(true);
+        axios
+        .get(`/user/propic/`, { withCredentials: true })
+        .then((response) => {
+          setPropic(response.data);          
+          setAuthLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setAuthLoading(false);
+        });
       })
       .catch((error) => {
         console.log(error);
