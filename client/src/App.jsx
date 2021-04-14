@@ -42,7 +42,6 @@ const App = () => {
         axios
           .get("/user/propic", { withCredentials: true })
           .then((response) => {
-            // console.log(response.data);
             setPropic(response.data);
             setLoading(false);
           })
@@ -55,7 +54,7 @@ const App = () => {
         console.log(error.response.data);
         setLoading(false);
       });
-  }, [setAuth]);
+  }, [setAuth, setPropic, loading]);
 
   useEffect(() => {
     axios

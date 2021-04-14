@@ -8,13 +8,14 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import Logo from "../assets/Logo.svg";
+import placeholder from "../assets/image.jpg";
 import axios from "axios";
 import NavItem from "./NavItem";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory, Link } from "react-router-dom";
 
 const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
-  const { auth, setAuth, propic } = useContext(AuthContext);
+  const { auth, setAuth, propic, setPropic } = useContext(AuthContext);
   const history = useHistory();
   const Logout = () => {
     axios
@@ -24,6 +25,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       .then((response) => {
         history.push("/login");
         setAuth(null);
+        setPropic(null);
       })
       .catch((error) => {
         alert("Logout Failed. Try Again.");
@@ -90,7 +92,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       <Hr />
       <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>
-          <AvatorImg src={propic} />
+          <AvatorImg src={propic ? propic : placeholder} />
         </Avator>
         <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
@@ -201,6 +203,7 @@ const Avator = styled.div`
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;

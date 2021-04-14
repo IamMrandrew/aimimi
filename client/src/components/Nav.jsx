@@ -6,6 +6,7 @@ import { FaBars } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import placeholder from "../assets/image.jpg";
 import axios from "axios";
 import { useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
@@ -14,7 +15,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
   const IsMatch = useLocation();
   const [title, setTitle] = useState();
   const [showDropDown, setShowDropDown] = useState(false);
-  const { auth, setAuth, propic } = useContext(AuthContext);
+  const { auth, setAuth, propic, setPropic } = useContext(AuthContext);
   const history = useHistory();
   const SideBarHandler = (showSidebar) => {
     setShowSidebar(!showSidebar);
@@ -50,6 +51,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
       .then((response) => {
         history.push("/login");
         setAuth(null);
+        setPropic(null);
       })
       .catch((error) => {
         alert("Logout Failed. Try Again.");
@@ -75,7 +77,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
       <NavContainer>
         <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
         <Avator>
-          <AvatorImg src={propic} />
+          <AvatorImg src={propic ? propic : placeholder} />
         </Avator>
         <Today>{title}</Today>
         <OutDropDown>
@@ -160,6 +162,7 @@ const Avator = styled.div`
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;
@@ -196,6 +199,10 @@ const DropDownWrapper = styled.div`
   height: 40px;
   cursor: pointer;
 
+  :hover {
+    background-color: var(--primaryTrans);
+  }
+  transition: background 300ms cubic-bezier(0.18, 0.89, 0.43, 1.19);
   @media (max-width: 991.98px) {
     display: none;
   }
@@ -224,6 +231,7 @@ const DownWrapper = styled.div`
   border-radius: 16px;
   position: absolute;
   right: 0;
+  z-index: 9999;
   display: flex;
   align-items: center;
   width: 145px;
