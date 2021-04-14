@@ -6,6 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory } from "react-router";
 import Loader from "./Loader";
+
 const Feed = ({ feed, liked, feeds, setFeeds }) => {
   const { auth } = useContext(AuthContext);
   const [feedPropic, setFeedPropic] = useState(null);

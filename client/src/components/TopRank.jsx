@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
-import ProfilePhoto from "../assets/ProfilePhoto.png";
+import Loader from "./Loader";
+import axios from "axios";
 
 const TopRank = ({ rank, index }) => {
+  const [loading, setLoading] = useState(true);
+  const [rankPropic, setRankPropic] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`/user/propic/${rank._id}`, { withCredentials: true })
+      .then((response) => {
+        setRankPropic(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [rank]);
+
   return (
     <Wrapper index={index}>
       <Content index={index}>
         <Flag index={index}>#{index}</Flag>
         <Avator>
-          <AvatorImg src={ProfilePhoto} />
+          {!loading && <AvatorImg src={rankPropic} />}
+          {loading && <Loader />}
         </Avator>
         <Item>{rank.username}</Item>
         <Item>{rank.accuracy}%</Item>
@@ -90,6 +107,14 @@ const Avator = styled.div`
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
+
+  & > div {
+    height: 100%;
+  }
+
+  span {
+    border-color: var(--primaryGoal);
+  }
 `;
 
 const AvatorImg = styled.img`
