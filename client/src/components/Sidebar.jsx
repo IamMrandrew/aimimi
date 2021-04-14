@@ -97,14 +97,14 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
         <ItemText>{auth ? auth.username : ""}</ItemText>
       </ProfileItem>
 
-      <ProfileItem>
+      <Item>
         <ItemIcon>
           <FaSignOutAlt />
         </ItemIcon>
         <Hover>
           <ItemText onClick={onClickHandler}>Log out</ItemText>
         </Hover>
-      </ProfileItem>
+      </Item>
     </Wrapper>
   );
 };
@@ -172,6 +172,20 @@ const ItemText = styled.span`
 `;
 
 const ProfileItem = styled(Link)`
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+`;
+
+const Item = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 24px;

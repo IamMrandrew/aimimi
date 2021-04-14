@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const commentSchema = Schema({
   creator: { type: Schema.Types.ObjectId, ref: "User", require: true },
-  last_updated_time: { type: Date, require: true },
+  created_time: { type: Date, require: true },
   like: [{ type: Schema.Types.ObjectId, ref: "User" }],
   content: { type: String, require: true },
 });

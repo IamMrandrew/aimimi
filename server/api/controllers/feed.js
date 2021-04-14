@@ -177,7 +177,8 @@ exports.unlike_comment = (req, res, next) => {
 };
 
 exports.get_feed_view = (req, res, next) => {
-  Feed.findOne({ goal_id: req.params.goal_id })
+  Feed.findOne({ _id: req.params.feed_id })
+    .populate("creator comment.creator")
     .then((result) => {
       res.status(200).send(result);
     })
@@ -187,15 +188,26 @@ exports.get_feed_view = (req, res, next) => {
 };
 
 exports.get_one_user_feed = (req, res, next) => {
-  Feed.find({ participant: req.userData.userId })
-    .populate("creator")
-    .then((result) => {
-      result.sort((a, b) => {
-        return b.created_time - a.created_time;
+  User.findById(req.userData.userId).then((user) => {
+    let data = [];
+    Promise.all(
+      user.onGoingGoals.map(async (goal) => {
+        await Feed.find({ goal_id: goal.goal_id })
+          .populate("creator")
+          .then((feed) => {
+            data.push(...feed);
+            return;
+          });
+      })
+    )
+      .then(() => {
+        data.sort((a, b) => {
+          return b.created_time - a.created_time;
+        });
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
       });
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
+  });
 };
