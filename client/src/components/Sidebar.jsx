@@ -85,7 +85,9 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       </NavItem>
       <NavItem
         path={
-          userSharedGoals[0] ? "/leaderboard/" + userSharedGoals[0]._id : ""
+          userSharedGoals[0]
+            ? "/leaderboard/" + userSharedGoals[0]._id
+            : "/leaderboard"
         }
         exact={false}
         showSidebarHandler={showSidebarHandler}
