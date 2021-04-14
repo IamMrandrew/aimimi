@@ -7,7 +7,7 @@ import Profilephoto from "../assets/ImageLarge.png";
 import { FaAngleLeft, FaHeart, FaComments } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import { AuthContext } from "../contexts/AuthContext";
-import Container from "react-bootstrap/esm/Container";
+import Container from "react-bootstrap/Container";
 import Loader from "../components/Loader";
 import Comment from "../components/Comment";
 

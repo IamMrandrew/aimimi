@@ -4,7 +4,7 @@ import styled from "styled-components/macro";
 
 const Loader = () => {
   return (
-    <Wrapper>
+    <Wrapper data-testid='loaderComponent'>
       <ClipLoader color={"var(--primaryGoal)"} />
     </Wrapper>
   );
