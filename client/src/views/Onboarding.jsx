@@ -6,11 +6,12 @@ import Navbar from "react-bootstrap/Navbar";
 import logo from "../assets/Logo.svg";
 import Onboarding1 from "../assets/Onboarding_1.png";
 import Onboarding2 from "../assets/Onboarding_2.png";
+import Onboarding3 from "../assets/Onboarding_3.png";
 
 import { Link } from "react-router-dom";
 const Onboarding = () => {
   return (
-    <Wrapper data-testid='onboardingComponent'>
+    <Wrapper data-testid="onboardingComponent">
       <CustomNavbar expand="lg">
         <CustomContainer>
           <Navbar.Brand>
@@ -65,6 +66,22 @@ const Onboarding = () => {
                 </Para>
               </TextWrapper>
             </ContentWrapper>
+          </FlexWrapper>
+          <FlexWrapper>
+            <ContentWrapper2>
+              <TextWrapper>
+                <Title>Shared Goal</Title>
+                <Para>
+                  aimimi introduced shared goals for our users. User explore
+                  goal in shares and feel free to challenge themselves. With our
+                  social media like system, we raise user motivation with
+                  competitive ranking and platform to communicate.
+                </Para>
+              </TextWrapper>
+            </ContentWrapper2>
+            <ImgWrapper>
+              <OnboardingImg2 src={Onboarding3} />
+            </ImgWrapper>
           </FlexWrapper>
         </CustomContainer>
       </Intro>
@@ -165,6 +182,16 @@ const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
   min-height: 350px;
+
+  @media (max-width: 991.98px) {
+    flex-basis: 100%;
+  }
+`;
+
+const ContentWrapper2 = styled.div`
+  flex-basis: 50%;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 991.98px) {
     flex-basis: 100%;
