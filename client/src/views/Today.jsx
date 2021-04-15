@@ -40,13 +40,13 @@ const Today = ({ showModal, setShowModal, goals, setGoals }) => {
           />
         ))}
         <AddGoal setGoals={setGoals} />
-        <CheckInModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          selectedGoal={selectedGoal}
-          selectedGoalCheckIn={selectedGoalCheckIn}
-        />
       </CustomContainer>
+      <CheckInModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedGoal={selectedGoal}
+        selectedGoalCheckIn={selectedGoalCheckIn}
+      />
     </Wrapper>
   );
 };
@@ -57,6 +57,7 @@ const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
+  overflow: hidden;
   overflow: scroll;
   height: calc(100vh - 60px);
 

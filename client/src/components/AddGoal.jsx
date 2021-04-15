@@ -184,7 +184,12 @@ const Wrapper = styled.div`
   transition: all 300ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
   @media (max-width: 575.98px) {
-    width: 100%;
+    right: 50%;
+    transform: ${(props) =>
+      props.showModal
+        ? "translateX(50%) scale(1)"
+        : "translateX(50%) scale(0.75)"};
+    width: 95%;
   }
 `;
 
@@ -235,10 +240,6 @@ const SelectBoxWrapper = styled.div`
     position: absolute;
     top: 6px;
     right: 15px;
-
-    @media screen and (max-width: 768px) {
-      right: 0px;
-    }
   }
 `;
 
@@ -284,15 +285,6 @@ const Field = styled.div`
 `;
 
 const CheckBox = styled.input`
-  /* padding: 11px 17px;
-  background-color: var(--background);
-  border: none;
-  outline: none;
-  border-radius: 12px;
-  font-weight: 500;
-  margin-right: 14px;
-  color: var(--monoPrimary); */
-
   position: relative;
   width: 25px;
   height: 25px;
