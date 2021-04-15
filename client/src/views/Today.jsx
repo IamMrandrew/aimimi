@@ -40,13 +40,13 @@ const Today = ({ showModal, setShowModal, goals, setGoals }) => {
           />
         ))}
         <AddGoal setGoals={setGoals} />
-        <CheckInModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          selectedGoal={selectedGoal}
-          selectedGoalCheckIn={selectedGoalCheckIn}
-        />
       </CustomContainer>
+      <CheckInModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedGoal={selectedGoal}
+        selectedGoalCheckIn={selectedGoalCheckIn}
+      />
     </Wrapper>
   );
 };
@@ -57,12 +57,7 @@ const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
-  overflow: scroll;
-  height: calc(100vh - 60px);
-
-  @media (min-width: 992px) {
-    height: calc(100vh - 80px);
-  }
+  overflow: hidden;
 `;
 
 const Title = styled.h1`
@@ -90,4 +85,10 @@ const Subtitle = styled.span`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
+  overflow: scroll;
+  height: calc(100vh - 60px);
+
+  @media (min-width: 992px) {
+    height: calc(100vh - 80px);
+  }
 `;

@@ -136,7 +136,7 @@ const App = () => {
           </>
         )}
         {loading && <Loader />}
-        <Route exact path="/" data-testid='ToOnboarding'>
+        <Route exact path="/" data-testid="ToOnboarding">
           <Onboarding />
         </Route>
         <Route path="/login">
@@ -162,7 +162,11 @@ const Wrapper = styled(Row)`
   height: 100vh;
   width: 100%;
   background-color: white;
-  overflow: hidden;
+  overflow: auto;
+
+  @media (min-width: 992px) {
+    overflow: hidden;
+  }
 `;
 
 const Main = styled(Col)`
@@ -171,4 +175,5 @@ const Main = styled(Col)`
   padding-right: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
