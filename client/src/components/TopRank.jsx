@@ -17,7 +17,7 @@ const TopRank = ({ rank, index }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [rank]);
+  }, [rank._id]);
 
   const onClickHandler = (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ const TopRank = ({ rank, index }) => {
           {loading && <Loader />}
         </Avator>
         <Item>{rank.username}</Item>
-        <Item>{rank.accuracy}%</Item>
+        <Item>{Math.round(rank.accuracy)}%</Item>
       </Content>
     </Wrapper>
   );

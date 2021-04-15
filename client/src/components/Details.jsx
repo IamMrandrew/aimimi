@@ -87,7 +87,7 @@ const Details = ({ goals, setGoals }) => {
             <EmptyDiv>
               <DeatilTitle>How well you did?</DeatilTitle>
               <PercentageDiv>
-                <Number>{userGoal && userGoal.accuracy}%</Number>
+                <Number>{userGoal && Math.round(userGoal.accuracy)}%</Number>
                 <ItemIcon>
                   <FaClipboardCheck />
                 </ItemIcon>
