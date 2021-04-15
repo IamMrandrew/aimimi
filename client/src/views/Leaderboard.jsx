@@ -143,9 +143,9 @@ const SelectBoxWrapper = styled.div`
   position: relative;
   cursor: pointer;
   margin-right: 10px;
-  background-color: var(--background);
+  background-color: #f2f4f6;
   border-radius: 12px;
-  max-width: 200px;
+  max-width: 240px;
 
   svg {
     width: 20px;
@@ -173,6 +173,7 @@ const SelectBox = styled.select`
   -moz-appearance: none;
   font-size: 18px;
   font-family: inherit;
+  width: 100%;
 
   &:focus,
   &:hover {
