@@ -184,7 +184,12 @@ const Wrapper = styled.div`
   transition: all 300ms cubic-bezier(0.87, 0, 0.11, 1.2);
 
   @media (max-width: 575.98px) {
-    width: 100%;
+    right: 50%;
+    transform: ${(props) =>
+      props.showModal
+        ? "translateX(50%) scale(1)"
+        : "translateX(50%) scale(0.75)"};
+    width: 95%;
   }
 `;
 
