@@ -240,10 +240,6 @@ const SelectBoxWrapper = styled.div`
     position: absolute;
     top: 6px;
     right: 15px;
-
-    @media screen and (max-width: 768px) {
-      right: 0px;
-    }
   }
 `;
 
@@ -289,15 +285,6 @@ const Field = styled.div`
 `;
 
 const CheckBox = styled.input`
-  /* padding: 11px 17px;
-  background-color: var(--background);
-  border: none;
-  outline: none;
-  border-radius: 12px;
-  font-weight: 500;
-  margin-right: 14px;
-  color: var(--monoPrimary); */
-
   position: relative;
   width: 25px;
   height: 25px;

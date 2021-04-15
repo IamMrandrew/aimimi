@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Rank from "../components/Rank";
 import TopRank from "../components/TopRank";
+import { FaAngleDown } from "react-icons/fa";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
@@ -35,11 +36,16 @@ const Leaderboard = ({ userSharedGoals }) => {
     <Wrapper>
       {!loading && (
         <CustomContainer>
-          <SelectBox onChange={selectBoxHandler} value={id}>
-            {userSharedGoals.map((goal) => (
-              <Option value={goal._id}>{goal.title}</Option>
-            ))}
-          </SelectBox>
+          <SelectBoxWrapper>
+            <SelectBox onChange={selectBoxHandler} value={id}>
+              {userSharedGoals.map((goal) => (
+                <Option key={goal._id} value={goal._id}>
+                  {goal.title}
+                </Option>
+              ))}
+            </SelectBox>
+            <FaAngleDown />
+          </SelectBoxWrapper>
           <Meta>
             <Desc>
               {userSharedGoals.length > 0 &&
@@ -133,6 +139,25 @@ const Desc = styled.span`
   margin-right: 16px;
 `;
 
+const SelectBoxWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: var(--background);
+  border-radius: 12px;
+  max-width: 200px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--monoPrimary);
+    pointer-events: none;
+    position: absolute;
+    top: 12px;
+    right: 15px;
+  }
+`;
+
 const SelectBox = styled.select`
   padding: 8px 12px;
   font-size: 28px;
@@ -143,9 +168,9 @@ const SelectBox = styled.select`
   cursor: pointer;
   background-color: #f2f4f6;
   border-radius: 8px;
-  /* appearance: none;
--webkit-appearance: none;
--moz-appearance: none; */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   font-size: 18px;
   font-family: inherit;
 

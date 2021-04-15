@@ -73,7 +73,14 @@ const Content = styled.div`
 
   @media (max-width: 991.98px) {
     min-width: 100px;
-    max-height: 180px;
+    max-height: ${(props) =>
+      props.index === 1
+        ? "180px"
+        : props.index === 2
+        ? "168px"
+        : props.index === 3
+        ? "160px"
+        : "180px"};
   }
 
   span:nth-child(1) {
@@ -120,6 +127,11 @@ const Avator = styled.div`
 
   span {
     border-color: var(--primaryGoal);
+  }
+
+  @media (max-width: 991.98px) {
+    margin-top: 6px;
+    margin-bottom: 10px;
   }
 `;
 
