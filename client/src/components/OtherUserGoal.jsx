@@ -26,7 +26,7 @@ const OtherUserGoal = ({ goal, type }) => {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [goal, type]);
   return (
     <div>
       <CustomDiv>

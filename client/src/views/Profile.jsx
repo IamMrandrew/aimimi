@@ -46,13 +46,11 @@ const Profile = () => {
         console.log(error);
       });
     setCompleted(auth.completedGoals);
-    console.log(completed);
-  }, []);
+  }, [auth]);
 
   useEffect(() => {
     setCompleted(auth.completedGoals);
-    console.log(completed);
-  }, [completed]);
+  }, [auth]);
 
   const fileHandler = (e) => {
     setImg(e.target.files[0]);
@@ -102,7 +100,7 @@ const Profile = () => {
       <CustomContainer>
         <Title>Profile</Title>
         <InformationWrapper>
-          <FlexDiv>
+          <FlexDivResponsive>
             <BlockDiv>
               <Avator>
                 {!authLoading && <AvatorImg src={propic} />}
@@ -122,13 +120,15 @@ const Profile = () => {
                 <Times> days ago</Times>
               </FlexDiv>
             </BlockDiv>
-          </FlexDiv>
-          <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
-            <ChooseFileWrapper>
-              <FileUpload type="file" onChange={fileHandler} />
-            </ChooseFileWrapper>
-            <ChangeButton>Change propic</ChangeButton>
-          </Submitform>
+          </FlexDivResponsive>
+          <FlexDivResponsive>
+            <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
+              <ChooseFileWrapper>
+                <FileUpload type="file" onChange={fileHandler} />
+              </ChooseFileWrapper>
+              <ChangeButton>Change propic</ChangeButton>
+            </Submitform>
+          </FlexDivResponsive>
         </InformationWrapper>
 
         <Flex>
@@ -245,7 +245,6 @@ const CustomContainer = styled(Container)`
 `;
 
 const InformationWrapper = styled.div`
-  height: 152px;
   width: 100%;
   background-color: #ffffff;
   display: flex;
@@ -254,9 +253,9 @@ const InformationWrapper = styled.div`
   margin-top: 32px;
   border-radius: 20px;
   padding: 25px 28px;
+  flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    height: 130px;
     margin-top: 15px;
   }
 `;
@@ -295,6 +294,17 @@ const Name = styled.h1`
 const FlexDiv = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const FlexDivResponsive = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 767.98px) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex-basis: 100%;
+  }
 `;
 
 const Joined = styled.span`

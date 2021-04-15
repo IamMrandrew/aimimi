@@ -37,9 +37,9 @@ const OtherProfile = () => {
       .get(`/user/other_user/${id}`, { withCredentials: true })
       .then((res) => {
         setUserInfo(res.data);
-        setLoading(false);
         setOnGoing(res.data.onGoingGoals);
         setCompleted(res.data.completedGoals);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);

@@ -9,12 +9,11 @@ const CompletedProfile = ({ goal }) => {
       .get(`/goal/${goal}`, { withCredentials: true })
       .then((response) => {
         setCompleted(response.data);
-        console.log(completed);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [completed]);
+  }, []);
   return (
     <div>
       <CustomDiv>
