@@ -60,9 +60,14 @@ const Onboarding = () => {
                 <Title>Why choose us?</Title>
                 <Para>
                   The project’s objective is to develop a platform for people
-                  who are hoping to crush their goals. The core feature of the
-                  platform is goal tracking, also with some other features like
-                  goal sharing, leaderboard, social networking service, etc.
+                  who are hoping to crush their goals. Our app aims to rise
+                  users' motivation to the fullest by taking reference of social
+                  media.
+                </Para>
+                <Para>
+                  The core feature of the platform is goal tracking, also with
+                  some other features like goal sharing, leaderboard, social
+                  networking service, etc.
                 </Para>
               </TextWrapper>
             </ContentWrapper>
@@ -73,9 +78,13 @@ const Onboarding = () => {
                 <Title>Shared Goal</Title>
                 <Para>
                   aimimi introduced shared goals for our users. User explore
-                  goal in shares and feel free to challenge themselves. With our
-                  social media like system, we raise user motivation with
-                  competitive ranking and platform to communicate.
+                  goal in shares and feel free to challenge themselves. Users
+                  can participate other's goal once it is set as public.
+                </Para>
+                <Para>
+                  With the features of Leaderboard an Activity, Users can be
+                  motivated through the encouragement and a sense of competition
+                  from others
                 </Para>
               </TextWrapper>
             </ContentWrapper2>
