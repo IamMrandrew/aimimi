@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+//for storing a general goal's information
 const goalSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
   createdBy: { type: Schema.Types.ObjectId, ref: "User", require: true },

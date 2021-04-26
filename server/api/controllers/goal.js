@@ -483,5 +483,5 @@ const delete_check_in = schedule.scheduleJob("00 00 * * *", function () {
 
 const daily_calculate_accuracy = schedule.scheduleJob(
   "00 00 * * *",
-  calculate_accuracy()
+  calculate_accuracy
 );
