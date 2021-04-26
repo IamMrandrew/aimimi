@@ -31,17 +31,23 @@ const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  // goals state contain goals from user
   const [goals, setGoals] = useState([]);
+  // userSharedGoals state contain all shared goals
   const [userSharedGoals, setUserSharedGoals] = useState([]);
 
   const { auth, setAuth, setPropic, setAuthLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
+  // useEffect function will automatically and independently run
   useEffect(() => {
+    //axios.get used GET request to fetch user data from MongoDB
     axios
       .get("/user", { withCredentials: true })
       .then((response) => {
         setAuth(response.data);
+
+        // fetch user profile picture with matched user email and password
         axios
           .get(`/user/propic/`, { withCredentials: true })
           .then((response) => {
@@ -61,11 +67,13 @@ const App = () => {
   }, [setAuth, setPropic, loading]);
 
   useEffect(() => {
+    // Fetch user goals with matched user information
     axios
       .get("/goal", { withCredentials: true })
       .then((response) => {
         setGoals(response.data);
         setUserSharedGoals(
+          // we will only get the shared goal from database
           response.data.filter((goal) => goal.publicity === true)
         );
         console.log(response.data);
@@ -80,6 +88,7 @@ const App = () => {
     <>
       <GlobalStyle />
       <Switch>
+        {/*  if user logged in, then user can view his/her homepage */}
         {!loading && auth && (
           <>
             <Overlay showModal={showModal} setShowModal={setShowModal} />
@@ -135,6 +144,7 @@ const App = () => {
             </Wrapper>
           </>
         )}
+        {/* If user did not login, then only onboarding page, signin and login page will be shown */}
         {loading && <Loader />}
         <Route exact path="/" data-testid="ToOnboarding">
           <Onboarding />

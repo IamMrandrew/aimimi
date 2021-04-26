@@ -10,6 +10,7 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // After user successfully logged in, then it will fetch all details from user
     axios
       .get("/user/all", { withCredentials: true })
       .then((response) => {
@@ -23,6 +24,7 @@ const Users = () => {
 
   return (
     <Wrapper>
+      {/* */}
       {!loading && (
         <CustomContainer>
           <Title>Users</Title>

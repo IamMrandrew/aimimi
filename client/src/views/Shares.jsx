@@ -12,6 +12,7 @@ const Shares = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // fetch all public goals to show on the shares page
     axios
       .get("/goal/public_goal", { withCredentials: true })
       .then((response) => {
@@ -22,7 +23,7 @@ const Shares = () => {
         console.log(err);
       });
   }, []);
-
+  // check whether the user joined
   const checkIfJoined = (goal) => {
     return auth.onGoingGoals.find(
       (onGoingGoal) => onGoingGoal.goal_id === goal._id
@@ -36,6 +37,7 @@ const Shares = () => {
           <Title>Shares</Title>
 
           <Subtitle>Trending</Subtitle>
+          {/* map all public goals and pass the goal._id, goal, checkIfJoined(goal), publicGoal, setPublicGoal */}
           {publicGoal &&
             publicGoal.map((goal) => (
               <SharedGoal
