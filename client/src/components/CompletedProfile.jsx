@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import axios from "axios";
 import { FaRegCheckCircle } from "react-icons/fa";
+
+// Show the completed goal in profile page
 const CompletedProfile = ({ goal }) => {
   const [completed, setCompleted] = useState([]);
+
+  // Get the goal by passing the goal id
   useEffect(() => {
     axios
       .get(`/goal/${goal}`, { withCredentials: true })
       .then((response) => {
+        // set the goal to the completed goal state
         setCompleted(response.data);
       })
       .catch((error) => {

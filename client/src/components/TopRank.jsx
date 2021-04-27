@@ -3,11 +3,13 @@ import styled from "styled-components/macro";
 import Loader from "./Loader";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+// Component for showing the top 3 ranks in leaderboard
 const TopRank = ({ rank, index }) => {
   const [loading, setLoading] = useState(true);
   const [rankPropic, setRankPropic] = useState(null);
   const history = useHistory();
   useEffect(() => {
+    // get user profile picture by passing by user ID which store in the rank state
     axios
       .get(`/user/propic/${rank._id}`, { withCredentials: true })
       .then((response) => {
@@ -21,6 +23,7 @@ const TopRank = ({ rank, index }) => {
 
   const onClickHandler = (e) => {
     e.preventDefault();
+    // If user clicked the profile picture, redirect to the that user profile
     history.push(`/profile/${rank._id}`);
   };
 

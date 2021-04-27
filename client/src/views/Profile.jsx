@@ -15,6 +15,7 @@ import {
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "../components/Loader";
 
+//Profile Page
 const Profile = () => {
   const history = useHistory();
   const { auth, propic, setPropic, authLoading, setAuthLoading } = useContext(
@@ -26,6 +27,7 @@ const Profile = () => {
   const [completed, setCompleted] = useState([]);
   const [img, setImg] = useState(null);
   useEffect(() => {
+    // Get all onGoning goals of that user, which is a get request
     axios
       .get("/goal", { withCredentials: true })
       .then((response) => {
@@ -37,6 +39,7 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
+    // get all completed goals of user, which is a send request
     axios
       .get("/goal", { withCredentials: true })
       .then((response) => {
@@ -49,6 +52,7 @@ const Profile = () => {
   }, [auth]);
 
   useEffect(() => {
+    //set the completed goal in state and pass the state to other component
     setCompleted(auth.completedGoals);
   }, [auth]);
 
@@ -56,7 +60,9 @@ const Profile = () => {
     setImg(e.target.files[0]);
   };
 
+  // Handle onClick delete button
   const DeleteHandler = (e) => {
+    // If user click the delete button, will send a delete request and delete whole user account
     e.preventDefault();
     axios
       .delete("/user", {
@@ -70,7 +76,10 @@ const Profile = () => {
         alert("Cannot delete account");
       });
   };
+
+  // Change profile picture function
   const ChangeFile = (e) => {
+    // User click the choose profile picture button, and upload a image file to update the profile picture
     e.preventDefault();
     let formdata = new FormData();
     formdata.append("img", img);
@@ -111,6 +120,7 @@ const Profile = () => {
               <Name>{auth.username}</Name>
               <Joined>Joined</Joined>
               <FlexDiv>
+                {/* Calculate the number of joined date */}
                 <Times>
                   {Math.floor(
                     (Date.now() - Date.parse(auth.joinDate)) /
@@ -159,6 +169,7 @@ const Profile = () => {
           </HalfFlexDiv>
 
           <HalfBlockDiv>
+            {/* used bootstarp framework for the div expense, we use "open" state to control the expand of div*/}
             <GoalsDiv
               onClick={() => setOpen(!open)}
               aria-expanded={open}
@@ -175,6 +186,7 @@ const Profile = () => {
               </Angleright>
             </GoalsDiv>
             <Collapse in={open}>
+              {/* we will map the goal and passes the "goals" state to component <GoalFromProfile> */}
               <div>
                 {goals &&
                   goals.map((goal) => (
@@ -182,7 +194,7 @@ const Profile = () => {
                   ))}
               </div>
             </Collapse>
-
+            {/*  used bootstarp framework for the div expense, we use "open" state to control the expand of div */}
             <GoalsDiv
               onClick={() => setSecondOpen(!secondOpen)}
               aria-expanded={secondOpen}
@@ -199,6 +211,7 @@ const Profile = () => {
               </Angleright>
             </GoalsDiv>
             <Collapse in={secondOpen}>
+              {/* we will map the goal and passes the "goals" state to component <CompletedProfile> */}
               <div>
                 {completed &&
                   completed.map((goal) => (

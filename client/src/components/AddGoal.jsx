@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
+// Add button in today and goals page
 const AddGoal = ({ setGoals }) => {
   const [goalName, setGoalName] = useState("");
   const [goalCategory, setGoalCategory] = useState("Sports");
@@ -16,31 +17,38 @@ const AddGoal = ({ setGoals }) => {
 
   const { setAuth } = useContext(AuthContext);
 
+  // set user inputed name in goalName state
   const goalNameHandler = (e) => {
     setGoalName(e.target.value);
   };
+  // set user inputed category in goalCategory state
   const goalCategoryHandler = (e) => {
     setGoalCategory(e.target.value);
   };
+  // set user inputed goal period in goalPeriod state
   const goalPeriodHandler = (e) => {
     setGoalPeriod(e.target.innerHTML);
   };
+  // set user inputed frequency in goalFrequency state
   const goalFrequencyHandler = (e) => {
     setGoalFrequency(e.target.value);
   };
+  // set user inputed timespan in goalTimespan state
   const goalTimespanHandler = (e) => {
     setGoalTimespan(e.target.value);
   };
-
+  // set user inputed publicity in goalPublicity state
   const goalPublicityHandler = (e) => {
     setGoalPublicity(!goalPublicity);
   };
-
+  //Control the model
   const showModalHandler = () => {
     setShowModal(!showModal);
   };
 
+  // Add goal function
   const addGoalHandler = () => {
+    // Post the goal with the title, startTime, category, frequency, period, publicity, timespan
     axios
       .post(
         "/goal",

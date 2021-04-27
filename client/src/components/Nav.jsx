@@ -11,6 +11,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "./Loader";
 
+//Showing the navbar
 const Nav = ({ showSidebar, setShowSidebar }) => {
   const IsMatch = useLocation();
   const [title, setTitle] = useState();
@@ -25,7 +26,9 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
   const DropDownHandler = (showDropDown) => {
     setShowDropDown(!showDropDown);
   };
+
   useEffect(() => {
+    // get user information
     axios
       .get("/user", { withCredentials: true })
       .then((response) => {
@@ -36,6 +39,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
       });
   }, [setAuth]);
 
+  // Check which page user is now viewing and set the corresponding title
   useEffect(() => {
     if (IsMatch.pathname === "/") setTitle("Today");
     if (IsMatch.pathname === "/goals") setTitle("Goals");
@@ -45,7 +49,9 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
     if (IsMatch.pathname === "/activity") setTitle("Activity");
   }, [IsMatch]);
 
+  // Handle logout if user clicked the logout button
   const Logout = () => {
+    // Send a delete request to clear the cookie and the information
     axios
       .delete("/user/logout", {
         withCredentials: true,
@@ -59,17 +65,22 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
         alert("Logout Failed. Try Again.");
       });
   };
+
+  // Run Logout function if user clicked the button
   const onClickHandler = (e) => {
     e.preventDefault();
     setShowDropDown(!showDropDown);
     Logout();
   };
 
+  // Route user to profile page if clicked the profile button
   const onClickProfile = (e) => {
     e.preventDefault();
     setShowDropDown(!showDropDown);
     history.push("/profile");
   };
+
+  // Route user to activity page if user clicked the bell icon
   const onClickBell = (e) => {
     e.preventDefault();
     history.push("/activity");
