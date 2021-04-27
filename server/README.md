@@ -1,18 +1,21 @@
 # Backend
 
 # Overview
+
 The backend development provides APIs for database management. Example APIs include user CRUD, goal CRUD, feed CRUD, comments and likes for feed, etc.
 
 # Highlighted packages used
-bcrypt
-jsonwebtoken
-gridfs-stream
-multer
-multer-gridfs-storage
-node-schedule
-nodemailer
+
+- bcrypt
+- jsonwebtoken
+- gridfs-stream
+- multer
+- multer-gridfs-storage
+- node-schedule
+- nodemailer
 
 # Run it locally
+
 Navigate to client folder, install dependencies
 
 ```
