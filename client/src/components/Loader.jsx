@@ -2,9 +2,10 @@ import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import styled from "styled-components/macro";
 
+// Loader animation
 const Loader = () => {
   return (
-    <Wrapper data-testid='loaderComponent'>
+    <Wrapper data-testid="loaderComponent">
       <ClipLoader color={"var(--primaryGoal)"} />
     </Wrapper>
   );

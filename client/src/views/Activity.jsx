@@ -5,12 +5,15 @@ import axios from "axios";
 import Feed from "../components/Feed";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "../components/Loader";
+
+// Activity button
 const Activity = () => {
   const [feeds, setFeeds] = useState([]);
   const { auth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // get the feeds the relative to the user, which is a get request
     axios
       .get("/feed", { withCredentials: true })
       .then((response) => {
@@ -22,6 +25,7 @@ const Activity = () => {
       });
   }, []);
 
+  // Check whether user liked the button
   const checkIfLiked = (feed) => {
     return feed.like.find((liked) => liked === auth._id);
   };
@@ -31,6 +35,7 @@ const Activity = () => {
       {!loading && (
         <CustomContainer>
           <Title>Activity</Title>
+          {/* Map the feed and pass the checkIfLiked and feeds to component <Feed> */}
           {feeds.map((feed) => (
             <Feed
               feed={feed}

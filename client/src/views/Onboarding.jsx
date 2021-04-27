@@ -7,8 +7,9 @@ import logo from "../assets/Logo.svg";
 import Onboarding1 from "../assets/Onboarding_1.png";
 import Onboarding2 from "../assets/Onboarding_2.png";
 import Onboarding3 from "../assets/Onboarding_3.png";
-
 import { Link } from "react-router-dom";
+
+//Onboarding page
 const Onboarding = () => {
   return (
     <Wrapper data-testid="onboardingComponent">

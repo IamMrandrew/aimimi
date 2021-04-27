@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "./Loader";
 
+// Compnent of shared goal in Shares page
 const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   const History = useHistory();
   const { auth, setAuth } = useContext(AuthContext);
@@ -15,6 +16,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   const [stat, setStat] = useState(0);
 
   useEffect(() => {
+    // Get creator profile picture by passing creator.id
     axios
       .get(`/user/propic/${goal.createdBy._id}`, { withCredentials: true })
       .then((response) => {
@@ -27,6 +29,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   }, [goal.createdBy._id]);
 
   useEffect(() => {
+    //  Get the goal details by passing the goal id and set the details in Stat state
     axios
       .get(`/goal/leaderboard/${goal._id}`, { withCredentials: true })
       .then((response) => {
@@ -37,8 +40,10 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
       });
   }, [goal._id]);
 
+  // Handle Join button
   const joinGoal = (e) => {
     e.preventDefault();
+    // Adding a goal to user Ongoing goal by sending a put request with goal.id as paramters
     axios
       .put("/goal/join", { goal_id: goal._id }, { withCredentials: true })
       .then((res) => {
@@ -59,6 +64,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
       });
   };
 
+  // For admin, let admin to delete unappropriate goals
   const deleteGoalHandler = () => {
     axios
       .delete(`/goal/${goal._id}`)
@@ -102,6 +108,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
             </ItemIcon>
             <Stat>{goal ? goal.timespan : ""} days left</Stat>
           </SubtitleDiv>
+          {/* Check whether user joined the, show "Join" if not, and show "Joined" otherwise */}
           <Buttons>
             <JoinButton
               disabled={joined}
@@ -110,6 +117,7 @@ const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
             >
               {joined ? "Joined" : "Join"}
             </JoinButton>
+            {/* Check if user us Admin, show the delete button if  is admin */}
             {auth.role === "Admin" && (
               <DeleteButton onClick={deleteGoalHandler}>Delete</DeleteButton>
             )}

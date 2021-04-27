@@ -8,6 +8,7 @@ import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 
+//Leaderboard page
 const Leaderboard = ({ userSharedGoals }) => {
   const [ranks, setRanks] = useState();
   const { id } = useParams();
@@ -16,6 +17,7 @@ const Leaderboard = ({ userSharedGoals }) => {
 
   useEffect(() => {
     setLoading(true);
+    // get the leaderboard of a goal with params equal to the leaderboard.id
     axios
       .get(`/goal/leaderboard/${id}`, { withCredentials: true })
       .then((response) => {
@@ -38,6 +40,7 @@ const Leaderboard = ({ userSharedGoals }) => {
         <CustomContainer>
           <SelectBoxWrapper>
             <SelectBox onChange={selectBoxHandler} value={id}>
+              {/* map the title of shared goals in the select box  */}
               {userSharedGoals.map((goal) => (
                 <Option key={goal._id} value={goal._id}>
                   {goal.title}
@@ -48,10 +51,12 @@ const Leaderboard = ({ userSharedGoals }) => {
           </SelectBoxWrapper>
           <Meta>
             <Desc>
+              {/* find the period of the userSharedGoals */}
               {userSharedGoals.length > 0 &&
                 userSharedGoals.find((goal) => goal._id === id).period}
             </Desc>
             <Desc>
+              {/* find the timespan of the userSharedGoals and calculate how many days left */}
               {userSharedGoals.length > 0 &&
                 userSharedGoals.find((goal) => goal._id === id).timespan -
                   Math.floor(
@@ -66,6 +71,7 @@ const Leaderboard = ({ userSharedGoals }) => {
             </Desc>
           </Meta>
           <TopBoard>
+            {/* For top 3, sending the rank state to the component <TopRank> inorder to show the rank, name, the profile picture and percentage */}
             {ranks &&
               ranks
                 .slice(0, 3)
@@ -73,6 +79,7 @@ const Leaderboard = ({ userSharedGoals }) => {
                   <TopRank key={rank._id} index={index + 1} rank={rank} />
                 ))}
           </TopBoard>
+          {/* send the rank state to the component <TopRank> inorder to show the rank, name, the profile picture and percentage */}
           {ranks && ranks.slice(3).length > 0 && (
             <Board>
               {ranks &&
