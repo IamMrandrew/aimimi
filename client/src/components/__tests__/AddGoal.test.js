@@ -2,7 +2,7 @@ import React from 'react'
 import { unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router-dom'
-import { render, fireEvent, getByTestId } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 
 import axios from 'axios'
 
@@ -23,16 +23,14 @@ afterEach(() => {
 })
 
 it('element rendered without crashing', () => {
-    // act(() => {
-        render(
-            <AuthContextProvider>
-                <MemoryRouter>
-                    <AddGoal />
-                </MemoryRouter>
-            </AuthContextProvider>
-            , container
-        )
-    // })
+    render(
+        <AuthContextProvider>
+            <MemoryRouter>
+                <AddGoal />
+            </MemoryRouter>
+        </AuthContextProvider>
+        , container
+    )
 })
 
 

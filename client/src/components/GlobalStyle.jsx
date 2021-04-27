@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components/macro";
 
+// Global style that used for all components
 export const GlobalStyle = createGlobalStyle`
   :root {
     --primary: #70BED1;

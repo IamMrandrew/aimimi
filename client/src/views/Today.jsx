@@ -6,6 +6,7 @@ import AddGoal from "../components/AddGoal";
 import CheckInModal from "../components/CheckInModal";
 import { AuthContext } from "../contexts/AuthContext";
 
+// It will show the today page
 const Today = ({ showModal, setShowModal, goals, setGoals }) => {
   const [selectedGoal, setSelectedGoal] = useState(0);
   const [selectedGoalCheckIn, setSelectedGoalCheckIn] = useState(0);
@@ -13,7 +14,8 @@ const Today = ({ showModal, setShowModal, goals, setGoals }) => {
   const [tasksLeft, setTaskLeft] = useState(0);
 
   useEffect(() => {
-    if (goals.length > 0) {
+    // Calculate how many tasks left and return the set the frequency in state
+    if (goals.length > 0 && auth.onGoingGoals) {
       setTaskLeft(
         auth.onGoingGoals.filter(
           (goal) =>
@@ -29,6 +31,7 @@ const Today = ({ showModal, setShowModal, goals, setGoals }) => {
       <CustomContainer>
         <Title>Today</Title>
         <Subtitle>{tasksLeft} tasks left for today</Subtitle>
+        {/* It will map the user onGoing goals, which will be shown on the today page*/}
         {goals.map((goal) => (
           <Goal
             key={goal._id}
@@ -40,13 +43,13 @@ const Today = ({ showModal, setShowModal, goals, setGoals }) => {
           />
         ))}
         <AddGoal setGoals={setGoals} />
-        <CheckInModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          selectedGoal={selectedGoal}
-          selectedGoalCheckIn={selectedGoalCheckIn}
-        />
       </CustomContainer>
+      <CheckInModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedGoal={selectedGoal}
+        selectedGoalCheckIn={selectedGoalCheckIn}
+      />
     </Wrapper>
   );
 };
@@ -57,6 +60,7 @@ const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
+  overflow: hidden;
   overflow: scroll;
   height: calc(100vh - 60px);
 

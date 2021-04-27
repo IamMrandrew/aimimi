@@ -57,6 +57,7 @@ exports.user_signup = (req, res, next) => {
               message: "Hashing failed",
             });
           } else {
+            console.log(req);
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
               randomString: crypto.randomBytes(16).toString("hex"),
@@ -66,7 +67,7 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
-              propic: "image.jpg",
+              propic: req.file ? req.file.originalname : "image.jpg",
             });
             sendEmail(req.body.email, user.randomString);
             user
@@ -172,7 +173,7 @@ exports.user_info = (req, res, next) => {
 exports.other_user_info = (req, res, next) => {
   User.findById(req.params.user_id)
     .then((user) => {
-      res.status.end(user);
+      res.status(200).json(user);
     })
     .catch((err) => {
       res.status(500).end(err);

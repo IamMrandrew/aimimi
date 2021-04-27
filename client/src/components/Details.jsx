@@ -7,6 +7,7 @@ import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
+// Show the details of the goal in Goals page
 const Details = ({ goals, setGoals }) => {
   const { id } = useParams();
   const history = useHistory();
@@ -14,10 +15,12 @@ const Details = ({ goals, setGoals }) => {
   const [goal, setGoal] = useState({});
   const [userGoal, setUserGoal] = useState([]);
 
+  // Set the goals in Goals state
   useEffect(() => {
     setGoal(goals.find((goal) => goal._id === id));
   }, [id, goals]);
 
+  // Set the the details of the goal in userGoal state
   useEffect(() => {
     if (auth.onGoingGoals) {
       if (auth.onGoingGoals.length > 0) {
@@ -28,12 +31,15 @@ const Details = ({ goals, setGoals }) => {
     }
   }, [goal, auth, id]);
 
+  // Route user to goals page
   const backGoalsHandler = (e) => {
     e.preventDefault();
     history.push(`/goals`);
   };
 
+  // Detele the goals from user onGoingGoals
   const onClickDeleteHandler = () => {
+    // Quit the goal by sending a delete request with goal._id as parameters
     axios
       .delete(`/goal/quit/${goal._id}`, {
         withCredentials: true,
@@ -87,7 +93,7 @@ const Details = ({ goals, setGoals }) => {
             <EmptyDiv>
               <DeatilTitle>How well you did?</DeatilTitle>
               <PercentageDiv>
-                <Number>{userGoal && userGoal.accuracy}%</Number>
+                <Number>{userGoal && Math.round(userGoal.accuracy)}%</Number>
                 <ItemIcon>
                   <FaClipboardCheck />
                 </ItemIcon>

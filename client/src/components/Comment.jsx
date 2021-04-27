@@ -4,10 +4,12 @@ import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import Loader from "react-spinners/ClipLoader";
 
+// Comment component
 const Comment = ({ comment }) => {
   const [commentPropic, setCommentPropic] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Get the comment creator profile picture
   useEffect(() => {
     axios
       .get(`/user/propic/${comment.creator._id}`, { withCredentials: true })
@@ -18,7 +20,7 @@ const Comment = ({ comment }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [comment]);
+  }, [comment.creator._id]);
 
   return (
     <Wrapper>
@@ -37,7 +39,7 @@ const Comment = ({ comment }) => {
           </Timestamp>
         </Item>
         <Content>{comment.content}</Content>
-        <Button>
+        <Button data-testid="commentLikeButton">
           <FaHeart />
           <Number>{comment ? comment.like.length : ""} likes</Number>
         </Button>

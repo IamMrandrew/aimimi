@@ -30,8 +30,8 @@ const storage = new GridFsStorage({
 // for uploading file info to database
 var upload = multer({ storage });
 
-// post route for sing up
-router.post("/signup", UserController.user_signup);
+// post route for sign up
+router.post("/signup", upload.single("img"), UserController.user_signup);
 
 // get route for verify email
 router.get("/verify/:random_string", UserController.verify);

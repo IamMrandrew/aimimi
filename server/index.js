@@ -46,5 +46,7 @@ if (process.env.NODE_ENV === "production") {
     res.send("Server is running!!");
   });
 }
+
 // listen to server PORT(3001)
+module.exports = app;
 const server = app.listen(process.env.PORT);

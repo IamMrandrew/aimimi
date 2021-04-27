@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
 import Loader from "./Loader";
 import axios from "axios";
 
+// Rank component except top 3 rank
 const Rank = ({ rank, index }) => {
   const [loading, setLoading] = useState(true);
   const [rankPropic, setRankPropic] = useState(null);
+  const history = useHistory();
 
+  // Get user profile picture with the rank._id and set it in rankPropic
   useEffect(() => {
     axios
       .get(`/user/propic/${rank._id}`, { withCredentials: true })
@@ -17,11 +21,19 @@ const Rank = ({ rank, index }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [rank]);
+  }, [rank._id]);
+
+  // Handle user onClick other user profile picture
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    // Route user to the profile of that user
+    history.push(`/profile/${rank._id}`);
+  };
 
   return (
-    <Wrapper>
+    <Wrapper onClick={onClickHandler}>
       <ItemWrapper>
+        {/* Ranking of user */}
         <Flag>#{index}</Flag>
         <Avator>
           {!loading && <AvatorImg src={rankPropic} />}
@@ -29,7 +41,7 @@ const Rank = ({ rank, index }) => {
         </Avator>
         <Item>{rank.username}</Item>
       </ItemWrapper>
-      <Item>{rank.accuracy}%</Item>
+      <Item>{Math.round(rank.accuracy)}%</Item>
     </Wrapper>
   );
 };
@@ -41,6 +53,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px 10px;
+  cursor: pointer;
 `;
 
 const ItemWrapper = styled.div`
@@ -78,6 +91,7 @@ const Avator = styled.div`
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;
