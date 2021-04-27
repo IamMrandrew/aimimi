@@ -9,8 +9,7 @@ import axios from 'axios'
 import { AuthContextProvider } from "./contexts/AuthContext"
 import App from './App'
 
-jest.spyOn(console, "log").mockImplementation(() => {});
-jest.spyOn(console, "error").mockImplementation(() => {});
+//jest.spyOn(console, "log").mockImplementation(jest.fn());
 
 let container, testingElement
 
@@ -36,10 +35,6 @@ it('element rendered without crashing', () => {
         )
 })
 
-function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
 it('<App /> rendered <Loader /> if landing', () => {
 
     testingElement = render(
@@ -51,26 +46,24 @@ it('<App /> rendered <Loader /> if landing', () => {
         , container
     )
 
-    // await sleep(500)
-
     expect(testingElement.queryByTestId('loaderComponent')).toBeInTheDocument()
 })
 
-// const fakeAuth = {
-//     "completedGoals": [
-//         "fakeGoal0"
-//       ],
-//       "_id": "fakeId",
-//       "username": "fakeUsername",
-//       "email": "fakeEmail",
-//       "password": "fakePassword",
-//       "joinDate": "2021-04-05T15:55:31.394Z",
-//       "onGoingGoals": [
-//           "{_id: \"fake-id-1\"}",
-//           "{_id: \"fake-id-2\"}"
-//       ],
-//       "__v": 3
-// }
+const fakeAuth = {
+    "completedGoals": [
+        "fakeGoal0"
+      ],
+      "_id": "fakeId",
+      "username": "fakeUsername",
+      "email": "fakeEmail",
+      "password": "fakePassword",
+      "joinDate": "2021-04-05T15:55:31.394Z",
+      "onGoingGoals": [
+          "{_id: \"fake-id-1\"}",
+          "{_id: \"fake-id-2\"}"
+      ],
+      "__v": 3
+}
 
 const fakeGoal1 = {
     "_id": "fake-id-1",
