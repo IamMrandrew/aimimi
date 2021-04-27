@@ -35,6 +35,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
         alert("Logout Failed. Try Again.");
       });
   };
+
   useEffect(() => {
     axios
       .get("/user", { withCredentials: true })
@@ -45,6 +46,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
         console.log(error.response.data.message);
       });
   }, [setAuth]);
+
   const onClickHandler = (e) => {
     e.preventDefault();
     Logout();
@@ -120,7 +122,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
           <FaSignOutAlt />
         </ItemIcon>
         <Hover>
-          <ItemText onClick={onClickHandler}>Log out</ItemText>
+          <ItemText onClick={onClickHandler} data-testid='logoutButton'>Log out</ItemText>
         </Hover>
       </Item>
     </Wrapper>

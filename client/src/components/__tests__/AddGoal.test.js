@@ -22,6 +22,51 @@ afterEach(() => {
     container = null
 })
 
+const fakeAuth = {
+    "completedGoals": [
+        "fakeGoal0"
+      ],
+      "_id": "fakeId",
+      "username": "fakeUsername",
+      "email": "fakeEmail",
+      "password": "fakePassword",
+      "joinDate": "2021-04-05T15:55:31.394Z",
+      "onGoingGoals": [
+          "{_id: \"fake-id-1\"}",
+          "{_id: \"fake-id-2\"}"
+      ],
+      "__v": 3
+}
+
+const fakeGoal1 = {
+    "_id": "fake-id-1",
+    "createdBy": "fake-user-id",
+    "title": "fake-title-1",
+    "startTime": "2021-04-13T17:47:44.738Z",
+    "category": "fake-category",
+    "frequency": 13,
+    "period": "Daily",
+    "publicity": true,
+    "timespan": 90,
+    "__v": 0
+}
+
+const fakeGoal2 = {
+    "_id": "fake-id-2",
+    "createdBy": "fake-user-id",
+    "title": "fake-title-2",
+    "startTime": "2021-04-13T17:47:44.738Z",
+    "category": "fake-category",
+    "frequency": 13,
+    "period": "Daily",
+    "publicity": true,
+    "timespan": 90,
+    "__v": 0
+}
+
+const fakeGoals = [ { fakeGoal1 }, { fakeGoal2 } ]
+
+
 it('element rendered without crashing', () => {
     render(
         <AuthContextProvider>
@@ -34,9 +79,11 @@ it('element rendered without crashing', () => {
 })
 
 
-it('axios being called with correct data if user submit add goal form', () => {
+it('axios post resolved or rejected being handled', () => {
 
     const spyAxiosPost = jest.spyOn(axios, 'post')
+        .mockResolvedValueOnce({ data: 'fakePostResp' })
+        .mockRejectedValueOnce()
 
     testingElement = render(
         <AuthContextProvider>
@@ -93,6 +140,8 @@ it('axios being called with correct data if user submit add goal form', () => {
         },
         { withCredentials: true }
     )
+
+    fireEvent.click(submitButton)
 
     spyAxiosPost.mockRestore()
 })

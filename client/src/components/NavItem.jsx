@@ -6,7 +6,7 @@ const NavItem = ({ path, exact, text, showSidebarHandler, children }) => {
   let match = useRouteMatch({ path: path, exact: exact });
 
   return (
-    <Wrapper to={path} onClick={showSidebarHandler}>
+    <Wrapper to={path} onClick={showSidebarHandler} data-testid='navItemShowSidebarButton'>
       <Icon>{children}</Icon>
       <Text>{text}</Text>
       <Hover match={match} />

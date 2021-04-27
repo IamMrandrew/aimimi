@@ -136,7 +136,7 @@ const App = () => {
           </>
         )}
         {loading && <Loader />}
-        <Route exact path="/" data-testid="ToOnboarding">
+        <Route exact path="/">
           <Onboarding />
         </Route>
         <Route path="/login">

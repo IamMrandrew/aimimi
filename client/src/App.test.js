@@ -1,12 +1,16 @@
 import React from 'react'
 import { unmountComponentAtNode } from 'react-dom'
-import { MemoryRouter } from 'react-router-dom'
-import { render, screen, act } from '@testing-library/react'
+import { MemoryRouter, Router } from 'react-router-dom'
+import { render, screen, act, waitFor } from '@testing-library/react'
+import { createMemoryHistory } from 'history'
 
 import axios from 'axios'
 
 import { AuthContextProvider } from "./contexts/AuthContext"
 import App from './App'
+
+jest.spyOn(console, "log").mockImplementation(() => {});
+jest.spyOn(console, "error").mockImplementation(() => {});
 
 let container, testingElement
 
@@ -32,7 +36,12 @@ it('element rendered without crashing', () => {
         )
 })
 
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 it('<App /> rendered <Loader /> if landing', () => {
+
     testingElement = render(
         <AuthContextProvider>
             <MemoryRouter initialEntries={['/']}>
@@ -42,102 +51,54 @@ it('<App /> rendered <Loader /> if landing', () => {
         , container
     )
 
+    // await sleep(500)
+
     expect(testingElement.queryByTestId('loaderComponent')).toBeInTheDocument()
 })
 
-// it('<App /> rendered <Onboarding /> if finished loading', () => {
-//     act(async() => {
-//         testingElement = render(
-//             <AuthContextProvider>
-//                 <MemoryRouter initialEntries={['/']}>
-//                     <App />
-//                 </MemoryRouter>
-//             </AuthContextProvider>
-//             , container
-//         )
+// const fakeAuth = {
+//     "completedGoals": [
+//         "fakeGoal0"
+//       ],
+//       "_id": "fakeId",
+//       "username": "fakeUsername",
+//       "email": "fakeEmail",
+//       "password": "fakePassword",
+//       "joinDate": "2021-04-05T15:55:31.394Z",
+//       "onGoingGoals": [
+//           "{_id: \"fake-id-1\"}",
+//           "{_id: \"fake-id-2\"}"
+//       ],
+//       "__v": 3
+// }
 
-//         await waitFor(() => {
-//             expect(window.location.href).toContain('/Onboarding')
-//         })
-//     })
-// })
-
-// it('axios have been called', () => {
-
-//     const spyAxiosGet = jest.spyOn(axios, 'get')
-
-//     testingElement = render(
-//         <AuthContextProvider>
-//             <MemoryRouter>
-//                 <App />
-//             </MemoryRouter>
-//         </AuthContextProvider>
-//         , container
-//     )
-
-//     expect(spyAxiosGet).toHaveBeenCalled()
-//     expect(spyAxiosGet).toHaveBeenCalledWith(
-//         '/user', { withCredentials: true }
-//     )
-
-//     spyAxiosGet.mockRestore()
-// })
-
-// it('axios have been called with mock data', async () => {
-
-//     const fakeAuth = {
-//         "completedGoals": [
-//             "fakeGoal1",
-//             "fakeGoal2"
-//           ],
-//           "_id": "fakeId",
-//           "username": "fakeUsername",
-//           "email": "fakeEmail",
-//           "password": "fakePassword",
-//           "joinDate": "2021-04-05T15:55:31.394Z",
-//           "onGoingGoals": [
-//           ],
-//           "__v": 3
-//     }
-
-//     mockAxios.get.mockImplementationOnce(() => 
-//         Promise.resolve({
-//             data: { fakeAuth }
-//         })
-//     )
-
-//     act(() => {
-//         testingElement = render(
-//             <AuthContextProvider>
-//                 <MemoryRouter>
-//                     <App />
-//                 </MemoryRouter>
-//             </AuthContextProvider>
-//             , container
-//         )
-//     })
-
-//     expect(testingElement.queryByTestId('onboardingComponent')).toBeInTheDocument()
-//     expect(mockAxios.get).toHaveBeenCalledTimes(1)
-//     expect(mockAxios.get).toHaveBeenCalledWith(
-//         '/user', { withCredentials: true }
-//     )
-// })
-
-const fakeAuth = {
-    "completedGoals": [
-        "fakeGoal1",
-        "fakeGoal2"
-      ],
-      "_id": "fakeId",
-      "username": "fakeUsername",
-      "email": "fakeEmail",
-      "password": "fakePassword",
-      "joinDate": "2021-04-05T15:55:31.394Z",
-      "onGoingGoals": [
-      ],
-      "__v": 3
+const fakeGoal1 = {
+    "_id": "fake-id-1",
+    "createdBy": "fake-user-id",
+    "title": "fake-title-1",
+    "startTime": "2021-04-13T17:47:44.738Z",
+    "category": "fake-category",
+    "frequency": 13,
+    "period": "Daily",
+    "publicity": true,
+    "timespan": 90,
+    "__v": 0
 }
+
+const fakeGoal2 = {
+    "_id": "fake-id-2",
+    "createdBy": "fake-user-id",
+    "title": "fake-title-2",
+    "startTime": "2021-04-13T17:47:44.738Z",
+    "category": "fake-category",
+    "frequency": 13,
+    "period": "Daily",
+    "publicity": true,
+    "timespan": 90,
+    "__v": 0
+}
+
+const fakeGoals = [ { fakeGoal1 }, { fakeGoal2 } ]
 
 const realAuth = {
     "completedGoals": [

@@ -77,7 +77,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
   return (
     <Wrapper>
       <NavContainer>
-        <CustomFaBars onClick={() => SideBarHandler(showSidebar)} />
+        <CustomFaBars onClick={() => SideBarHandler(showSidebar)} data-testid='sidebarButton'/>
         <Avator>
           {!authLoading && <AvatorImg src={propic} />}
           {authLoading && <Loader />}
@@ -85,18 +85,18 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
         <Today>{title}</Today>
         <OutDropDown>
           <WrapDropDownWrapper>
-            <DropDownWrapper onClick={() => DropDownHandler(showDropDown)}>
+            <DropDownWrapper onClick={() => DropDownHandler(showDropDown)} data-testid='dropDownButton'>
               <UserName>{auth ? auth.username : ""}</UserName>
               <CustomFaChevronDown />
             </DropDownWrapper>
 
             <DownWrapper showDropDown={showDropDown}>
               <BlockWrapper>
-                <ProfileWrapper onClick={onClickProfile}>
+                <ProfileWrapper onClick={onClickProfile} data-testid='profileButton'>
                   <CustomFaUserAlt />
                   <DropDownText>Profile</DropDownText>
                 </ProfileWrapper>
-                <LogoutWrapper onClick={onClickHandler}>
+                <LogoutWrapper onClick={onClickHandler} data-testid='logoutButton'>
                   <CustomFaSignOutAlt />
                   <LoginDropDownText>Logout</LoginDropDownText>
                 </LogoutWrapper>
@@ -105,7 +105,7 @@ const Nav = ({ showSidebar, setShowSidebar }) => {
           </WrapDropDownWrapper>
         </OutDropDown>
 
-        <BellWapper onClick={onClickBell}>
+        <BellWapper onClick={onClickBell} data-testid='bellButton'>
           <CustomFaBell />
         </BellWapper>
       </NavContainer>

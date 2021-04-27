@@ -8,6 +8,8 @@ import axios from 'axios'
 
 import Comment from '../Comment'
 
+jest.spyOn(console, 'error').mockImplementation(() => {})
+
 let container, testingElement
 
 beforeEach(() => {
@@ -36,7 +38,7 @@ it('element rendered without crashing', () => {
 })
 
 it('axios being called with correct data if comment exist', () => {
-    const spyAxiosGet = jest.spyOn(axios, 'get')
+    const spyAxiosGet = jest.spyOn(axios, 'get').mockResolvedValue( { data: 'fakeSrc' } )
 
     render( <Comment comment={ fakeComment } />, container )
 
@@ -48,20 +50,17 @@ it('axios being called with correct data if comment exist', () => {
     spyAxiosGet.mockRestore()
 })
 
-it('axios being called with correct data if user like a comment', () => {
-    // const spyAxiosGet = jest.spyOn(axios, 'get')
+it('handle error if axios error', () => {
+    const spyAxiosGet = jest.spyOn(axios, 'get').mockRejectedValue()
 
-    // testingElement = render( <Comment comment={ fakeComment }/>, container )
+    render( <Comment comment={ fakeComment } />, container )
 
-    // expect(spyAxiosGet).not.toHaveBeenCalled()
+    expect(spyAxiosGet).toHaveBeenCalled()
+    expect(spyAxiosGet).toHaveBeenCalledWith(
+        `/user/propic/${fakeComment.creator._id}`, { withCredentials: true }
+    )
 
-    // const likeButton = testingElement.queryByTestId('commentLikeButton')
-
-    // fireEvent.click(likeButton)
-
-    // expect(spyAxiosGet).toHaveBeenCalled()
-
-    // spyAxiosGet.mockRestore()
+    spyAxiosGet.mockRestore()
 })
 
 const realComment = {

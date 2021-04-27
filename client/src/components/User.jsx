@@ -22,7 +22,7 @@ const User = ({ user, users, setUsers }) => {
         <Name>{user.username}</Name>
         <Email>{user.email}</Email>
       </TextWrapper>
-      <DeleteButton onClick={deleteGoalHandler}>Delete</DeleteButton>
+      <DeleteButton onClick={deleteGoalHandler} data-testid='deleteUserButton'>Delete</DeleteButton>
     </Wrapper>
   );
 };

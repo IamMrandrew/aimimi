@@ -27,7 +27,7 @@ const Rank = ({ rank, index }) => {
   };
 
   return (
-    <Wrapper onClick={onClickHandler}>
+    <Wrapper onClick={onClickHandler} data-testid='rankButton'>
       <ItemWrapper>
         <Flag>#{index}</Flag>
         <Avator>

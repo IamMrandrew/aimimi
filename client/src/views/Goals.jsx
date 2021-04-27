@@ -6,7 +6,7 @@ import OngoingGoal from "../components/OngoingGoal";
 
 const Goals = ({ goals, setGoals }) => {
   return (
-    <Wrapper>
+    <Wrapper data-testid="goalsPage">
       <CustomContainer>
         <Title>Goals</Title>
 
