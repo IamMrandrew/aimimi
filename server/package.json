@@ -29,7 +29,8 @@
     "watch": "env-cmd -f ./config/test.env jest --watch --runInBand --detectOpenHandles"
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "silent": true
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
