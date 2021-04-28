@@ -3,12 +3,16 @@ import styled from "styled-components/macro";
 import { FaAngleRight } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 
+// Component of OngoingGoal in Goals page
 const OngoingGoal = ({ goal }) => {
   const history = useHistory();
+
+  // Route user to view goal details if user clicked the component
   const onClickHandler = (e) => {
     e.preventDefault();
     history.push(`/goals/${goal._id}`);
   };
+
   return (
     <div>
       <Wrapper onClick={onClickHandler}>
@@ -17,6 +21,7 @@ const OngoingGoal = ({ goal }) => {
           <Description>{goal.category}</Description>
           <Description>{goal.period}</Description>
           <Description>
+            {/* calculate the days left*/}
             {goal.timespan -
               Math.floor(
                 (Date.now() - Date.parse(goal.startTime)) / (1000 * 3600 * 24)

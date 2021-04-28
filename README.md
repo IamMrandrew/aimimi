@@ -100,20 +100,22 @@ yarn start
 
 ### server
 
-Navigate to client folder, install dependencies
+Navigate to server folder, install dependencies
 
 ```
 cd server
 yarn install
 ```
 
-Create an `.env` file under the server folder and set the environment variable:
+Create an `config` folder under the server folder, put `.env` file. and 'test.env' inside and set the environment variable:
 
 ```
 PORT=3001
 MONGO_URL=your_own_mongodb_uri
 NODE_ENV=development
 JTW_TOKEN=your_token
+GMAIL_ACCOUNT=mail_account
+GMAIL_PASSWORD=mail_password
 ```
 
 Start the server side

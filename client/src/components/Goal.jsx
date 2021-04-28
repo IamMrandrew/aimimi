@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import { FaCheck } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext";
 
+// Goal component of the onGoing goal showing on Today page
 const Goal = ({
   goal,
   showModal,
@@ -15,6 +16,7 @@ const Goal = ({
 
   const { auth } = useContext(AuthContext);
 
+  // Show the check in button
   const showCheckInButtonHandler = () => {
     if (progressData) {
       if (progressData.check_in < goal.frequency) {
@@ -23,16 +25,19 @@ const Goal = ({
     }
   };
 
+  // Close the check in button after checked in
   const closeCheckInButtonHandler = () => {
     setShowCheckInButton(false);
   };
 
+  // Set to shoe the progress bar animation
   const showModalHandler = () => {
     setShowModal((prev) => !prev);
     setSelectedGoal(goal);
     setSelectedGoalCheckIn(progressData.check_in);
   };
 
+  // Set the progress of the goal
   useEffect(() => {
     if (auth.onGoingGoals) {
       if (auth.onGoingGoals.length > 0) {
@@ -50,6 +55,7 @@ const Goal = ({
         onMouseOut={closeCheckInButtonHandler}
       >
         <Wrapper showCheckInButton={showCheckInButton}>
+          {/* Calculate the precentage of the goal */}
           <Progress
             percentage={
               progressData
@@ -61,6 +67,7 @@ const Goal = ({
             <Title>{goal.title}</Title>
             <Description>{goal.period}</Description>
             <Description>
+              {/* Calculate the days left  */}
               {goal.timespan -
                 Math.floor(
                   (Date.now() - Date.parse(goal.startTime)) / (1000 * 3600 * 24)

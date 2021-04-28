@@ -11,6 +11,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
+// Login Page
 const Login = ({ setLoading }) => {
   const [details, setDetails] = useState({ email: "", password: "" });
   const [emails, setEmails] = useState({
@@ -21,7 +22,9 @@ const Login = ({ setLoading }) => {
   });
   const { setAuth } = useContext(AuthContext);
   const history = useHistory();
+  // Handle login button
   const Login = (emails, passwords) => {
+    // Send a post request with user inputed email and password
     axios
       .post(
         "/user/login",
@@ -31,23 +34,28 @@ const Login = ({ setLoading }) => {
         }
       )
       .then((response) => {
+        // If user successfully logged in, setAuth to save the user information and redirect to the home page
         setAuth(response.data);
         history.push("/");
         setLoading(true);
       })
       .catch((error) => {
+        //If the email / password is wrong, pop up an alert
         alert("Login Failed. Try Again.");
       });
   };
 
+  // Call login function after user clicked the login button
   const submitHandler = (e) => {
     e.preventDefault();
     Login(emails.email, passwords.password);
   };
+  // clear the email state
   const clearEmail = (e) => {
     e.preventDefault();
     setEmails({ email: "" });
   };
+  // clear the password state
   const clearPassword = (e) => {
     e.preventDefault();
     setPasswords({ password: "" });

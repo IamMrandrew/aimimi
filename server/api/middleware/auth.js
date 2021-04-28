@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+// middleware for verifying a jsonwebtoken and get the decoded data
 module.exports = (req, res, next) => {
   jwt.verify(
     req.cookies.token,

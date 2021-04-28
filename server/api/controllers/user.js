@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const FeedController = require("../controllers/feed");
 const Grid = require("gridfs-stream");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -56,6 +57,7 @@ exports.user_signup = (req, res, next) => {
               message: "Hashing failed",
             });
           } else {
+            console.log(req);
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
               randomString: crypto.randomBytes(16).toString("hex"),
@@ -65,7 +67,7 @@ exports.user_signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               joinDate: Date.now(),
-              propic: "image.jpg",
+              propic: req.file ? req.file.originalname : "image.jpg",
             });
             sendEmail(req.body.email, user.randomString);
             user
@@ -171,10 +173,20 @@ exports.user_info = (req, res, next) => {
 exports.other_user_info = (req, res, next) => {
   User.findById(req.params.user_id)
     .then((user) => {
-      res.status.end(user);
+      res.status(200).json(user);
     })
     .catch((err) => {
       res.status(500).end(err);
+    });
+};
+
+exports.all_user_info = (req, res, next) => {
+  User.find()
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
 };
 
@@ -303,11 +315,11 @@ exports.user_logout = (req, res, next) => {
 
 exports.user_delete = (req, res, next) => {
   User.remove({ _id: req.params.user_id })
-    .exec()
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: "User deleted",
+    .then(() => {
+      FeedController.remove_user_feed(req.params.user_id).then(() => {
+        res.status(200).json({
+          message: "User deleted",
+        });
       });
     })
     .catch((err) => {

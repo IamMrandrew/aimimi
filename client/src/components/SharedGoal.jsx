@@ -7,13 +7,16 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "./Loader";
 
-const SharedGoal = ({ goal, joined }) => {
+// Compnent of shared goal in Shares page
+const SharedGoal = ({ goal, joined, publicGoal, setPublicGoal }) => {
   const History = useHistory();
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [sharedGoalPropic, setSharedGoalPropic] = useState(null);
+  const [stat, setStat] = useState(0);
 
   useEffect(() => {
+    // Get creator profile picture by passing creator.id
     axios
       .get(`/user/propic/${goal.createdBy._id}`, { withCredentials: true })
       .then((response) => {
@@ -23,10 +26,24 @@ const SharedGoal = ({ goal, joined }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [goal]);
+  }, [goal.createdBy._id]);
 
+  useEffect(() => {
+    //  Get the goal details by passing the goal id and set the details in Stat state
+    axios
+      .get(`/goal/leaderboard/${goal._id}`, { withCredentials: true })
+      .then((response) => {
+        setStat(response.data.data.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [goal._id]);
+
+  // Handle Join button
   const joinGoal = (e) => {
     e.preventDefault();
+    // Adding a goal to user Ongoing goal by sending a put request with goal.id as paramters
     axios
       .put("/goal/join", { goal_id: goal._id }, { withCredentials: true })
       .then((res) => {
@@ -45,6 +62,20 @@ const SharedGoal = ({ goal, joined }) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  // For admin, let admin to delete unappropriate goals
+  const deleteGoalHandler = () => {
+    axios
+      .delete(`/goal/${goal._id}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setPublicGoal(publicGoal.filter((item) => item._id !== goal._id));
   };
 
   return (
@@ -71,20 +102,26 @@ const SharedGoal = ({ goal, joined }) => {
             <ItemIcon>
               <FaUsers />
             </ItemIcon>
-            <Stat>1223</Stat>
+            <Stat>{stat}</Stat>
             <ItemIcon>
               <FaCalendarAlt />
             </ItemIcon>
             <Stat>{goal ? goal.timespan : ""} days left</Stat>
           </SubtitleDiv>
-
-          <JoinButton
-            disabled={joined}
-            onClick={joined ? undefined : joinGoal}
-            joined={joined}
-          >
-            {joined ? "Joined" : "Join"}
-          </JoinButton>
+          {/* Check whether user joined the, show "Join" if not, and show "Joined" otherwise */}
+          <Buttons>
+            <JoinButton
+              disabled={joined}
+              onClick={joined ? undefined : joinGoal}
+              joined={joined}
+            >
+              {joined ? "Joined" : "Join"}
+            </JoinButton>
+            {/* Check if user us Admin, show the delete button if  is admin */}
+            {auth.role === "Admin" && (
+              <DeleteButton onClick={deleteGoalHandler}>Delete</DeleteButton>
+            )}
+          </Buttons>
         </FlexDiv>
       </Container>
     </Wrapper>
@@ -94,6 +131,7 @@ const SharedGoal = ({ goal, joined }) => {
 export default SharedGoal;
 
 const Wrapper = styled.div`
+  position: relative;
   background-color: #ffffff;
   height: 160px;
   width: 100%;
@@ -146,6 +184,7 @@ const Avator = styled.div`
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;
@@ -174,6 +213,10 @@ const Stat = styled.span`
   margin-right: 11px;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+`;
+
 const JoinButton = styled.button`
   display: block;
   align-items: center;
@@ -187,4 +230,18 @@ const JoinButton = styled.button`
   font-size: 16px;
   width: 92px;
   height: 32px;
+`;
+
+const DeleteButton = styled.button`
+  margin-left: 12px;
+  padding: 4px 20px;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  border-radius: 14px;
+  background-color: #f28f8f;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
 `;

@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
+// Checkin Model for onGoing goals in Today page
 const CheckInModal = ({
   showModal,
   setShowModal,
@@ -14,7 +15,9 @@ const CheckInModal = ({
 
   const { setAuth } = useContext(AuthContext);
 
+  // For user to check in the goal
   const checkInHandler = () => {
+    // Put the new progress with corresponding goal._id
     axios
       .put(
         "/goal/check_in",
@@ -40,11 +43,13 @@ const CheckInModal = ({
       });
   };
 
+  // Set the progess bar value in progress state
   const progressHandler = (e) => {
     setProgress(e.target.value);
     setShowValue(true);
   };
 
+  // Set the progress state
   useEffect(() => {
     setProgress(selectedGoalCheckIn);
   }, [selectedGoal, selectedGoalCheckIn]);
@@ -72,11 +77,14 @@ const CheckInModal = ({
               max={selectedGoal.frequency}
               selectedGoal={selectedGoal}
               progress={progress}
+              data-testid="checkInProgress"
             />
           </SliderWrapper>
           <Number>{selectedGoal.frequency}</Number>
         </SliderField>
-        <Button onClick={checkInHandler}>Check in</Button>
+        <Button onClick={checkInHandler} data-testid="checkInButton">
+          Check in
+        </Button>
       </Card>
     </Wrapper>
   );

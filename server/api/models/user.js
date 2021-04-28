@@ -20,7 +20,7 @@ const userSchema = Schema({
   password: { type: String, required: true },
   joinDate: { type: Date, default: Date.now },
   completedGoals: [{ type: Schema.Types.ObjectId, ref: "Goal" }],
-  onGoingGoals: [onGoingGoalsSchema],
+  onGoingGoals: [onGoingGoalsSchema], // for storing goals information specific for each user
 });
 
 module.exports = mongoose.model("User", userSchema);

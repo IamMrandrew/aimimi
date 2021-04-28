@@ -14,25 +14,24 @@ import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
 
 const Signup = () => {
-  const [emails, setEmails] = useState({
-    email: "",
-  });
-  const [passwords, setPasswords] = useState({
-    password: "",
-  });
-  const [usernames, setUsernames] = useState({
-    username: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [img, setImg] = useState(null);
   const history = useHistory();
-  const Signup = (emails, passwords, usernames) => {
+
+  const Signup = () => {
+    let formdata = new FormData();
+    // we will set user email, passwrod, username and img in formdata
+    formdata.append("email", email);
+    formdata.append("password", password);
+    formdata.append("username", username);
+    formdata.append("img", img);
+    // we will send a POST request to post the new account details
     axios
-      .post(
-        "/user/signup",
-        { email: emails, password: passwords, username: usernames },
-        {
-          withCredentials: true,
-        }
-      )
+      .post("/user/signup", formdata, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log(response);
         history.push("/email-check");
@@ -41,24 +40,28 @@ const Signup = () => {
         alert("Signup Failed. Try Again.");
       });
   };
+
+  // Handle the clear input button
   const clearEmail = (e) => {
     e.preventDefault();
-    setEmails({ email: "" });
+    setEmail("");
   };
   const clearPassword = (e) => {
     e.preventDefault();
-    setPasswords({ password: "" });
+    setPassword("");
   };
   const clearUsername = (e) => {
     e.preventDefault();
-    setUsernames({ username: "" });
+    setUsername("");
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(emails);
-    console.log(passwords);
-    console.log(usernames);
-    Signup(emails.email, passwords.password, usernames.username);
+    Signup();
+  };
+
+  // Handle the uploaded file button
+  const fileHandler = (e) => {
+    setImg(e.target.files[0]);
   };
   return (
     <>
@@ -75,8 +78,31 @@ const Signup = () => {
               <Subtitle>or </Subtitle>
               <LoginLink to="/login"> Log In</LoginLink>
               <Subtitle> (if you already have an account) </Subtitle>
-              <Signupform method="POST" onSubmit={submitHandler}>
+              <Signupform
+                method="POST"
+                onSubmit={submitHandler}
+                encType="multipart/form-data"
+              >
                 <BarWrapper>
+                  <IconAndTagWrapper>
+                    <CustomAiOutlineEye />
+                    <TagWrapper>
+                      <Tag>Username</Tag>
+                      <PasswordInput
+                        id="confirm_password"
+                        type="username"
+                        placeholder="Enter your username"
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
+                        required
+                      />
+                    </TagWrapper>
+                  </IconAndTagWrapper>
+
+                  <CustomFaTimes onClick={clearUsername} />
+                </BarWrapper>
+
+                <PasswordBarWrapper>
                   <IconAndTagWrapper>
                     <CustomFaEnvelope />
                     <TagWrapper>
@@ -86,17 +112,15 @@ const Signup = () => {
                         type="email"
                         name="email"
                         placeholder="name@domain.com"
-                        onChange={(e) =>
-                          setEmails({ ...emails, email: e.target.value })
-                        }
-                        value={emails.email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                         required
                       ></SigninInput>
                     </TagWrapper>
                   </IconAndTagWrapper>
 
                   <CustomFaTimes onClick={clearEmail} />
-                </BarWrapper>
+                </PasswordBarWrapper>
 
                 <PasswordBarWrapper>
                   <IconAndTagWrapper>
@@ -107,13 +131,8 @@ const Signup = () => {
                         id="password"
                         type="password"
                         placeholder="Must have at least 6 characters"
-                        onChange={(e) =>
-                          setPasswords({
-                            ...passwords,
-                            password: e.target.value,
-                          })
-                        }
-                        value={passwords.password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
                         required
                       />
                     </TagWrapper>
@@ -122,29 +141,10 @@ const Signup = () => {
                   <CustomFaTimes onClick={clearPassword} />
                 </PasswordBarWrapper>
 
-                <PasswordBarWrapper>
-                  <IconAndTagWrapper>
-                    <CustomAiOutlineEye />
-                    <TagWrapper>
-                      <Tag>Username</Tag>
-                      <PasswordInput
-                        id="confirm_password"
-                        type="username"
-                        placeholder="Enter your username"
-                        onChange={(e) =>
-                          setUsernames({
-                            ...usernames,
-                            username: e.target.value,
-                          })
-                        }
-                        value={usernames.username}
-                        required
-                      />
-                    </TagWrapper>
-                  </IconAndTagWrapper>
-
-                  <CustomFaTimes onClick={clearUsername} />
-                </PasswordBarWrapper>
+                <ChooseFileText>Put your propic here</ChooseFileText>
+                <ChooseFileWrapper>
+                  <FileUpload type="file" onChange={fileHandler} />
+                </ChooseFileWrapper>
 
                 <SignupBar>
                   <SignupTitle>Sign Up</SignupTitle>
@@ -388,6 +388,27 @@ const PasswordInput = styled.input`
   @media (max-width: 767.98px) {
     font-size: 14px;
   }
+`;
+
+const ChooseFileWrapper = styled.label`
+  display: block;
+  border: 2px dashed #777777;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+`;
+
+const ChooseFileText = styled.div`
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--primaryMild);
+  margin-top: 15px;
+  margin-bottom: 10px;
+`;
+
+const FileUpload = styled.input`
+  outline: none;
 `;
 
 export default Signup;

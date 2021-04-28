@@ -19,10 +19,12 @@ const SingleFeed = () => {
   const [feedPropic, setFeedPropic] = useState(null);
   const [propicloading, setPropicLoading] = useState(true);
 
+  // handle the on click which set the input value oin state
   const inputHandler = (e) => {
     setInput(e.target.value);
   };
 
+  // add the input comment
   const leaveCommentHandler = () => {
     const newComment = {
       feed_id: feed._id,
@@ -31,6 +33,7 @@ const SingleFeed = () => {
       created_time: new Date(),
       like: [],
     };
+    // after the comment submission, then will send a POST request and post the comment in database
     axios
       .post("/feed/add_comment", newComment, { withCredentials: true })
       .then((res) => {
@@ -39,18 +42,18 @@ const SingleFeed = () => {
       .catch((err) => {
         console.log(err);
       });
-
+    // then will set the new comment in the state
     setFeed({ ...feed, comment: [...feed.comment, newComment] });
     setInput("");
   };
-
+  // check if user liked before
   const checkIfLiked = () => {
     return feed.like.find((liked) => liked === auth._id);
   };
-
+  // handle the like button
   const Like = (e) => {
     e.preventDefault();
-
+    // Sends a POST request for adding a like for that feed
     axios
       .post(`/feed/like/${feed._id}`, { withCredentials: true })
       .then((res) => {})
@@ -61,24 +64,28 @@ const SingleFeed = () => {
     setFeed({ ...feed, like: [...feed.like, auth._id] });
   };
 
+  // handle Unlike
   const UnLike = (e) => {
     e.preventDefault();
 
+    // send a DELETE request to delete like in database
     axios
       .delete(`/feed/unlike/${feed._id}`, { withCredentials: true })
       .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
-
     setFeed({ ...feed, like: feed.like.filter((e) => e !== auth._id) });
   };
 
   useEffect(() => {
+    // When user get into the partically,
+    //it will automatically send a GET request to get the details of the feed
     axios
       .get(`/feed/${id}`, { withCredentials: true })
       .then((response) => {
         setFeed(response.data);
+        // Get the user profile picture of the feed creater
         axios
           .get(`/user/propic/${response.data.creator._id}`, {
             withCredentials: true,
@@ -109,12 +116,15 @@ const SingleFeed = () => {
               <Content>
                 <User>
                   <Avator>
+                    {/* Since loading profile picture from database require some time, so we set a loading animation before  */}
                     {!propicloading && <AvatorImg src={feedPropic} />}
                     {propicloading && <Loader />}
                   </Avator>
                   <Meta>
+                    {/* Since fetching require some time, therfore , we need to use condition */}
                     <Name>{feed ? feed.creator.username : ""}</Name>
                     <Time>
+                      {/* Calculate the time passed after the feed posted */}
                       {Math.floor(
                         (Date.now() -
                           Date.parse(feed ? feed.created_time : "")) /
@@ -152,6 +162,7 @@ const SingleFeed = () => {
               <MdSend onClick={leaveCommentHandler} />
             </InputField>
           </FeedWrapper>
+          {/* We will map the comment that other users posted */}
           {feed.comment.map((item) => (
             <Comment key={item._id} comment={item} />
           ))}

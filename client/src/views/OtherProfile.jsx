@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Collapse from "react-bootstrap/Collapse";
 import GoalFromProfile from "../components/GoalFromProfile";
 import CompletedProfile from "../components/CompletedProfile";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   FaCheckCircle,
@@ -14,131 +14,79 @@ import {
 } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext";
 import Loader from "../components/Loader";
+import OtherUserGoal from "../components/OtherUserGoal";
+import OngoingGoal from "../components/OngoingGoal";
 
-//Profile Page
-const Profile = () => {
+// Profile of other user
+const OtherProfile = () => {
+  let { id } = useParams();
   const history = useHistory();
-  const { auth, propic, setPropic, authLoading, setAuthLoading } = useContext(
-    AuthContext
-  );
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
-  const [goals, setGoals] = useState([]);
+  const { auth, propic, authLoading } = useContext(AuthContext);
+
   const [completed, setCompleted] = useState([]);
-  const [img, setImg] = useState(null);
+  const [userInfo, setUserInfo] = useState([]);
+  const [onGoing, setOnGoing] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [hisPropic, setHisPropic] = useState(null);
+  const [propicLoading, setPropicLoading] = useState(true);
+
   useEffect(() => {
-    // Get all onGoning goals of that user, which is a get request
+    // get other user information using get request, id in parmas is the user id
+    // set the user information to states inorder to clearly separate the basic info, ongoing goals and completed goals
     axios
-      .get("/goal", { withCredentials: true })
+      .get(`/user/other_user/${id}`, { withCredentials: true })
+      .then((res) => {
+        setUserInfo(res.data);
+        setOnGoing(res.data.onGoingGoals);
+        setCompleted(res.data.completedGoals);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    // get other user profile picture using get request, id in parmas is the user id
+    axios
+      .get(`/user/propic/${id}`, { withCredentials: true })
       .then((response) => {
-        setGoals(response.data);
+        setHisPropic(response.data);
+        setPropicLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  useEffect(() => {
-    // get all completed goals of user, which is a send request
-    axios
-      .get("/goal", { withCredentials: true })
-      .then((response) => {
-        setGoals(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setCompleted(auth.completedGoals);
-  }, [auth]);
-
-  useEffect(() => {
-    //set the completed goal in state and pass the state to other component
-    setCompleted(auth.completedGoals);
-  }, [auth]);
-
-  const fileHandler = (e) => {
-    setImg(e.target.files[0]);
-  };
-
-  // Handle onClick delete button
-  const DeleteHandler = (e) => {
-    // If user click the delete button, will send a delete request and delete whole user account
-    e.preventDefault();
-    axios
-      .delete("/user", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        alert("Account deleted");
-        history.push("/onboarding");
-      })
-      .catch((err) => {
-        alert("Cannot delete account");
-      });
-  };
-
-  // Change profile picture function
-  const ChangeFile = (e) => {
-    // User click the choose profile picture button, and upload a image file to update the profile picture
-    e.preventDefault();
-    let formdata = new FormData();
-    formdata.append("img", img);
-    axios
-      .post("/user/add_propic", formdata, { withCredentials: true })
-      .then((response) => {
-        console.log("success");
-        setAuthLoading(true);
-        axios
-          .get(`/user/propic/`, { withCredentials: true })
-          .then((response) => {
-            setPropic(response.data);
-            setAuthLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            setAuthLoading(false);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Profile</Title>
         <InformationWrapper>
-          <FlexDivResponsive>
-            <BlockDiv>
-              <Avator>
-                {!authLoading && <AvatorImg src={propic} />}
-                {authLoading && <Loader />}
-              </Avator>
-            </BlockDiv>
-            <BlockDiv>
-              <Name>{auth.username}</Name>
-              <Joined>Joined</Joined>
-              <FlexDiv>
-                {/* Calculate the number of joined date */}
-                <Times>
-                  {Math.floor(
-                    (Date.now() - Date.parse(auth.joinDate)) /
-                      (1000 * 3600 * 24)
-                  )}
-                </Times>
-                <Times> days ago</Times>
-              </FlexDiv>
-            </BlockDiv>
-          </FlexDivResponsive>
-          <FlexDivResponsive>
-            <Submitform onSubmit={ChangeFile} encType="multipart/form-data">
-              <ChooseFileWrapper>
-                <FileUpload type="file" onChange={fileHandler} />
-              </ChooseFileWrapper>
-              <ChangeButton>Change propic</ChangeButton>
-            </Submitform>
-          </FlexDivResponsive>
+          <BlockDiv>
+            <Avator>
+              {!propicLoading && <AvatorImg src={hisPropic} />}
+              {propicLoading && <Loader />}
+            </Avator>
+          </BlockDiv>
+          <BlockDiv>
+            <Name>{userInfo.username}</Name>
+            <Joined>Joined</Joined>
+            <FlexDiv>
+              {/* calculate the joined time */}
+              <Times>
+                {Math.floor(
+                  (Date.now() - Date.parse(userInfo.joinDate)) /
+                    (1000 * 3600 * 24)
+                )}
+              </Times>
+              <Times> days ago</Times>
+            </FlexDiv>
+          </BlockDiv>
         </InformationWrapper>
 
         <Flex>
@@ -150,7 +98,12 @@ const Profile = () => {
                     <FaCheckCircle />
                   </ItemText>
                 </ItemDiv>
-                <Status>{auth.completedGoals.length}</Status>
+                <Status>
+                  {/* set condition to avoid empty response of user's completedGoals */}
+                  {userInfo.completedGoals
+                    ? userInfo.completedGoals.length
+                    : ""}
+                </Status>
                 <GoalTitle>Compelted</GoalTitle>
               </CustomContainer1>
             </ItemWrapper>
@@ -162,14 +115,16 @@ const Profile = () => {
                     <FaBullseye />
                   </ItemText>
                 </SecondItemDiv>
-                <Status>{auth.onGoingGoals.length}</Status>
+                {/* set condition to avoid empty response of user's onGoingGoals */}
+                <Status>
+                  {userInfo.onGoingGoals ? userInfo.onGoingGoals.length : ""}
+                </Status>
                 <GoalTitle>Ongoing</GoalTitle>
               </CustomContainer1>
             </SecondItemWrapper>
           </HalfFlexDiv>
 
           <HalfBlockDiv>
-            {/* used bootstarp framework for the div expense, we use "open" state to control the expand of div*/}
             <GoalsDiv
               onClick={() => setOpen(!open)}
               aria-expanded={open}
@@ -186,15 +141,15 @@ const Profile = () => {
               </Angleright>
             </GoalsDiv>
             <Collapse in={open}>
-              {/* we will map the goal and passes the "goals" state to component <GoalFromProfile> */}
+              {/* map all user's onGoing goal and pass the "onGoing" to component <OtherUserGoal>*/}
               <div>
-                {goals &&
-                  goals.map((goal) => (
-                    <GoalFromProfile id="ongoing" goal={goal} />
+                {onGoing &&
+                  onGoing.map((goal) => (
+                    <OtherUserGoal id="ongoing" goal={goal} type={"onGoing"} />
                   ))}
               </div>
             </Collapse>
-            {/*  used bootstarp framework for the div expense, we use "open" state to control the expand of div */}
+
             <GoalsDiv
               onClick={() => setSecondOpen(!secondOpen)}
               aria-expanded={secondOpen}
@@ -211,35 +166,28 @@ const Profile = () => {
               </Angleright>
             </GoalsDiv>
             <Collapse in={secondOpen}>
-              {/* we will map the goal and passes the "goals" state to component <CompletedProfile> */}
+              {/* map all user's completed goal and pass the "completed" to component <OtherUserGoal>*/}
               <div>
                 {completed &&
                   completed.map((goal) => (
-                    <CompletedProfile id="completed" goal={goal} />
+                    <OtherUserGoal id="completed" goal={goal} />
                   ))}
               </div>
             </Collapse>
           </HalfBlockDiv>
         </Flex>
-
-        <QuitButton onClick={DeleteHandler}>Delete Account</QuitButton>
       </CustomContainer>
     </Wrapper>
   );
 };
 
-export default Profile;
+export default OtherProfile;
 
 const Wrapper = styled.div`
   padding-top: 32px;
   flex: 1;
   display: flex;
-  overflow: scroll;
-  height: calc(100vh - 60px);
-
-  @media (min-width: 992px) {
-    height: calc(100vh - 80px);
-  }
+  overflow: hidden;
 `;
 
 const Title = styled.h1`
@@ -255,20 +203,20 @@ const Title = styled.h1`
 
 const CustomContainer = styled(Container)`
   max-width: 888px;
+  position: relative;
 `;
 
 const InformationWrapper = styled.div`
+  height: 152px;
   width: 100%;
   background-color: #ffffff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-top: 32px;
   border-radius: 20px;
   padding: 25px 28px;
-  flex-wrap: wrap;
-
   @media (max-width: 768px) {
+    height: 130px;
     margin-top: 15px;
   }
 `;
@@ -307,17 +255,6 @@ const Name = styled.h1`
 const FlexDiv = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const FlexDivResponsive = styled.div`
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 767.98px) {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    flex-basis: 100%;
-  }
 `;
 
 const Joined = styled.span`
@@ -483,39 +420,4 @@ const HalfFlexDiv = styled.div`
 const ItemTextDiv = styled.div`
   color: #a3d2e6;
   font-size: 30px;
-`;
-
-const ChooseFileWrapper = styled.label`
-  display: block;
-  border: 2px dashed #777777;
-  width: 100%;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-`;
-
-const FileUpload = styled.input`
-  outline: none;
-`;
-
-const Submitform = styled.form``;
-
-const ChangeButton = styled.button`
-  margin-top: 10px;
-  width: 100%;
-  border-radius: 14px;
-  background-color: var(--primary);
-  padding: 8px 12px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  display: block;
-  color: white;
-  font-weight: 600;
-
-  @media (max-width: 767.98px) {
-    height: 70px;
-  }
 `;

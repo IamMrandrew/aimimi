@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Loader from "./Loader";
 import axios from "axios";
-
+import { useHistory } from "react-router-dom";
+// Component for showing the top 3 ranks in leaderboard
 const TopRank = ({ rank, index }) => {
   const [loading, setLoading] = useState(true);
   const [rankPropic, setRankPropic] = useState(null);
-
+  const history = useHistory();
   useEffect(() => {
+    // get user profile picture by passing by user ID which store in the rank state
     axios
       .get(`/user/propic/${rank._id}`, { withCredentials: true })
       .then((response) => {
@@ -17,18 +19,24 @@ const TopRank = ({ rank, index }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [rank]);
+  }, [rank._id]);
+
+  const onClickHandler = (e) => {
+    e.preventDefault();
+    // If user clicked the profile picture, redirect to the that user profile
+    history.push(`/profile/${rank._id}`);
+  };
 
   return (
     <Wrapper index={index}>
-      <Content index={index}>
+      <Content index={index} onClick={onClickHandler}>
         <Flag index={index}>#{index}</Flag>
         <Avator>
           {!loading && <AvatorImg src={rankPropic} />}
           {loading && <Loader />}
         </Avator>
         <Item>{rank.username}</Item>
-        <Item>{rank.accuracy}%</Item>
+        <Item>{Math.round(rank.accuracy)}%</Item>
       </Content>
     </Wrapper>
   );
@@ -59,6 +67,7 @@ const Content = styled.div`
       : props.index === 3
       ? "172px"
       : "215px"};
+  cursor: pointer;
 
   justify-content: space-between;
   background-color: white;
@@ -67,7 +76,14 @@ const Content = styled.div`
 
   @media (max-width: 991.98px) {
     min-width: 100px;
-    max-height: 180px;
+    max-height: ${(props) =>
+      props.index === 1
+        ? "180px"
+        : props.index === 2
+        ? "168px"
+        : props.index === 3
+        ? "160px"
+        : "180px"};
   }
 
   span:nth-child(1) {
@@ -115,10 +131,16 @@ const Avator = styled.div`
   span {
     border-color: var(--primaryGoal);
   }
+
+  @media (max-width: 991.98px) {
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
 `;
 
 const AvatorImg = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center center;
 `;

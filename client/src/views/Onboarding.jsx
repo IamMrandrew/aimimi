@@ -6,11 +6,13 @@ import Navbar from "react-bootstrap/Navbar";
 import logo from "../assets/Logo.svg";
 import Onboarding1 from "../assets/Onboarding_1.png";
 import Onboarding2 from "../assets/Onboarding_2.png";
-
+import Onboarding3 from "../assets/Onboarding_3.png";
 import { Link } from "react-router-dom";
+
+//Onboarding page
 const Onboarding = () => {
   return (
-    <Wrapper data-testid='onboardingComponent'>
+    <Wrapper data-testid="onboardingComponent">
       <CustomNavbar expand="lg">
         <CustomContainer>
           <Navbar.Brand>
@@ -59,12 +61,37 @@ const Onboarding = () => {
                 <Title>Why choose us?</Title>
                 <Para>
                   The project’s objective is to develop a platform for people
-                  who are hoping to crush their goals. The core feature of the
-                  platform is goal tracking, also with some other features like
-                  goal sharing, leaderboard, social networking service, etc.
+                  who are hoping to crush their goals. Our app aims to rise
+                  users' motivation to the fullest by taking reference of social
+                  media.
+                </Para>
+                <Para>
+                  The core feature of the platform is goal tracking, also with
+                  some other features like goal sharing, leaderboard, social
+                  networking service, etc.
                 </Para>
               </TextWrapper>
             </ContentWrapper>
+          </FlexWrapper>
+          <FlexWrapper>
+            <ContentWrapper2>
+              <TextWrapper>
+                <Title>Shared Goal</Title>
+                <Para>
+                  aimimi introduced shared goals for our users. User explore
+                  goal in shares and feel free to challenge themselves. Users
+                  can participate other's goal once it is set as public.
+                </Para>
+                <Para>
+                  With the features of Leaderboard an Activity, Users can be
+                  motivated through the encouragement and a sense of competition
+                  from others
+                </Para>
+              </TextWrapper>
+            </ContentWrapper2>
+            <ImgWrapper>
+              <OnboardingImg2 src={Onboarding3} />
+            </ImgWrapper>
           </FlexWrapper>
         </CustomContainer>
       </Intro>
@@ -165,6 +192,16 @@ const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
   min-height: 350px;
+
+  @media (max-width: 991.98px) {
+    flex-basis: 100%;
+  }
+`;
+
+const ContentWrapper2 = styled.div`
+  flex-basis: 50%;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 991.98px) {
     flex-basis: 100%;
