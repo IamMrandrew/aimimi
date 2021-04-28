@@ -2,7 +2,7 @@
 
 ## Overviews
 
-Aimimi was bootstrapped with [React.js](https://github.com/facebook/create-react-app), a JavaScript library that aims to simplify development of visual interfaces.
+Aimimi was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), a JavaScript library that aims to simplify development of visual interfaces.
 
 ## Getting Started
 
