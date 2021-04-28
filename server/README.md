@@ -39,3 +39,17 @@ Start the server side
 ```
 yarn start
 ```
+
+# Start the test
+
+To start the test
+
+```
+yarn test
+```
+
+To keep montoring the test
+
+```
+yarn watch
+```
