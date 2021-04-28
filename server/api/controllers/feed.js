@@ -25,8 +25,12 @@ exports.remove_feed = (goal_id) => {
 };
 
 // API for removing specific user feeds, requires user id
-exports.remove_user_feed = (user_id) => {
-  Feed.deleteMany({ creator: user_id });
+exports.remove_user_feed = async (user_id) => {
+  try {
+    await Feed.deleteMany({ creator: user_id });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // API for liking feed, requires feed id as params
