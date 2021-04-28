@@ -49,4 +49,6 @@ if (process.env.NODE_ENV === "production") {
 
 // listen to server PORT(3001)
 module.exports = app;
-const server = app.listen(process.env.PORT);
+if (process.env.NODE_ENV !== "test") {
+  app.listen(process.env.PORT);
+}
