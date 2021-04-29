@@ -47,6 +47,26 @@ describe("User actions", () => {
       })
       .expect(200);
   });
+
+  test("Shoule be unable to login with invalid password", async () => {
+    const res = await request(app)
+      .post("/user/login")
+      .send({
+        email: "test@gmail.com",
+        password: "invalid",
+      })
+      .expect(401);
+  });
+
+  test("Shoule be unable to login with invalid accound", async () => {
+    const res = await request(app)
+      .post("/user/login")
+      .send({
+        email: "invalid@gmail.com",
+        password: "12345",
+      })
+      .expect(401);
+  });
 });
 
 describe("Admin actions", () => {
