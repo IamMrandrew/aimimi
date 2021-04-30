@@ -10,6 +10,8 @@ import axios from 'axios'
 import { AuthContext, AuthContextProvider } from "../../contexts/AuthContext"
 import User from '../User'
 
+jest.spyOn(console, 'log').mockImplementation(jest.fn())
+
 let container, testingElement
 
 beforeEach(() => {

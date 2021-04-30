@@ -3,6 +3,7 @@ import { unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { Router, MemoryRouter } from 'react-router-dom'
 import { render, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import axios from 'axios'
 import { createMemoryHistory } from 'history'
@@ -10,7 +11,7 @@ import { createMemoryHistory } from 'history'
 import { AuthContextProvider } from "../../contexts/AuthContext"
 import Feed from '../Feed'
 
-jest.spyOn(console, 'log').mockImplementation(jest.fn())
+jest.spyOn(console, 'error').mockImplementation(jest.fn())
 
 let container, testingElement
 

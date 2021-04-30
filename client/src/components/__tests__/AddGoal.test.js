@@ -9,6 +9,8 @@ import axios from 'axios'
 import { AuthContextProvider } from "../../contexts/AuthContext"
 import AddGoal from '../AddGoal'
 
+jest.spyOn(console, 'log').mockImplementation(jest.fn())
+
 let container, testingElement
 
 beforeEach(() => {

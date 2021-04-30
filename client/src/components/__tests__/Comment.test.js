@@ -25,12 +25,12 @@ afterEach(() => {
 
 const fakeComment = {
     "like": "[  ]",
-    "_id": "fake id",
+    "_id": "fake-id",
     "creator": {
-            "_id": "fake user id"
+            "_id": "fake-user-id"
     },
-    "created_time": "fake created time",
-    "content": "fake content"
+    "created_time": "fake-created-time",
+    "content": "fake-content"
 }
 
 it('element rendered without crashing', () => {

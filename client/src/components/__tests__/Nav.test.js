@@ -4,6 +4,7 @@ import { act } from 'react-dom/test-utils'
 import { MemoryRouter, Router } from 'react-router-dom'
 import { render, fireEvent, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
+import '@testing-library/jest-dom'
 
 import axios from 'axios'
 
@@ -77,7 +78,7 @@ it('axios being called with correct data if rendering', () => {
 describe('rendered correct title for differenct location', () => {
 
     it('Today', () => {
-        render(
+        testingElement = render(
             <AuthContextProvider>
                 <MemoryRouter initialEntries={['/']}>
                     <Nav />
