@@ -9,6 +9,8 @@ import axios from 'axios'
 import { AuthContextProvider } from "../../contexts/AuthContext"
 import CheckInModal from '../CheckInModal'
 
+jest.spyOn(console, 'error').mockImplementation(jest.fn())
+
 let container, testingElement
 
 beforeEach(() => {
@@ -49,6 +51,8 @@ it('element rendered without crashing', () => {
 
 it('axios being called with correct data if user checked in', () => {
     const spyAxiosPut = jest.spyOn(axios, 'put')
+        .mockResolvedValueOnce()
+        .mockRejectedValueOnce()
 
     testingElement = render(
         <AuthContextProvider>
@@ -75,6 +79,8 @@ it('axios being called with correct data if user checked in', () => {
         { goal_id: fakeSelectedGoal._id, check_in_time: newProgress },
         { withCredentials: true }
     )
+
+    fireEvent.click(checkInButton)
 
     spyAxiosPut.mockRestore()
 })

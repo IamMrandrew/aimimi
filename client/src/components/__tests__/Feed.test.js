@@ -3,12 +3,15 @@ import { unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { Router, MemoryRouter } from 'react-router-dom'
 import { render, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import axios from 'axios'
 import { createMemoryHistory } from 'history'
 
 import { AuthContextProvider } from "../../contexts/AuthContext"
 import Feed from '../Feed'
+
+jest.spyOn(console, 'error').mockImplementation(jest.fn())
 
 let container, testingElement
 
@@ -22,6 +25,22 @@ afterEach(() => {
     document.body.removeChild(container)
     container = null
 })
+
+const fakeAuth = {
+    "completedGoals": [
+        "fakeGoal0"
+      ],
+      "_id": "fakeId",
+      "username": "fakeUsername",
+      "email": "fakeEmail",
+      "password": "fakePassword",
+      "joinDate": "2021-04-05T15:55:31.394Z",
+      "onGoingGoals": [
+          "{_id: \"fake-id-1\"}",
+          "{_id: \"fake-id-2\"}"
+      ],
+      "__v": 3
+}
 
 const fakeCreator = {
     "completedGoals": ["fake completed goal"],
@@ -55,6 +74,8 @@ fakeFeed1 = fakeFeed2 = {
 const fakeFeeds = [ { fakeFeed1 }, { fakeFeed2 } ]
 
 it('element rendered without crashing', () => {
+    const spyAxiosGetResolved = jest.spyOn(axios, 'get').mockResolvedValue({ data: { fakeAuth }})
+
     render(
         <AuthContextProvider>
             <MemoryRouter>
@@ -63,6 +84,21 @@ it('element rendered without crashing', () => {
         </AuthContextProvider>
         , container
     )
+
+    spyAxiosGetResolved.mockRestore()
+
+    const spyAxiosGetRejected = jest.spyOn(axios, 'get').mockRejectedValue()
+
+    render(
+        <AuthContextProvider>
+            <MemoryRouter>
+                <Feed feed={ fakeFeed1 } feeds={ fakeFeeds } />
+            </MemoryRouter>
+        </AuthContextProvider>
+        , container
+    )
+
+    spyAxiosGetRejected.mockRestore()
 })
 
 describe('like/unlike comment', () => {
@@ -73,6 +109,8 @@ describe('like/unlike comment', () => {
 
     it('axios being called with correct data if user LIKE a comment', () => {
         spyAxiosPost = jest.spyOn(axios, 'post')
+            .mockResolvedValueOnce({ data: 'fakeResolved' })
+            .mockRejectedValueOnce()
         spyAxiosDelete = jest.spyOn(axios, 'delete')
 
         testingElement = render(
@@ -97,6 +135,8 @@ describe('like/unlike comment', () => {
         expect(spyAxiosPost).toHaveBeenCalledWith(
             `/feed/like/${fakeFeed1._id}`, { withCredentials: true }
         )
+
+        fireEvent.click(likeButton)
     
         spyAxiosPost.mockRestore()
         spyAxiosDelete.mockRestore()
@@ -105,6 +145,8 @@ describe('like/unlike comment', () => {
     it('axios being called with correct data if user UNLIKE a comment', () => {
         spyAxiosPost = jest.spyOn(axios, 'post')
         spyAxiosDelete = jest.spyOn(axios, 'delete')
+            .mockResolvedValueOnce({ data: 'fakeResolved' })
+            .mockRejectedValueOnce()
 
         testingElement = render(
             <AuthContextProvider>
@@ -128,6 +170,8 @@ describe('like/unlike comment', () => {
         expect(spyAxiosDelete).toHaveBeenCalledWith(
             `/feed/unlike/${fakeFeed2._id}`, { withCredentials: true }
         )
+
+        fireEvent.click(likeButton)
     
         spyAxiosPost.mockRestore()
         spyAxiosDelete.mockRestore()
@@ -155,6 +199,19 @@ it('redirected to correct path if user clicked comment button', () => {
     expect(spyHistoryPush).toHaveBeenCalledWith(
         `/feed/${fakeFeed1._id}`
     )
+})
+
+it('<Feed /> rendered <Loader /> if landing', () => {
+    testingElement = render(
+        <AuthContextProvider>
+            <MemoryRouter initialEntries={['/']}>
+                <Feed feed={ fakeFeed1 } feeds={ fakeFeeds } />
+            </MemoryRouter>
+        </AuthContextProvider>
+        , container
+    )
+
+    expect(testingElement.queryByTestId('loaderComponent')).toBeInTheDocument()
 })
 
 const realProps = {

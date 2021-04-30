@@ -146,7 +146,7 @@ const App = () => {
         )}
         {/* If user did not login, then only onboarding page, signin and login page will be shown */}
         {loading && <Loader />}
-        <Route exact path="/" data-testid="ToOnboarding">
+        <Route exact path="/">
           <Onboarding />
         </Route>
         <Route path="/login">

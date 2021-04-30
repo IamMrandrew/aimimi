@@ -134,7 +134,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
           <FaSignOutAlt />
         </ItemIcon>
         <Hover>
-          <ItemText onClick={onClickHandler}>Log out</ItemText>
+          <ItemText onClick={onClickHandler} data-testid='logoutButton'>Log out</ItemText>
         </Hover>
       </Item>
     </Wrapper>

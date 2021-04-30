@@ -15,7 +15,7 @@ const OngoingGoal = ({ goal }) => {
 
   return (
     <div>
-      <Wrapper onClick={onClickHandler}>
+      <Wrapper onClick={onClickHandler} data-testid='ongoingGoalButton'>
         <TitleWrapper>
           <Title>{goal.title}</Title>
           <Description>{goal.category}</Description>

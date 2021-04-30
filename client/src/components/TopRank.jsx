@@ -29,7 +29,7 @@ const TopRank = ({ rank, index }) => {
 
   return (
     <Wrapper index={index}>
-      <Content index={index} onClick={onClickHandler}>
+      <Content index={index} onClick={onClickHandler} data-testid='topRankButton'>
         <Flag index={index}>#{index}</Flag>
         <Avator>
           {!loading && <AvatorImg src={rankPropic} />}

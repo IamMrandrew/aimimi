@@ -31,7 +31,7 @@ const Rank = ({ rank, index }) => {
   };
 
   return (
-    <Wrapper onClick={onClickHandler}>
+    <Wrapper onClick={onClickHandler} data-testid='rankButton'>
       <ItemWrapper>
         {/* Ranking of user */}
         <Flag>#{index}</Flag>
