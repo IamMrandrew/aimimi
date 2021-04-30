@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Feed = require("../models/feed");
 const User = require("../models/user");
 
+// API for adding feed, requires goal id, creator(user id) and content
 exports.add_feed = (goal_id, creator, content) => {
   const feed = new Feed({
     _id: new mongoose.Types.ObjectId(),
@@ -18,14 +19,21 @@ exports.add_feed = (goal_id, creator, content) => {
   });
 };
 
+// API for removing specific goal feeds, requires goal id
 exports.remove_feed = (goal_id) => {
   Feed.deleteMany({ goal_id: goal_id });
 };
 
-exports.remove_user_feed = (user_id) => {
-  Feed.deleteMany({ creator: user_id });
+// API for removing specific user feeds, requires user id
+exports.remove_user_feed = async (user_id) => {
+  try {
+    await Feed.deleteMany({ creator: user_id });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
+// API for liking feed, requires feed id as params
 exports.like_feed = (req, res, next) => {
   Feed.findOneAndUpdate(
     // { _id: req.body.feed_id },
@@ -40,6 +48,7 @@ exports.like_feed = (req, res, next) => {
     });
 };
 
+// API for unliking feed, requires feed as params
 exports.unlike_feed = (req, res, next) => {
   Feed.findOneAndUpdate(
     { _id: req.params.feed_id },
@@ -54,6 +63,7 @@ exports.unlike_feed = (req, res, next) => {
     });
 };
 
+// API for adding comment, requires feed id and content in body
 exports.add_comment = (req, res, next) => {
   Feed.findById(req.body.feed_id).then((feed) => {
     feed
@@ -73,6 +83,7 @@ exports.add_comment = (req, res, next) => {
   });
 };
 
+// API for updating comment, requires feed id and content in body
 exports.update_comment = (req, res, next) => {
   Feed.findById(req.body.feed_id).then((feed) => {
     if (
@@ -100,8 +111,9 @@ exports.update_comment = (req, res, next) => {
   });
 };
 
+// API for deleting comment, requires feed id and comment id as params
 exports.delete_comment = (req, res, next) => {
-  Feed.findById(req.body.feed_id).then((feed) => {
+  Feed.findById(req.params.feed_id).then((feed) => {
     if (
       feed.comment
         .map((e) => {
@@ -123,6 +135,7 @@ exports.delete_comment = (req, res, next) => {
   });
 };
 
+// API for liking comment, requires feed id and comment id in body
 exports.like_comment = (req, res, next) => {
   Feed.findById(req.body.feed_id).then((feed) => {
     feed
@@ -141,6 +154,7 @@ exports.like_comment = (req, res, next) => {
   });
 };
 
+// API for unliking comment, requires feed id and comment id in body
 exports.unlike_comment = (req, res, next) => {
   Feed.findById(req.body.feed_id).then((feed) => {
     feed
@@ -159,6 +173,7 @@ exports.unlike_comment = (req, res, next) => {
   });
 };
 
+// API for getting feed view, requires feed id as params
 exports.get_feed_view = (req, res, next) => {
   Feed.findOne({ _id: req.params.feed_id })
     .populate("creator comment.creator")
@@ -170,6 +185,7 @@ exports.get_feed_view = (req, res, next) => {
     });
 };
 
+// API for getting specific user feed
 exports.get_one_user_feed = (req, res, next) => {
   User.findById(req.userData.userId).then((user) => {
     let data = [];

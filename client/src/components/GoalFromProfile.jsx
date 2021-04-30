@@ -7,6 +7,8 @@ import {
   FaRegCheckSquare,
 } from "react-icons/fa";
 import Collapse from "react-bootstrap/Collapse";
+
+// Shows the title of completed / onGoing goal which the state is passed from profile page
 const GoalFromProfile = ({ goal }) => {
   return (
     <div>

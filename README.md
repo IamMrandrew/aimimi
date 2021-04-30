@@ -100,7 +100,7 @@ yarn start
 
 ### server
 
-Navigate to client folder, install dependencies
+Navigate to server folder, install dependencies
 
 ```
 cd server

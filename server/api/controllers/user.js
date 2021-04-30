@@ -9,35 +9,39 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const sendEmail = (email, randomString) => {
-  let transoprt = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.GMAIL_ACCOUNT,
-      pass: process.env.GMAIL_PASSWORD,
-    },
-  });
-  let text;
-  process.env.NODE_ENV == "development"
-    ? (text =
-        "Welcome to Aimimi! Please click http://localhost:3001/user/verify/" +
-        randomString +
-        " to verify your email.")
-    : (text =
-        "Welcome to Aimimi! Please click http://aimimi.herokuapp.com/user/verify/" +
-        randomString +
-        " to verify your email.");
-  let mailOptions = {
-    from: "Aimimi",
-    to: email,
-    subject: "Aimimi Email Confirmation",
-    text: text,
-  };
-  transoprt.sendMail(mailOptions, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Email sent");
-    }
+  return new Promise((resolve, reject) => {
+    let transoprt = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.GMAIL_ACCOUNT,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+    });
+    let text;
+    process.env.NODE_ENV == "development"
+      ? (text =
+          "Welcome to Aimimi! Please click http://localhost:3001/user/verify/" +
+          randomString +
+          " to verify your email.")
+      : (text =
+          "Welcome to Aimimi! Please click http://aimimi.herokuapp.com/user/verify/" +
+          randomString +
+          " to verify your email.");
+    let mailOptions = {
+      from: "Aimimi",
+      to: email,
+      subject: "Aimimi Email Confirmation",
+      text: text,
+    };
+    transoprt.sendMail(mailOptions, (err, result) => {
+      if (err) {
+        console.log(err);
+        resolve(false);
+      } else {
+        console.log("Email sent");
+        resolve(true);
+      }
+    });
   });
 };
 
@@ -50,14 +54,13 @@ exports.user_signup = (req, res, next) => {
           message: "Duplicate Email",
         });
       } else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
+        bcrypt.hash(req.body.password, 10, async (err, hash) => {
           if (err) {
             return res.status(500).json({
               error: err,
               message: "Hashing failed",
             });
           } else {
-            console.log(req);
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
               randomString: crypto.randomBytes(16).toString("hex"),
@@ -69,7 +72,7 @@ exports.user_signup = (req, res, next) => {
               joinDate: Date.now(),
               propic: req.file ? req.file.originalname : "image.jpg",
             });
-            sendEmail(req.body.email, user.randomString);
+            await sendEmail(req.body.email, user.randomString);
             user
               .save()
               .then((result) => {

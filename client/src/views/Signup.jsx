@@ -18,15 +18,16 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [img, setImg] = useState(null);
-
   const history = useHistory();
+
   const Signup = () => {
     let formdata = new FormData();
+    // we will set user email, passwrod, username and img in formdata
     formdata.append("email", email);
     formdata.append("password", password);
     formdata.append("username", username);
     formdata.append("img", img);
-
+    // we will send a POST request to post the new account details
     axios
       .post("/user/signup", formdata, {
         withCredentials: true,
@@ -39,6 +40,8 @@ const Signup = () => {
         alert("Signup Failed. Try Again.");
       });
   };
+
+  // Handle the clear input button
   const clearEmail = (e) => {
     e.preventDefault();
     setEmail("");
@@ -56,6 +59,7 @@ const Signup = () => {
     Signup();
   };
 
+  // Handle the uploaded file button
   const fileHandler = (e) => {
     setImg(e.target.files[0]);
   };

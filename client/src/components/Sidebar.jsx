@@ -15,18 +15,22 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useHistory, Link } from "react-router-dom";
 import Loader from "./Loader";
 
+// Component of sidebar
 const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
   const { auth, setAuth, propic, setPropic, authLoading } = useContext(
     AuthContext
   );
   const history = useHistory();
 
+  // Handle logout button
   const Logout = () => {
+    // delete the cookie in browser and setAuth to null in order to clear the information
     axios
       .delete("/user/logout", {
         withCredentials: true,
       })
       .then((response) => {
+        // Redirect user to login page
         history.push("/login");
         setAuth(null);
         setPropic(null);
@@ -37,6 +41,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
   };
 
   useEffect(() => {
+    // get user information and store it to auth state
     axios
       .get("/user", { withCredentials: true })
       .then((response) => {
@@ -47,11 +52,13 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       });
   }, [setAuth]);
 
+  // handle onClick logout button
   const onClickHandler = (e) => {
     e.preventDefault();
     Logout();
   };
 
+  // contol showing sidebar by clicking the hamburger icon
   const showSidebarHandler = () => {
     setShowSidebar(!showSidebar);
   };
@@ -61,6 +68,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       <LogoWrapper to="/">
         <LogoImg src={Logo} />
       </LogoWrapper>
+      {/* Route user to today page if clicked */}
       <NavItem
         path="/"
         exact={true}
@@ -68,6 +76,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
         text="Today"
       >
         <FaCalendarWeek />
+        {/* Route user to the Goals page if clicked */}
       </NavItem>
       <NavItem
         path="/goals"
@@ -77,6 +86,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       >
         <FaBullseye />
       </NavItem>
+      {/* Route user to the shares if clicked */}
       <NavItem
         path="/shares"
         exact={false}
@@ -85,6 +95,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
       >
         <FaUsers />
       </NavItem>
+      {/* Route user to the Leaderboard page if clicked */}
       <NavItem
         path={
           userSharedGoals[0]
@@ -96,6 +107,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
         text="Leaderboard"
       >
         <FaTrophy />
+        {/* Only for admin, which route user to the User page if clicked */}
       </NavItem>
       {auth.role === "Admin" && (
         <NavItem
@@ -107,7 +119,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, userSharedGoals }) => {
           <FaUserCog />
         </NavItem>
       )}
-
+      {/* Show the profile picture and user name */}
       <Hr />
       <ProfileItem onClick={showSidebarHandler} to="/profile">
         <Avator>

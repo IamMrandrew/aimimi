@@ -17,6 +17,7 @@ import Loader from "../components/Loader";
 import OtherUserGoal from "../components/OtherUserGoal";
 import OngoingGoal from "../components/OngoingGoal";
 
+// Profile of other user
 const OtherProfile = () => {
   let { id } = useParams();
   const history = useHistory();
@@ -33,6 +34,8 @@ const OtherProfile = () => {
   const [propicLoading, setPropicLoading] = useState(true);
 
   useEffect(() => {
+    // get other user information using get request, id in parmas is the user id
+    // set the user information to states inorder to clearly separate the basic info, ongoing goals and completed goals
     axios
       .get(`/user/other_user/${id}`, { withCredentials: true })
       .then((res) => {
@@ -47,6 +50,7 @@ const OtherProfile = () => {
   }, []);
 
   useEffect(() => {
+    // get other user profile picture using get request, id in parmas is the user id
     axios
       .get(`/user/propic/${id}`, { withCredentials: true })
       .then((response) => {
@@ -73,6 +77,7 @@ const OtherProfile = () => {
             <Name>{userInfo.username}</Name>
             <Joined>Joined</Joined>
             <FlexDiv>
+              {/* calculate the joined time */}
               <Times>
                 {Math.floor(
                   (Date.now() - Date.parse(userInfo.joinDate)) /
@@ -94,6 +99,7 @@ const OtherProfile = () => {
                   </ItemText>
                 </ItemDiv>
                 <Status>
+                  {/* set condition to avoid empty response of user's completedGoals */}
                   {userInfo.completedGoals
                     ? userInfo.completedGoals.length
                     : ""}
@@ -109,6 +115,7 @@ const OtherProfile = () => {
                     <FaBullseye />
                   </ItemText>
                 </SecondItemDiv>
+                {/* set condition to avoid empty response of user's onGoingGoals */}
                 <Status>
                   {userInfo.onGoingGoals ? userInfo.onGoingGoals.length : ""}
                 </Status>
@@ -134,6 +141,7 @@ const OtherProfile = () => {
               </Angleright>
             </GoalsDiv>
             <Collapse in={open}>
+              {/* map all user's onGoing goal and pass the "onGoing" to component <OtherUserGoal>*/}
               <div>
                 {onGoing &&
                   onGoing.map((goal) => (
@@ -158,6 +166,7 @@ const OtherProfile = () => {
               </Angleright>
             </GoalsDiv>
             <Collapse in={secondOpen}>
+              {/* map all user's completed goal and pass the "completed" to component <OtherUserGoal>*/}
               <div>
                 {completed &&
                   completed.map((goal) => (

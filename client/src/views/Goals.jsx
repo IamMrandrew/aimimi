@@ -4,16 +4,19 @@ import Container from "react-bootstrap/Container";
 import AddGoal from "../components/AddGoal";
 import OngoingGoal from "../components/OngoingGoal";
 
+// Goals page
 const Goals = ({ goals, setGoals }) => {
   return (
     <Wrapper data-testid="goalsPage">
       <CustomContainer>
         <Title>Goals</Title>
 
+        {/* we pass the goals state to component <OngoingGoal> */}
         {goals.map((goal) => (
           <OngoingGoal key={goal._id} goal={goal} />
         ))}
 
+        {/* Show add goal button */}
         <AddGoal setGoals={setGoals} />
       </CustomContainer>
     </Wrapper>

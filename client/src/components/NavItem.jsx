@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components/macro";
 import { Link, useRouteMatch } from "react-router-dom";
 
+// Each item in the side bar
 const NavItem = ({ path, exact, text, showSidebarHandler, children }) => {
   let match = useRouteMatch({ path: path, exact: exact });
-
+  // pass the state inside the return
   return (
     <Wrapper to={path} onClick={showSidebarHandler} data-testid='navItemShowSidebarButton'>
       <Icon>{children}</Icon>

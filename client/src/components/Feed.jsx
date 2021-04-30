@@ -7,12 +7,14 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useHistory } from "react-router";
 import Loader from "./Loader";
 
+// Feed component which shows the feed in the activity page
 const Feed = ({ feed, liked, feeds, setFeeds }) => {
   const { auth } = useContext(AuthContext);
   const [feedPropic, setFeedPropic] = useState(null);
   const history = useHistory();
   const [loading, setLoading] = useState(true);
 
+  // Get the profile picture of the creator of the feed
   useEffect(() => {
     axios
       .get(`/user/propic/${feed.creator._id}`, { withCredentials: true })
@@ -25,16 +27,17 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
       });
   }, [feed]);
 
+  // Like the feed
   const Like = (e) => {
     e.preventDefault();
-
+    // Send a post request with feed._id as parameters
     axios
       .post(`/feed/like/${feed._id}`, { withCredentials: true })
       .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
-
+    // map the feed._id in the feeds state
     setFeeds(
       feeds.map((item) => {
         if (item._id === feed._id) {
@@ -45,9 +48,11 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
     );
   };
 
+  // Unlike the feed
   const UnLike = (e) => {
     e.preventDefault();
 
+    // Unlike the feed by sending a delete request with feed._id as parameters
     axios
       .delete(`/feed/unlike/${feed._id}`, { withCredentials: true })
       .then((res) => {})
@@ -55,6 +60,7 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
         console.log(err);
       });
 
+    // map the feed._id in the feeds state
     setFeeds(
       feeds.map((item) => {
         if (item._id === feed._id) {
@@ -85,7 +91,11 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
         </FlexWrapper>
         <Status>{feed.content}</Status>
         <ButtonDiv>
-          <UnClickButton onClick={liked ? UnLike : Like} liked={liked} data-testid='feedLikeButton'>
+          <UnClickButton
+            onClick={liked ? UnLike : Like}
+            liked={liked}
+            data-testid="feedLikeButton"
+          >
             <FaHeart />
             <Number>{feed.like.length} likes</Number>
           </UnClickButton>
@@ -93,7 +103,7 @@ const Feed = ({ feed, liked, feeds, setFeeds }) => {
             onClick={() => {
               history.push(`/feed/${feed._id}`);
             }}
-            data-testid='feedCommentButton'
+            data-testid="feedCommentButton"
           >
             <FaComments />
             <Number>{feed.comment.length} comments</Number>

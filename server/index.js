@@ -10,12 +10,14 @@ const userRoutes = require("./api/routes/user");
 const goalRoutes = require("./api/routes/goal");
 const feedRoutes = require("./api/routes/feed");
 
+// connect to mongoDB
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 const db = mongoose.connection;
 
+// connect status
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("successful connection");
@@ -28,6 +30,7 @@ app.use(express.json());
 app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 app.use(cookieParser());
 
+// import all routes
 app.use("/user", userRoutes);
 app.use("/goal", goalRoutes);
 app.use("/feed", feedRoutes);
@@ -44,5 +47,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+// listen to server PORT(3001)
 module.exports = app;
-const server = app.listen(process.env.PORT);
+if (process.env.NODE_ENV !== "test") {
+  app.listen(process.env.PORT);
+}

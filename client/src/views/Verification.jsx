@@ -10,11 +10,12 @@ import { useHistory, Link } from "react-router-dom";
 const Verification = () => {
   const history = useHistory();
 
+  // If user clicked the login button then will route to login page
   const onClickHandler = (e) => {
     e.preventDefault();
     history.push("/login");
   };
-
+  // If user click the logo, then it will route back to onboarding page
   const onClickLogo = (e) => {
     e.preventDefault();
     history.push("/onboarding");

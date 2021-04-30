@@ -11,22 +11,26 @@
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
     "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.4",
     "mongoose": "^5.12.0",
-    "mongoose-express-session": "^0.0.5",
     "multer": "^1.4.2",
     "multer-gridfs-storage": "^4.2.0",
     "node": "^15.10.0",
     "node-schedule": "^2.0.0",
     "nodemailer": "^6.5.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "set-cookie-parser": "^2.4.8"
   },
   "scripts": {
     "start": "env-cmd -f ./config/.env nodemon index.js",
-    "test": "env-cmd -f ./config/test.env jest --watch"
+    "test": "env-cmd -f ./config/test.env jest --runInBand --detectOpenHandles",
+    "watch": "env-cmd -f ./config/test.env jest --watch --runInBand --detectOpenHandles"
+  },
+  "jest": {
+    "verbose": true,
+    "silent": true
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
